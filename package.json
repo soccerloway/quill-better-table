@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/soccerloway/quill-better-table#readme",
   "dependencies": {
-    "quill": "^2.0.0-dev.3"
+    "quill": "^2.0.0-dev.3",
+    "quill-delta": "4.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

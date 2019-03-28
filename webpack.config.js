@@ -10,14 +10,16 @@ module.exports = {
 
   output:{
     filename: '[name]',
-    library: 'NbEditor',
+    library: 'quill-better-table',
     libraryExport: 'default',
     libraryTarget: 'umd',
     path: path.resolve(__dirname, './dist/')
   },
 
   resolve: {
-    alias: {},
+    alias: {
+      'src': path.resolve(__dirname, './src')
+    },
     extensions: ['.js', '.scss', '.html']
   },
 
@@ -64,7 +66,19 @@ module.exports = {
           options: {
             presets: [
               [
-                'env'
+                'env',
+                {
+                  targets: {
+                    browsers: [
+                      'last 2 Chrome major versions',
+                      'last 2 Firefox major versions',
+                      'last 2 Safari major versions',
+                      'last 2 Edge major versions',
+                      'last 2 iOS major versions',
+                      'last 2 ChromeAndroid major versions',
+                    ],
+                  },
+                }
               ]
             ]
           }
