@@ -4,6 +4,7 @@ const Break = Quill.import("blots/break")
 const Block = Quill.import("blots/block")
 const Container = Quill.import("blots/container")
 
+const CELL_IDENTITY_KEYS = ["row", "cell"]
 const CELL_ATTRIBUTES = ["rowspan", "colspan", "width"]
 const CELL_DEFAULT = {
   width: 150,
@@ -15,25 +16,16 @@ class TableCellLine extends Block {
   static create(value) {
     const node = super.create(value)
 
-    if (value.row) {
-      node.setAttribute("data-row", value.row)
-    } else {
-      node.setAttribute("data-row", rowId())
-    }
-
-    if (value.cell) {
-      node.setAttribute("data-cell", value.cell)
-    } else {
-      node.setAttribute("data-cell", cellId())
-    }
+    CELL_IDENTITY_KEYS.forEach(key => {
+      let identityMaker = `${key}Id`
+      node.setAttribute(`data-${key}`, value[key] || identityMaker())
+    })
 
     CELL_ATTRIBUTES.forEach(attrName => {
       if (attrName === 'width') {
         node.setAttribute(`data-${attrName}`, CELL_DEFAULT[attrName])
-      } else if (value[attrName]) {
-        node.setAttribute(`data-${attrName}`, value[attrName])
       } else {
-        node.setAttribute(`data-${attrName}`, CELL_DEFAULT[attrName])
+        node.setAttribute(`data-${attrName}`, value[attrName] || CELL_DEFAULT[attrName])
       }
     })
 
@@ -42,13 +34,12 @@ class TableCellLine extends Block {
 
   static formats(domNode) {
     const formats = {}
-    if (domNode.hasAttribute("data-row")) {
-      formats["row"] = domNode.getAttribute("data-row") || undefined
-    }
 
-    if (domNode.hasAttribute("data-cell")) {
-      formats["cell"] = domNode.getAttribute("data-cell") || undefined
-    }
+    CELL_IDENTITY_KEYS.forEach(key => {
+      if (domNode.hasAttribute(`data-${key}`)) {
+        formats[key] = domNode.getAttribute(`data-${key}`) || undefined
+      }
+    })
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
@@ -60,7 +51,7 @@ class TableCellLine extends Block {
   }
 
   format(name, value) {
-    if (CELL_ATTRIBUTES.concat(['row', 'cell']).indexOf(name) > -1) {
+    if (CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).indexOf(name) > -1) {
       if (value) {
         this.domNode.setAttribute(`data-${name}`, value)
       } else {
@@ -72,17 +63,15 @@ class TableCellLine extends Block {
   }
 
   optimize(context) {
-    // 覆盖patchment的shadowBlot对wrap的调用，在wrap函数调用时传入value
-    // 方便TableCell设置初始data-row（rowId）
+    // cover shadowBlot's wrap call, pass params parentBlot initialize
+    // needed
     const rowId = this.domNode.getAttribute('data-row')
     const rowspan = this.domNode.getAttribute('data-rowspan')
     const colspan = parseInt(this.domNode.getAttribute('data-colspan'), 10)
     const width = parseInt(this.domNode.getAttribute('data-width'), 10)
     const cellWidth = width * colspan
-    if (
-      this.statics.requiredContainer &&
-      !(this.parent instanceof this.statics.requiredContainer)
-    ) {
+    if (this.statics.requiredContainer &&
+      !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         width: cellWidth,
@@ -90,7 +79,6 @@ class TableCellLine extends Block {
         rowspan
       })
     }
-
     super.optimize(context)
   }
 
@@ -170,40 +158,37 @@ class TableCell extends Container {
     }, formats)
   }
 
+  toggleAttribute (name, value) {
+    if (value) {
+      this.domNode.setAttribute(name, value)
+    } else {
+      this.domNode.removeAttribute(name)
+    }
+  }
+
+  formatChildren (name, value) {
+    this.children.forEach(child => {
+      child.format(name, value)
+    })
+  }
+
   format(name, value) {
     if (CELL_ATTRIBUTES.indexOf(name) > -1) {
-      if (value) {
-        this.domNode.setAttribute(name, value)
-      } else {
-        this.domNode.removeAttribute(name)
-      }
-
-      this.children.forEach(child => {
-        child.format(name, value)
-      })
+      this.toggleAttribute(name, value)
+      this.formatChildren(name, value)
     } else if (['row'].indexOf(name) > -1) {
-      if (value) {
-        this.domNode.setAttribute(`data-${name}`, value)
-      } else {
-        this.domNode.removeAttribute(`data-${name}`)
-      }
-
-      this.children.forEach(child => {
-        child.format(name, value)
-      })
+      this.toggleAttribute(`data-${name}`, value)
+      this.formatChildren(name, value)
     } else {
       super.format(name, value)
     }
   }
 
   optimize(context) {
-    // 覆盖patchment的shadowBlot对wrap的调用，在wrap函数调用时传入value
     const rowId = this.domNode.getAttribute("data-row")
 
-    if (
-      this.statics.requiredContainer &&
-      !(this.parent instanceof this.statics.requiredContainer)
-    ) {
+    if (this.statics.requiredContainer &&
+      !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId
       })

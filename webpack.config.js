@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
@@ -97,12 +98,15 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
       chunkFilename: '[name].[id].css'
-    })
+    }),
+
+    new webpack.HotModuleReplacementPlugin({})
   ],
 
   devServer:{
     host:'localhost',
     contentBase: path.join(__dirname, './dist/demo'),
-    port: 8080
+    port: 8080,
+    hot: false
   }
 }
