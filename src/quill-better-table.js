@@ -4,6 +4,8 @@ import Delta from 'quill-delta'
 const Module = Quill.import('core/module')
 
 import {
+  TableCol,
+  TableColGroup,
   TableCellLine,
   TableCell,
   TableRow,
@@ -16,6 +18,8 @@ import {
 
 class BetterTable extends Module {
   static register() {
+    Quill.register(TableCol, true);
+    Quill.register(TableColGroup, true);
     Quill.register(TableCellLine, true);
     Quill.register(TableCell, true);
     Quill.register(TableRow, true);
@@ -48,12 +52,18 @@ class BetterTable extends Module {
     let delta = new Delta().retain(range.index)
 
     delta.insert('\n')
+    // insert table cell line with empty line
     delta = new Array(rows).fill(0).reduce(memo => {
       let tableRowId = rowId()
       return new Array(columns).fill('\n').reduce((memo, text) => {
         memo.insert(text, { 'table-cell-line': {row: tableRowId, cell: cellId()} });
         return memo
       }, memo)
+    }, delta)
+    // insert table column
+    delta = new Array(columns).fill('\n').reduce((memo, text) => {
+      memo.insert(text, { 'table-col': true })
+      return memo
     }, delta)
 
     this.quill.updateContents(delta, Quill.sources.USER)

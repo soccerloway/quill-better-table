@@ -4,10 +4,13 @@ const Break = Quill.import("blots/break")
 const Block = Quill.import("blots/block")
 const Container = Quill.import("blots/container")
 
+const COL_ATTRIBUTES = ["width"]
+const COL_DEFAULT = {
+  width: 150
+}
 const CELL_IDENTITY_KEYS = ["row", "cell"]
-const CELL_ATTRIBUTES = ["rowspan", "colspan", "width"]
+const CELL_ATTRIBUTES = ["rowspan", "colspan"]
 const CELL_DEFAULT = {
-  width: 150,
   rowspan: 1,
   colspan: 1
 }
@@ -22,11 +25,7 @@ class TableCellLine extends Block {
     })
 
     CELL_ATTRIBUTES.forEach(attrName => {
-      if (attrName === 'width') {
-        node.setAttribute(`data-${attrName}`, CELL_DEFAULT[attrName])
-      } else {
-        node.setAttribute(`data-${attrName}`, value[attrName] || CELL_DEFAULT[attrName])
-      }
+      node.setAttribute(`data-${attrName}`, value[attrName] || CELL_DEFAULT[attrName])
     })
 
     return node
@@ -43,8 +42,7 @@ class TableCellLine extends Block {
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
-        formats[attribute] =
-          domNode.getAttribute(`data-${attribute}`) || undefined
+        formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined
       }
       return formats
     }, formats)
@@ -68,13 +66,10 @@ class TableCellLine extends Block {
     const rowId = this.domNode.getAttribute('data-row')
     const rowspan = this.domNode.getAttribute('data-rowspan')
     const colspan = parseInt(this.domNode.getAttribute('data-colspan'), 10)
-    const width = parseInt(this.domNode.getAttribute('data-width'), 10)
-    const cellWidth = width * colspan
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
-        width: cellWidth,
         colspan,
         rowspan
       })
@@ -264,6 +259,40 @@ class TableBody extends Container {}
 TableBody.blotName = "table-body"
 TableBody.tagName = "TBODY"
 
+class TableCol extends Block {
+  static create (value) {
+    let node = super.create(value)
+    COL_ATTRIBUTES.forEach(attrName => {
+      node.setAttribute(`${attrName}`, value[attrName] || COL_DEFAULT[attrName])
+    })
+    return node
+  }
+
+  static formats(domNode) {
+    return COL_ATTRIBUTES.reduce((formats, attribute) => {
+      if (domNode.hasAttribute(`${attribute}`)) {
+        formats[attribute] =
+          domNode.getAttribute(`${attribute}`) || undefined
+      }
+      return formats
+    }, {})
+  }
+
+  format(name, value) {
+    if (COL_ATTRIBUTES.indexOf(name) > -1) {
+      this.domNode.setAttribute(`${name}`, value || COL_DEFAULT[name])
+    } else {
+      super.format(name, value)
+    }
+  }
+}
+TableCol.blotName = "table-col"
+TableCol.tagName = "col"
+
+class TableColGroup extends Container {}
+TableColGroup.blotName = "table-col-group"
+TableColGroup.tagName = "colgroup"
+
 class TableContainer extends Container {
   static create() {
     let node = super.create()
@@ -277,23 +306,22 @@ class TableContainer extends Container {
 
   updateTableWidth () {
     setTimeout(() => {
-      const headRow = this.rows()[0]
-      if (!headRow) return
-      const tableWidth = headRow.children.reduce((sumWidth, cell) => {
-        sumWidth = sumWidth + parseInt(cell.formats().width, 10)
+      const colGroup = this.colGroup()
+      if (!colGroup) return
+      const tableWidth = colGroup.children.reduce((sumWidth, col) => {
+        sumWidth = sumWidth + parseInt(col.formats()[TableCol.blotName].width, 10)
         return sumWidth
       }, 0)
       this.domNode.style.width = `${tableWidth}px`
     }, 0)
   }
 
-  // 获得选中的td
-  getSelectedTds() {
-    return this.selectedTds
-  }
-
   cells(column) {
     return this.rows().map(row => row.children.at(column))
+  }
+
+  colGroup () {
+    return this.children.tail
   }
 
   deleteColumn(compareRect) {
@@ -592,18 +620,6 @@ TableContainer.tagName = "TABLE"
 class TableViewWrapper extends Container {
   constructor (scroll, domNode) {
     super(scroll, domNode)
-    const quill = Quill.find(scroll.domNode.parentNode)
-    domNode.addEventListener('scroll', (e) => {
-      const tableToolModule = quill.getModule('table-tools')
-      if (tableToolModule.table) {
-        tableToolModule.columnTool[0].scrollLeft = e.target.scrollLeft
-      }
-      tableToolModule.selectedTds = []
-      tableToolModule.left.style.display = 'none'
-      tableToolModule.right.style.display = 'none'
-      tableToolModule.top.style.display = 'none'
-      tableToolModule.bottom.style.display = 'none'
-    }, false)
   }
 }
 TableViewWrapper.blotName = "table-view"
@@ -613,7 +629,7 @@ TableViewWrapper.tagName = "DIV"
 TableViewWrapper.allowedChildren = [TableContainer]
 TableContainer.requiredContainer = TableViewWrapper
 
-TableContainer.allowedChildren = [TableBody]
+TableContainer.allowedChildren = [TableBody, TableColGroup]
 TableBody.requiredContainer = TableContainer
 
 TableBody.allowedChildren = [TableRow]
@@ -624,6 +640,12 @@ TableCell.requiredContainer = TableRow
 
 TableCell.allowedChildren = [TableCellLine]
 TableCellLine.requiredContainer = TableCell
+
+TableColGroup.allowedChildren = [TableCol]
+TableColGroup.requiredContainer = TableContainer
+
+TableCol.requiredContainer = TableColGroup
+
 
 function rowId() {
   const id = Math.random()
@@ -640,6 +662,8 @@ function cellId() {
 }
 
 export {
+  TableCol,
+  TableColGroup,
   TableCellLine,
   TableCell,
   TableRow,
