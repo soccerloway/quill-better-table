@@ -52,6 +52,11 @@ class BetterTable extends Module {
     let delta = new Delta().retain(range.index)
 
     delta.insert('\n')
+    // insert table column
+    delta = new Array(columns).fill('\n').reduce((memo, text) => {
+      memo.insert(text, { 'table-col': true })
+      return memo
+    }, delta)
     // insert table cell line with empty line
     delta = new Array(rows).fill(0).reduce(memo => {
       let tableRowId = rowId()
@@ -59,11 +64,6 @@ class BetterTable extends Module {
         memo.insert(text, { 'table-cell-line': {row: tableRowId, cell: cellId()} });
         return memo
       }, memo)
-    }, delta)
-    // insert table column
-    delta = new Array(columns).fill('\n').reduce((memo, text) => {
-      memo.insert(text, { 'table-col': true })
-      return memo
     }, delta)
 
     this.quill.updateContents(delta, Quill.sources.USER)

@@ -6,7 +6,7 @@ const Container = Quill.import("blots/container")
 
 const COL_ATTRIBUTES = ["width"]
 const COL_DEFAULT = {
-  width: 150
+  width: 100
 }
 const CELL_IDENTITY_KEYS = ["row", "cell"]
 const CELL_ATTRIBUTES = ["rowspan", "colspan"]
@@ -34,13 +34,7 @@ class TableCellLine extends Block {
   static formats(domNode) {
     const formats = {}
 
-    CELL_IDENTITY_KEYS.forEach(key => {
-      if (domNode.hasAttribute(`data-${key}`)) {
-        formats[key] = domNode.getAttribute(`data-${key}`) || undefined
-      }
-    })
-
-    return CELL_ATTRIBUTES.reduce((formats, attribute) => {
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
         formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined
       }
@@ -285,6 +279,10 @@ class TableCol extends Block {
       super.format(name, value)
     }
   }
+
+  html () {
+    return this.domNode.outerHTML
+  }
 }
 TableCol.blotName = "table-col"
 TableCol.tagName = "col"
@@ -316,16 +314,21 @@ class TableContainer extends Container {
     }, 0)
   }
 
+  // 获得选中的td
+  getSelectedTds() {
+    return this.selectedTds
+  }
+
   cells(column) {
     return this.rows().map(row => row.children.at(column))
   }
 
   colGroup () {
-    return this.children.tail
+    return this.children.head
   }
 
-  deleteColumn(compareRect) {
-    const [body] = this.descendant(TableBody)
+  deleteColumn(compareRect, delIndex) {
+    const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
     const ERROR_LIMIT = 5
@@ -358,6 +361,9 @@ class TableContainer extends Container {
       return
     }
 
+    // 删除该列对应的colBlot
+    this.colGroup().children.at(delIndex).remove()
+
     removedCells.forEach(cell => {
       cell.remove()
     })
@@ -366,14 +372,13 @@ class TableContainer extends Container {
       const cellColspan = parseInt(cell.formats().colspan, 10)
       const cellWidth = parseInt(cell.formats().width, 10)
       cell.format('colspan', cellColspan - 1)
-      cell.format('width', cellWidth - CELL_DEFAULT.width)
     })
 
     this.updateTableWidth()
   }
 
   deleteRow(compareRect) {
-    const [body] = this.descendant(TableBody)
+    const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
     const ERROR_LIMIT = 5
@@ -477,64 +482,90 @@ class TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect) {
-    const [body] = this.descendant(TableBody)
-    if (body == null || body.children.head == null) return
+  insertColumn(compareRect, colIndex) {
+    const [body] = this.descendants(TableBody)
+    const [tableColGroup] = this.descendants(TableColGroup)
+    const tableCols = this.descendants(TableCol)
+    let addRightCells = []
+    let modifiedCells = []
+    let affectedCells = []
 
+    if (body == null || body.children.head == null) return
     const ERROR_LIMIT = 5
     const tableCells = this.descendants(TableCell)
-    const affectedCells = tableCells.reduce((cells, cell) => {
+    tableCells.forEach(cell => {
       const cellRect = cell.domNode.getBoundingClientRect()
-      const compareRight = compareRect.x + compareRect.width
       const cellLeft = cellRect.x
       const cellRight = cellRect.x + cellRect.width
-      const cellFormats = cell.formats()
+      const compareRight = compareRect.x + compareRect.width
 
       if (Math.abs(cellRight - compareRight) < ERROR_LIMIT) {
         // 列工具单元的右边线与单元格右边线重合，此时在该单元格右边新增一格
-        const id = cellId()
-        const tableRow = cell.parent
-        const rId = tableRow.formats().row
-        const ref = cell.next
-        const tableCell = this.scroll.create(
-          TableCell.blotName,
-          Object.assign({}, CELL_DEFAULT, {
-            row: rId,
-            rowspan: cellFormats.rowspan
-          })
-        )
-        const cellLine = this.scroll.create(TableCellLine.blotName, {
-          row: rId,
-          cell: id,
-          rowspan: cellFormats.rowspan
-        })
-        tableCell.appendChild(cellLine)
-
-        if (ref) {
-          tableRow.insertBefore(tableCell, ref)
-        } else {
-          tableRow.appendChild(tableCell)
-        }
-
-        cells.push(tableCell)
+        addRightCells.push(cell)
       } else if (
         compareRight - cellLeft > ERROR_LIMIT &&
         compareRight - cellRight < -ERROR_LIMIT
       ) {
         // 列工具单元的右边线位于单元格之中
-        cell.format('colspan', parseInt(cellFormats.colspan, 10) + 1)
-        cell.format('width', parseInt(cellFormats.width, 10) + CELL_DEFAULT.width)
-        cells.push(cell)
+        modifiedCells.push(cell)
       }
-      return cells
-    }, [])
+    })
+
+    addRightCells.forEach(cell => {
+      const id = cellId()
+      const tableRow = cell.parent
+      const rId = tableRow.formats().row
+      const ref = cell.next
+      const cellFormats = cell.formats()
+      const tableCell = this.scroll.create(
+        TableCell.blotName,
+        Object.assign({}, CELL_DEFAULT, {
+          row: rId,
+          rowspan: cellFormats.rowspan
+        })
+      )
+      const cellLine = this.scroll.create(TableCellLine.blotName, {
+        row: rId,
+        cell: id,
+        rowspan: cellFormats.rowspan
+      })
+      tableCell.appendChild(cellLine)
+
+      if (ref) {
+        tableRow.insertBefore(tableCell, ref)
+      } else {
+        tableRow.appendChild(tableCell)
+      }
+      affectedCells.push(tableCell)
+    })
+
+    // 插入新的TableCol
+    const tableCol = this.scroll.create(TableCol.blotName, true)
+    let colRef = tableCols[colIndex].next
+    if (colRef) {
+      tableColGroup.insertBefore(tableCol, colRef)
+    } else {
+      tableColGroup.appendChild(tableCol)
+    }
+
+    modifiedCells.forEach(cell => {
+      const cellColspan = cell.formats().colspan
+      cell.format('colspan', parseInt(cellColspan, 10) + 1)
+      affectedCells.push(cell)
+    })
+
+    affectedCells.sort((cellA, cellB) => {
+      let y1 = cellA.domNode.getBoundingClientRect().y
+      let y2 = cellB.domNode.getBoundingClientRect().y
+      return y1 - y2
+    })
 
     this.updateTableWidth()
     return affectedCells
   }
 
   insertRow(compareRect, rowIndex) {
-    const [body] = this.descendant(TableBody)
+    const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
     const ERROR_LIMIT = 5
@@ -608,7 +639,7 @@ class TableContainer extends Container {
   }
 
   rows() {
-    const body = this.children.head
+    const body = this.children.tail
     if (body == null) return []
     return body.children.map(row => row)
   }
