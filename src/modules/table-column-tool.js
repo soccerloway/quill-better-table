@@ -31,7 +31,7 @@ export default class TableColumnTool {
     css(this.domNode, {
       width: `${tableViewRect.width}px`,
       height: `${COL_TOOL_HEIGHT}px`,
-      left: `${tableViewRect.left - containerRect.left + parent.scrollLeft - 1}px`,
+      left: `${tableViewRect.left - containerRect.left + parent.scrollLeft}px`,
       top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT}px`
     })
   }
@@ -56,7 +56,7 @@ export default class TableColumnTool {
 
     for (let index = 0; index < cellsNumber; index++) {
       let col = tableCols.at(index)
-      let colWidth = col.formats()[col.statics.blotName].width
+      let colWidth = parseInt(col.formats()[col.statics.blotName].width, 10)
       let existCells = Array.from(this.domNode.querySelectorAll('qlbt-col-tool-cell'))
       // if cell already exist
       let toolCell = null
