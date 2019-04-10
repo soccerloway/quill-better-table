@@ -1,5 +1,6 @@
 import Quill from 'quill'
 import Delta from 'quill-delta'
+import TableColumnTool from './modules/table-column-tool'
 
 const Module = Quill.import('core/module')
 
@@ -28,8 +29,36 @@ class BetterTable extends Module {
     Quill.register(TableViewWrapper, true);
   }
 
-  constructor(...args) {
-    super(...args);
+  constructor(quill, options) {
+    super(quill, options);
+
+    this.quill.root.addEventListener('click', (evt) => {
+      if (!evt.path || evt.path.length <= 0) return
+
+      const tableNode = evt.path.filter(node => {
+        return node.tagName &&
+          node.tagName.toUpperCase() === 'TABLE' &&
+          node.classList.contains('quill-better-table')
+      })[0]
+
+      if (tableNode) {
+        // current table clicked
+        if (this.table === tableNode) {
+          return
+        }
+
+        // other table clicked
+        if (this.table) {
+          this.hideTableTools()
+        }
+
+        this.showTableTools(tableNode, quill, options)
+      } else if (this.table) {
+        // other clicked
+        this.hideTableTools()
+      }
+    }, false)
+
   }
 
   getTable(range = this.quill.getSelection()) {
@@ -68,6 +97,17 @@ class BetterTable extends Module {
 
     this.quill.updateContents(delta, Quill.sources.USER)
     this.quill.setSelection(range.index + 1, Quill.sources.SILENT)
+  }
+
+  showTableTools (table, quill, options) {
+    this.table = table
+    this.columnTool = new TableColumnTool(table, quill, options)
+  }
+
+  hideTableTools () {
+    this.columnTool.destroy()
+    this.columnTool = null
+    this.table = null
   }
 }
 

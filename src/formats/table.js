@@ -76,7 +76,7 @@ class TableCellLine extends Block {
   }
 }
 TableCellLine.blotName = "table-cell-line"
-TableCellLine.ClassName = "table-cell-line"
+TableCellLine.ClassName = "qlbt-cell-line"
 TableCellLine.tagName = "DIV"
 
 class TableCell extends Container {
@@ -645,16 +645,23 @@ class TableContainer extends Container {
   }
 }
 TableContainer.blotName = "table-container"
-TableContainer.className = "nb-editor-table"
+TableContainer.className = "quill-better-table"
 TableContainer.tagName = "TABLE"
 
 class TableViewWrapper extends Container {
   constructor (scroll, domNode) {
     super(scroll, domNode)
+    const quill = Quill.find(scroll.domNode.parentNode)
+    domNode.addEventListener('scroll', (e) => {
+      const tableModule = quill.getModule('better-table')
+      if (tableModule.columnTool) {
+        tableModule.columnTool.domNode.scrollLeft = e.target.scrollLeft
+      }
+    }, false)
   }
 }
 TableViewWrapper.blotName = "table-view"
-TableViewWrapper.className = "nb-table-view-wrapper"
+TableViewWrapper.className = "quill-better-table-wrapper"
 TableViewWrapper.tagName = "DIV"
 
 TableViewWrapper.allowedChildren = [TableContainer]
