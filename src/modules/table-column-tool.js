@@ -27,12 +27,12 @@ export default class TableColumnTool {
     this.domNode = document.createElement('div')
     this.domNode.classList.add('qlbt-col-tool')
     this.updateToolCells()
-    this.quill.root.parentNode.appendChild(this.domNode)
+    parent.appendChild(this.domNode)
     css(this.domNode, {
       width: `${tableViewRect.width}px`,
       height: `${COL_TOOL_HEIGHT}px`,
       left: `${tableViewRect.left - containerRect.left + parent.scrollLeft}px`,
-      top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT}px`
+      top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5}px`
     })
   }
 
@@ -68,7 +68,7 @@ export default class TableColumnTool {
         toolCell = existCells[index]
       }
 
-      // 设置工具单元格宽度
+      // set tool cell min-width
       css(toolCell, {
         'min-width': `${colWidth}px`
       })
@@ -88,7 +88,7 @@ export default class TableColumnTool {
     let x = 0
     let delta = 0
     let width0 = 0
-    // 辅助线相关变量
+    // helpLine relation varrible
     let tableRect = {}
     let cellRect = {}
     let $helpLine = null
@@ -150,7 +150,7 @@ export default class TableColumnTool {
         top: `${cellRect.top}px`,
         left: `${cellRect.left + cellRect.width - 1}px`,
         zIndex: '100',
-        height: `${tableRect.height + COL_TOOL_HEIGHT}px`,
+        height: `${tableRect.height + COL_TOOL_HEIGHT + 4}px`,
         width: '1px',
         backgroundColor: PRIMARY_COLOR
       })

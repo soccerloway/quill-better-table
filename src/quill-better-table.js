@@ -1,6 +1,7 @@
 import Quill from 'quill'
 import Delta from 'quill-delta'
 import TableColumnTool from './modules/table-column-tool'
+import TableSelection from './modules/table-selection'
 
 const Module = Quill.import('core/module')
 
@@ -102,10 +103,13 @@ class BetterTable extends Module {
   showTableTools (table, quill, options) {
     this.table = table
     this.columnTool = new TableColumnTool(table, quill, options)
+    this.tableSelection = new TableSelection(table, quill, options)
   }
 
   hideTableTools () {
     this.columnTool.destroy()
+    this.tableSelection.destroy()
+    this.tableSelection = null
     this.columnTool = null
     this.table = null
   }
