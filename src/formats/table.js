@@ -482,7 +482,7 @@ class TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect, colIndex) {
+  insertColumn(compareRect, colIndex, isRight = true) {
     const [body] = this.descendants(TableBody)
     const [tableColGroup] = this.descendants(TableColGroup)
     const tableCols = this.descendants(TableCol)
@@ -497,25 +497,39 @@ class TableContainer extends Container {
       const cellRect = cell.domNode.getBoundingClientRect()
       const cellLeft = cellRect.x
       const cellRight = cellRect.x + cellRect.width
+      const compareLeft = compareRect.x
       const compareRight = compareRect.x + compareRect.width
 
-      if (Math.abs(cellRight - compareRight) < ERROR_LIMIT) {
-        // 列工具单元的右边线与单元格右边线重合，此时在该单元格右边新增一格
-        addRightCells.push(cell)
-      } else if (
-        compareRight - cellLeft > ERROR_LIMIT &&
-        compareRight - cellRight < -ERROR_LIMIT
-      ) {
-        // 列工具单元的右边线位于单元格之中
-        modifiedCells.push(cell)
+      if (isRight) {
+        if (Math.abs(cellRight - compareRight) < ERROR_LIMIT) {
+          // 列工具单元的右边线与单元格右边线重合，此时在该单元格右边新增一格
+          addRightCells.push(cell)
+        } else if (
+          compareRight - cellLeft > ERROR_LIMIT &&
+          compareRight - cellRight < -ERROR_LIMIT
+        ) {
+          // 列工具单元的右边线位于单元格之中
+          modifiedCells.push(cell)
+        }
+      } else {
+        if (Math.abs(cellLeft - compareLeft) < ERROR_LIMIT) {
+          // compareRect的左边线与单元格左边线重合，此时在该单元格左边新增一格
+          addRightCells.push(cell)
+        } else if (
+          compareLeft - cellLeft > ERROR_LIMIT &&
+          compareLeft - cellRight < -ERROR_LIMIT
+        ) {
+          // compareRect的左边线位于单元格之中
+          modifiedCells.push(cell)
+        }
       }
     })
 
     addRightCells.forEach(cell => {
+      const ref = isRight ? cell.next : cell
       const id = cellId()
       const tableRow = cell.parent
       const rId = tableRow.formats().row
-      const ref = cell.next
       const cellFormats = cell.formats()
       const tableCell = this.scroll.create(
         TableCell.blotName,
@@ -541,7 +555,7 @@ class TableContainer extends Container {
 
     // 插入新的TableCol
     const tableCol = this.scroll.create(TableCol.blotName, true)
-    let colRef = tableCols[colIndex].next
+    let colRef = isRight ? tableCols[colIndex].next : tableCols[colIndex]
     if (colRef) {
       tableColGroup.insertBefore(tableCol, colRef)
     } else {

@@ -12,8 +12,8 @@ export default class TableSelection {
     this.table = table
     this.quill = quill
     this.options = options
-    this.selectedTds = []  // array for selected table-cells
     this.boundary = {}   // params for selected square
+    this.selectedTds = []  // array for selected table-cells
     this.dragging = false
     this.selectingHandler = this.mouseDownHandler.bind(this)
 
@@ -100,7 +100,7 @@ export default class TableSelection {
       display: 'block',
       left: `${this.boundary.x - containerRect.x - 1}px`,
       top: `${this.boundary.y - containerRect.y}px`,
-      height: `${this.boundary.y1 - this.boundary.y}px`,
+      height: `${this.boundary.y1 - this.boundary.y + 1}px`,
       width: '1px'
     })
 
@@ -116,7 +116,7 @@ export default class TableSelection {
       display: 'block',
       left: `${this.boundary.x - containerRect.x - 1}px`,
       top: `${this.boundary.y - containerRect.y}px`,
-      width: `${this.boundary.x1 - this.boundary.x}px`,
+      width: `${this.boundary.x1 - this.boundary.x + 1}px`,
       height: '1px'
     })
 
@@ -138,6 +138,24 @@ export default class TableSelection {
     this.quill.root.removeEventListener('mousedown',
       this.selectingHandler,
     false)
+
+    return null
+  }
+
+  setSelection (startRect, endRect) {
+    this.boundary = computeBoundaryFromRects(startRect, endRect)
+    this.selectedTds = this.computeSelectedTds()
+    this.repositionHelpLines()
+  }
+
+  clearSelection () {
+    this.boundary = {}
+    this.selectedTds = []
+    LINE_POSITIONS.forEach(direction => {
+      css(this[direction], {
+        display: 'none'
+      })
+    })
   }
 }
 

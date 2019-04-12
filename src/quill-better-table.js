@@ -2,6 +2,7 @@ import Quill from 'quill'
 import Delta from 'quill-delta'
 import TableColumnTool from './modules/table-column-tool'
 import TableSelection from './modules/table-selection'
+import TableOperationMenu from './modules/table-operation-menu'
 
 const Module = Quill.import('core/module')
 
@@ -44,19 +45,58 @@ class BetterTable extends Module {
 
       if (tableNode) {
         // current table clicked
-        if (this.table === tableNode) {
-          return
-        }
-
+        if (this.table === tableNode) return
         // other table clicked
-        if (this.table) {
-          this.hideTableTools()
-        }
-
+        if (this.table) this.hideTableTools()
         this.showTableTools(tableNode, quill, options)
       } else if (this.table) {
         // other clicked
         this.hideTableTools()
+      }
+    }, false)
+
+    // handle right click on quill-better-table
+    this.quill.root.addEventListener('contextmenu', (evt) => {
+      if (!this.table) return true
+      evt.preventDefault()
+      if (!evt.path || evt.path.length <= 0) return
+
+      const tableNode = evt.path.filter(node => {
+        return node.tagName &&
+          node.tagName.toUpperCase() === 'TABLE' &&
+          node.classList.contains('quill-better-table')
+      })[0]
+
+      const rowNode = evt.path.filter(node => {
+        return node.tagName &&
+          node.tagName.toUpperCase() === 'TR' &&
+          node.getAttribute('data-row')
+      })[0]
+
+      const cellNode = evt.path.filter(node => {
+        return node.tagName &&
+          node.tagName.toUpperCase() === 'TD' &&
+          node.getAttribute('data-row')
+      })[0]
+
+      if (this.tableSelection.selectedTds.length <= 0) {
+        this.tableSelection.setSelection(
+          cellNode.getBoundingClientRect(),
+          cellNode.getBoundingClientRect()
+        )
+      }
+
+      if (this.tableOperationMenu)
+        this.tableOperationMenu = this.tableOperationMenu.destroy()
+
+      if (tableNode) {
+        this.tableOperationMenu = new TableOperationMenu({
+          table: tableNode,
+          row: rowNode,
+          cell: cellNode,
+          left: evt.pageX,
+          top: evt.pageY
+        }, quill, options)
       }
     }, false)
 
@@ -109,8 +149,10 @@ class BetterTable extends Module {
   hideTableTools () {
     this.columnTool.destroy()
     this.tableSelection.destroy()
-    this.tableSelection = null
+    this.tableOperationMenu && this.tableOperationMenu.destroy()
     this.columnTool = null
+    this.tableSelection = null
+    this.tableOperationMenu = null
     this.table = null
   }
 }
