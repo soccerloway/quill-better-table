@@ -79,7 +79,12 @@ class BetterTable extends Module {
           node.getAttribute('data-row')
       })[0]
 
-      if (this.tableSelection.selectedTds.length <= 0) {
+      let isTargetCellSelected = this.tableSelection.selectedTds
+        .map(tableCell => tableCell.domNode)
+        .includes(cellNode)
+
+      if (this.tableSelection.selectedTds.length <= 0 ||
+        !isTargetCellSelected) {
         this.tableSelection.setSelection(
           cellNode.getBoundingClientRect(),
           cellNode.getBoundingClientRect()
