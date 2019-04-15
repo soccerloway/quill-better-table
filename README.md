@@ -5,7 +5,7 @@ Module for better table in Quill, more useful features are supported.
 <ul>
   <li>multiline in cells ☑</li>
   <li>add table column left/right ☑</li>
-  <li>add table row top/bottom</li>
+  <li>add table row top/bottom ☑</li>
   <li>remove table selected columns ☑</li>
   <li>remove table selected rows</li>
   <li>selects multiple cells ☑</li>

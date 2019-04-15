@@ -578,7 +578,7 @@ class TableContainer extends Container {
     return affectedCells
   }
 
-  insertRow(compareRect, rowIndex) {
+  insertRow(compareRect, isDown) {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
@@ -594,19 +594,33 @@ class TableContainer extends Container {
 
     tableCells.forEach(cell => {
       const cellRect = cell.domNode.getBoundingClientRect()
+      const compareTop = compareRect.y
       const compareBottom = compareRect.y + compareRect.height
       const cellTop = cellRect.y
       const cellBottom = cellRect.y + cellRect.height
 
-      if (Math.abs(cellBottom - compareBottom) < ERROR_LIMIT) {
-        // 行工具单元的下边线与单元格下边线重合，此时在该单元格下边新增一格
-        addBelowCells.push(cell)
-      } else if (
-        compareBottom - cellTop > ERROR_LIMIT &&
-        compareBottom - cellBottom < -ERROR_LIMIT
-      ) {
-        // 行工具单元的下边线位于单元格之中
-        modifiedCells.push(cell)
+      if (isDown) {
+        if (Math.abs(cellBottom - compareBottom) < ERROR_LIMIT) {
+          // 行工具单元的下边线与单元格下边线重合，此时在该单元格下边新增一格
+          addBelowCells.push(cell)
+        } else if (
+          compareBottom - cellTop > ERROR_LIMIT &&
+          compareBottom - cellBottom < -ERROR_LIMIT
+        ) {
+          // 行工具单元的下边线位于单元格之中
+          modifiedCells.push(cell)
+        }
+      } else {
+        if (Math.abs(cellTop - compareTop) < ERROR_LIMIT) {
+          // 行工具单元的上边线与单元格上边线重合，此时在该单元格下边新增一格
+          addBelowCells.push(cell)
+        } else if (
+          compareTop - cellTop > ERROR_LIMIT &&
+          compareTop - cellBottom < -ERROR_LIMIT
+        ) {
+          // 行工具单元的下边线位于单元格之中
+          modifiedCells.push(cell)
+        }
       }
     })
 
@@ -623,13 +637,12 @@ class TableContainer extends Container {
       const cellFormats = cell.formats()
 
       const tableCell = this.scroll.create(TableCell.blotName, Object.assign(
-        {}, CELL_DEFAULT, { row: rId, colspan: cellFormats.colspan, width: cellFormats.width }
+        {}, CELL_DEFAULT, { row: rId, colspan: cellFormats.colspan }
       ))
       const cellLine = this.scroll.create(TableCellLine.blotName, {
         row: rId,
         cell: cId,
-        colspan: cellFormats.colspan,
-        width: cellFormats.width
+        colspan: cellFormats.colspan
       })
       const empty = this.scroll.create(Break.blotName)
       cellLine.appendChild(empty)
@@ -644,8 +657,15 @@ class TableContainer extends Container {
       affectedCells.push(cell)
     })
 
-    const ref = body.children.at(rowIndex).next
-    body.insertBefore(newRow, ref)
+    const refRow = this.rows().find(row => {
+      let rowRect = row.domNode.getBoundingClientRect()
+      if (isDown) {
+        return Math.abs(rowRect.y - compareRect.y - compareRect.height) < ERROR_LIMIT
+      } else {
+        return Math.abs(rowRect.y - compareRect.y) < ERROR_LIMIT
+      }
+    })
+    body.insertBefore(newRow, refRow)
 
     // affectedCells根据rect.x排序
     affectedCells.sort(sortFunc)
