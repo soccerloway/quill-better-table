@@ -3,7 +3,7 @@ import { css } from '../utils'
 
 const MENU_MIN_HEIHGT = 150
 const MENU_WIDTH = 200
-const ERROR_LIMIT = 2
+const ERROR_LIMIT = 3
 
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
@@ -57,6 +57,28 @@ const MENU_ITEMS_DEFAULT = {
         newColumn[0].domNode.getBoundingClientRect(),
         newColumn[0].domNode.getBoundingClientRect()
       )
+    }
+  },
+
+  deleteColumn: {
+    text: 'Delete selected columns',
+    handler () {
+      const tableContainer = Quill.find(this.table)
+      let colIndexes = getColToolCellIndexesByBoundary(
+        this.columnToolCells,
+        this.boundary,
+        (cellRect, boundary) => {
+          return cellRect.x + ERROR_LIMIT > boundary.x &&
+            cellRect.x + cellRect.width - ERROR_LIMIT < boundary.x1
+        }
+      )
+
+      let isDeleteTable = tableContainer.deleteColumns(this.boundary, colIndexes)
+      if (!isDeleteTable) {
+        this.tableColumnTool.updateToolCells()
+        this.quill.update(Quill.sources.USER)
+        this.tableSelection.clearSelection()
+      }
     }
   }
 }
@@ -125,4 +147,14 @@ function getColToolCellIndexByBoundary (cells, boundary, conditionFn) {
     }
     return findIndex
   }, false)
+}
+
+function getColToolCellIndexesByBoundary (cells, boundary, conditionFn) {
+  return cells.reduce((findIndexes, cell) => {
+    let cellRect = cell.getBoundingClientRect()
+    if (conditionFn(cellRect, boundary)) {
+      findIndexes.push(cells.indexOf(cell))
+    }
+    return findIndexes
+  }, [])
 }

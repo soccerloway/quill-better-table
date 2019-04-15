@@ -53,25 +53,30 @@ export default class TableColumnTool {
     const CellsInFirstRow = tableContainer.children.tail.children.head.children
     const tableCols = tableContainer.colGroup().children
     const cellsNumber = computeCellsNumber(CellsInFirstRow)
+    let existCells = Array.from(this.domNode.querySelectorAll('.qlbt-col-tool-cell'))
 
-    for (let index = 0; index < cellsNumber; index++) {
+    for (let index = 0; index < Math.max(cellsNumber, existCells.length); index++) {
       let col = tableCols.at(index)
-      let colWidth = parseInt(col.formats()[col.statics.blotName].width, 10)
-      let existCells = Array.from(this.domNode.querySelectorAll('.qlbt-col-tool-cell'))
+      let colWidth = col && parseInt(col.formats()[col.statics.blotName].width, 10)
       // if cell already exist
       let toolCell = null
       if (!existCells[index]) {
         toolCell = this.createToolCell()
         this.domNode.appendChild(toolCell)
         this.addColCellHolderHandler(toolCell)
+        // set tool cell min-width
+        css(toolCell, {
+          'min-width': `${colWidth}px`
+        })
+      } else if (existCells[index] && index >= cellsNumber) {
+        existCells[index].remove()
       } else {
         toolCell = existCells[index]
+        // set tool cell min-width
+        css(toolCell, {
+          'min-width': `${colWidth}px`
+        })
       }
-
-      // set tool cell min-width
-      css(toolCell, {
-        'min-width': `${colWidth}px`
-      })
     }
   }
 

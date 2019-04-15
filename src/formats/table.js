@@ -327,7 +327,7 @@ class TableContainer extends Container {
     return this.children.head
   }
 
-  deleteColumn(compareRect, delIndex) {
+  deleteColumns(compareRect, delIndexes = []) {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
@@ -344,8 +344,8 @@ class TableContainer extends Container {
       const cellRight = cellRect.x + cellRect.width
 
       if (
-        cellLeft > compareLeft - ERROR_LIMIT &&
-        cellRight < compareRight + ERROR_LIMIT
+        cellLeft + ERROR_LIMIT > compareLeft &&
+        cellRight - ERROR_LIMIT < compareRight
       ) {
         removedCells.push(cell)
       } else if (
@@ -358,11 +358,13 @@ class TableContainer extends Container {
 
     if (removedCells.length === tableCells.length) {
       this.tableDestroy()
-      return
+      return true
     }
 
     // 删除该列对应的colBlot
-    this.colGroup().children.at(delIndex).remove()
+    delIndexes.forEach((delIndex) => {
+      this.colGroup().children.at(delIndexes[0]).remove()
+    })
 
     removedCells.forEach(cell => {
       cell.remove()
@@ -371,7 +373,7 @@ class TableContainer extends Container {
     modifiedCells.forEach(cell => {
       const cellColspan = parseInt(cell.formats().colspan, 10)
       const cellWidth = parseInt(cell.formats().width, 10)
-      cell.format('colspan', cellColspan - 1)
+      cell.format('colspan', cellColspan - delIndexes.length)
     })
 
     this.updateTableWidth()
@@ -447,12 +449,10 @@ class TableContainer extends Container {
 
   tableDestroy() {
     const quill = Quill.find(this.scroll.domNode.parentNode)
-    const tableToolModule = quill.getModule("table-tools")
-    const offset = this.offset()
-    tableToolModule.hide()
+    const tableModule = quill.getModule("better-table")
     this.remove()
+    tableModule.hideTableTools()
     quill.update(Quill.sources.USER)
-    quill.setSelection(offset, Quill.sources.SILENT)
   }
 
   insertCell(tdDom, row) {
