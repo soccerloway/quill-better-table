@@ -395,7 +395,6 @@ class TableContainer extends Container {
       const compareBottom = compareRect.y + compareRect.height
       const cellTop = cellRect.y
       const cellBottom = cellRect.y + cellRect.height
-
       if (
         cellTop > compareTop - ERROR_LIMIT &&
         cellBottom < compareBottom + ERROR_LIMIT
@@ -417,6 +416,18 @@ class TableContainer extends Container {
       this.tableDestroy()
       return
     }
+
+    // compute length of removed rows
+    const removedRowsLength = this.rows().reduce((sum, row) => {
+      let rowRect  = row.domNode.getBoundingClientRect()
+      if (
+        rowRect.y > compareRect.y - ERROR_LIMIT &&
+        rowRect.y + rowRect.height < compareRect.y + compareRect.height + ERROR_LIMIT
+      ) {
+        sum += 1
+      }
+      return sum
+    }, 0)
 
     // 需要根据当前cell位置处理，必须放在删除单元格等改变布局的逻辑之前
     fallCells.forEach(cell => {
@@ -443,7 +454,7 @@ class TableContainer extends Container {
 
     modifiedCells.forEach(cell => {
       const cellRowspan = parseInt(cell.formats().rowspan, 10)
-      cell.format("rowspan", cellRowspan - 1)
+      cell.format("rowspan", cellRowspan - removedRowsLength)
     })
   }
 

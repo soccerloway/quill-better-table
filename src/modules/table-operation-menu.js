@@ -116,6 +116,16 @@ const MENU_ITEMS_DEFAULT = {
         this.tableSelection.clearSelection()
       }
     }
+  },
+
+  deleteRow: {
+    text: 'Delete selected rows',
+    handler () {
+      const tableContainer = Quill.find(this.table)
+      tableContainer.deleteRow(this.boundary)
+      this.quill.update(Quill.sources.USER)
+      this.tableSelection.clearSelection()
+    }
   }
 }
 
