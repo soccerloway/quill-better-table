@@ -16,11 +16,14 @@ export default class TableSelection {
     this.selectedTds = []  // array for selected table-cells
     this.dragging = false
     this.selectingHandler = this.mouseDownHandler.bind(this)
+    this.clearSelectionHanler = this.clearSelection.bind(this)
 
     this.helpLinesInitial()
     this.quill.root.addEventListener('mousedown',
       this.selectingHandler,
       false)
+
+    this.quill.on('text-change', this.clearSelectionHanler)
   }
 
   helpLinesInitial () {
@@ -47,7 +50,8 @@ export default class TableSelection {
     const startTdRect = startTd.getBoundingClientRect()
     this.dragging = true
     this.boundary = computeBoundaryFromRects(startTdRect, startTdRect)
-    this.selectedTds = self.computeSelectedTds()
+    this.correctBoundary()
+    this.selectedTds = this.computeSelectedTds()
     this.repositionHelpLines()
 
     function mouseMoveHandler (e) {
@@ -55,6 +59,7 @@ export default class TableSelection {
       const endTd = e.target.closest('td[data-row]')
       const endTdRect = endTd.getBoundingClientRect()
       self.boundary = computeBoundaryFromRects(startTdRect, endTdRect)
+      self.correctBoundary()
       self.selectedTds = self.computeSelectedTds()
       self.repositionHelpLines()
 
@@ -71,6 +76,25 @@ export default class TableSelection {
     }
   }
 
+  correctBoundary () {
+    const tableContainer = Quill.find(this.table)
+    const tableCells = tableContainer.descendants(TableCell)
+
+    tableCells.forEach(tableCell => {
+      let { x, y, width, height } = tableCell.domNode.getBoundingClientRect()
+      let isCellIntersected = (
+          (x + ERROR_LIMIT >= this.boundary.x && x + ERROR_LIMIT <= this.boundary.x1) ||
+          (x - ERROR_LIMIT + width >= this.boundary.x && x - ERROR_LIMIT + width <= this.boundary.x1)
+        ) && (
+          (y + ERROR_LIMIT >= this.boundary.y && y + ERROR_LIMIT <= this.boundary.y1) ||
+          (y - ERROR_LIMIT + height >= this.boundary.y && y - ERROR_LIMIT + height <= this.boundary.y1)
+        )
+      if (isCellIntersected) {
+        this.boundary = computeBoundaryFromRects(this.boundary, { x, y, width, height })
+      }
+    })
+  }
+
   computeSelectedTds () {
     const tableContainer = Quill.find(this.table)
     const tableCells = tableContainer.descendants(TableCell)
@@ -78,15 +102,14 @@ export default class TableSelection {
     return tableCells.reduce((selectedCells, tableCell) => {
       let { x, y, width, height } = tableCell.domNode.getBoundingClientRect()
       let isCellIncluded = (
-          (x + ERROR_LIMIT >= this.boundary.x && x + ERROR_LIMIT <= this.boundary.x1) ||
-          (x - ERROR_LIMIT + width >= this.boundary.x && x - ERROR_LIMIT + width <= this.boundary.x1)
+          x + ERROR_LIMIT >= this.boundary.x &&
+          x - ERROR_LIMIT + width <= this.boundary.x1
         ) && (
-          (y + ERROR_LIMIT >= this.boundary.y && y + ERROR_LIMIT <= this.boundary.y1) ||
-          (y - ERROR_LIMIT + height >= this.boundary.y && y - ERROR_LIMIT + height <= this.boundary.y1)
+          y + ERROR_LIMIT >= this.boundary.y &&
+          y - ERROR_LIMIT + height <= this.boundary.y1
         )
 
       if (isCellIncluded) {
-        this.boundary = computeBoundaryFromRects(this.boundary, { x, y, width, height })
         selectedCells.push(tableCell)
       }
 
@@ -129,6 +152,15 @@ export default class TableSelection {
     })
   }
 
+  // based on selectedTds compute positions of help lines
+  // It is useful when selectedTds are not changed
+  refreshHelpLinesPosition () {
+    const startRect = this.selectedTds[0].domNode.getBoundingClientRect()
+    const endRect = this.selectedTds[this.selectedTds.length - 1].domNode.getBoundingClientRect()
+    this.boundary = computeBoundaryFromRects(startTdRect, endRect)
+    this.repositionHelpLines()
+  }
+
   destroy () {
     LINE_POSITIONS.forEach(direction => {
       this[direction].remove()
@@ -139,11 +171,14 @@ export default class TableSelection {
       this.selectingHandler,
     false)
 
+    this.quill.off('text-change', this.clearSelectionHanler)
+
     return null
   }
 
   setSelection (startRect, endRect) {
     this.boundary = computeBoundaryFromRects(startRect, endRect)
+    this.correctBoundary()
     this.selectedTds = this.computeSelectedTds()
     this.repositionHelpLines()
   }
@@ -152,7 +187,7 @@ export default class TableSelection {
     this.boundary = {}
     this.selectedTds = []
     LINE_POSITIONS.forEach(direction => {
-      css(this[direction], {
+      this[direction] && css(this[direction], {
         display: 'none'
       })
     })

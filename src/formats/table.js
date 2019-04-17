@@ -14,6 +14,7 @@ const CELL_DEFAULT = {
   rowspan: 1,
   colspan: 1
 }
+const ERROR_LIMIT = 5
 
 class TableCellLine extends Block {
   static create(value) {
@@ -331,7 +332,6 @@ class TableContainer extends Container {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
-    const ERROR_LIMIT = 5
     const tableCells = this.descendants(TableCell)
     const removedCells = []
     const modifiedCells = []
@@ -383,7 +383,6 @@ class TableContainer extends Container {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
-    const ERROR_LIMIT = 5
     const tableCells = this.descendants(TableCell)
     const removedCells = []  // 将被删掉的单元格
     const modifiedCells = [] // 将被修改属性的单元格
@@ -466,23 +465,18 @@ class TableContainer extends Container {
     quill.update(Quill.sources.USER)
   }
 
-  insertCell(tdDom, row) {
+  insertCell(tableRow, ref) {
     const id = cellId()
-    const tableRow = Quill.find(row)
     const rId = tableRow.formats().row
-    const ref = tdDom ? Quill.find(tdDom) : null
     const tableCell = this.scroll.create(
       TableCell.blotName,
       Object.assign({}, CELL_DEFAULT, {
-        row: rId,
-        rowspan: 1,
-        width: 150
+        row: rId
       })
     )
     const cellLine = this.scroll.create(TableCellLine.blotName, {
       row: rId,
-      cell: id,
-      rowspan: 1
+      cell: id
     })
     tableCell.appendChild(cellLine)
 
@@ -502,7 +496,6 @@ class TableContainer extends Container {
     let affectedCells = []
 
     if (body == null || body.children.head == null) return
-    const ERROR_LIMIT = 5
     const tableCells = this.descendants(TableCell)
     tableCells.forEach(cell => {
       const cellRect = cell.domNode.getBoundingClientRect()
@@ -593,7 +586,6 @@ class TableContainer extends Container {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
-    const ERROR_LIMIT = 5
     const tableCells = this.descendants(TableCell)
     const rId = rowId()
     const newRow = this.scroll.create(TableRow.blotName, {
@@ -681,6 +673,78 @@ class TableContainer extends Container {
     // affectedCells根据rect.x排序
     affectedCells.sort(sortFunc)
     return affectedCells
+  }
+
+  mergeCells (compareRect, mergingCells, rowspan, colspan) {
+    const mergedCell = mergingCells.reduce((result, tableCell, index) => {
+      if (index !== 0) {
+        result && tableCell.moveChildren(result)
+        tableCell.remove()
+      } else {
+        tableCell.format('colspan', colspan)
+        tableCell.format('rowspan', rowspan)
+        result = tableCell
+      }
+
+      return result
+    }, null)
+
+    let rowId = mergedCell.domNode.getAttribute('data-row')
+    let cellId = mergedCell.children.head.domNode.getAttribute('data-cell')
+    mergedCell.children.forEach(cellLine => {
+      cellLine.format('cell', cellId)
+      cellLine.format('row', rowId)
+      cellLine.format('colspan', colspan)
+      cellLine.format('rowspan', rowspan)
+    })
+
+    return mergedCell
+  }
+
+  unmergeCells (unmergingCells) {
+    let cellFormats = {}
+    let cellRowspan = 1
+    let cellColspan = 1
+
+    unmergingCells.forEach(tableCell => {
+      cellFormats = tableCell.formats()
+      cellRowspan = cellFormats.rowspan
+      cellColspan = cellFormats.colspan
+
+      if (cellColspan > 1) {
+        let ref = tableCell.next
+        let row = tableCell.row()
+        tableCell.format('colspan', 1)
+        for (let i = cellColspan; i > 1; i--) {
+          this.insertCell(row, ref)
+        }
+      }
+
+      if (cellRowspan > 1) {
+        let i = cellRowspan
+        let nextRow = tableCell.row().next
+        while (i > 1) {
+          let refInNextRow = nextRow.children
+            .reduce((result, cell) => {
+              let compareRect = tableCell.domNode.getBoundingClientRect()
+              let cellRect = cell.domNode.getBoundingClientRect()
+              if (Math.abs(compareRect.x + compareRect.width - cellRect.x) < ERROR_LIMIT) {
+                result = cell
+              }
+              return result
+            }, null)
+
+          for (let i = cellColspan; i > 0; i--) {
+            this.insertCell(nextRow, refInNextRow)
+          }
+
+          i -= 1
+          nextRow = nextRow.next
+        }
+
+        tableCell.format('rowspan', 1)
+      }
+    })
   }
 
   rows() {

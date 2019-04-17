@@ -96,6 +96,53 @@ const MENU_ITEMS_DEFAULT = {
     }
   },
 
+  mergeCells: {
+    text: 'Merge selected cells',
+    handler () {
+      const tableContainer = Quill.find(this.table)
+      // compute merged Cell rowspan, equal to length of selected rows
+      const rowspan = tableContainer.rows().reduce((sum, row) => {
+        let rowRect  = row.domNode.getBoundingClientRect()
+        if (
+          rowRect.y > this.boundary.y - ERROR_LIMIT &&
+          rowRect.y + rowRect.height < this.boundary.y + this.boundary.height + ERROR_LIMIT
+        ) {
+          sum += 1
+        }
+        return sum
+      }, 0)
+
+      // compute merged cell colspan, equal to length of selected cols
+      const colspan = this.columnToolCells.reduce((sum, cell) => {
+        let cellRect = cell.getBoundingClientRect()
+        if (
+          cellRect.x > this.boundary.x - ERROR_LIMIT &&
+          cellRect.x + cellRect.width < this.boundary.x + this.boundary.width + ERROR_LIMIT
+        ) {
+          sum += 1
+        }
+        return sum
+      }, 0)
+
+      const mergedCell = tableContainer.mergeCells(this.boundary, this.selectedTds, rowspan, colspan)
+      this.quill.update(Quill.sources.USER)
+      this.tableSelection.setSelection(
+        mergedCell.domNode.getBoundingClientRect(),
+        mergedCell.domNode.getBoundingClientRect()
+      )
+    }
+  },
+
+  unmergeCells: {
+    text: 'Unmerge cells',
+    handler () {
+      const tableContainer = Quill.find(this.table)
+      tableContainer.unmergeCells(this.selectedTds)
+      this.quill.update(Quill.sources.USER)
+      this.tableSelection.clearSelection()
+    }
+  },
+
   deleteColumn: {
     text: 'Delete selected columns',
     handler () {
