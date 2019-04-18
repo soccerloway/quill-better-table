@@ -102,7 +102,7 @@ class BetterTable extends Module {
           cell: cellNode,
           left: evt.pageX,
           top: evt.pageY
-        }, quill, options)
+        }, quill, options.operationMenu)
       }
     }, false)
 

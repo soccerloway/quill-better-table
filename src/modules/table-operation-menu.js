@@ -218,7 +218,11 @@ export default class TableOperationMenu {
 
     for (let name in this.menuItems) {
       if (this.menuItems[name]) {
-        this.domNode.appendChild(this.menuItemCreator(this.menuItems[name]))
+        this.domNode.appendChild(
+          this.menuItemCreator(
+            Object.assign({}, MENU_ITEMS_DEFAULT[name], this.menuItems[name])
+          )
+        )
       }
     }
   }

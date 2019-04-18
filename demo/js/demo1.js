@@ -12,7 +12,16 @@ window.onload = () => {
     theme: 'snow',
     modules: {
       table: false,
-      'better-table': true,
+      'better-table': {
+        operationMenu: {
+          items: {
+            mergeCells: false,
+            unmergeCells: {
+              text: '拆分单元格'
+            }
+          }
+        }
+      },
       keyboard: {
         bindings: BetterTableModule.keyboardBindings
       }
