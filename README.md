@@ -11,6 +11,6 @@ Module for better table in Quill, more useful features are supported.
   <li>selects multiple cells ☑</li>
   <li>merge/unmerge cells ☑</li>
   <li>modify column width ☑</li>
-  <li>delete table</li>
+  <li>delete table ☑</li>
   <li>clear cell content</li>
 </ul>

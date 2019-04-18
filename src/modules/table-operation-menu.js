@@ -173,6 +173,17 @@ const MENU_ITEMS_DEFAULT = {
       this.quill.update(Quill.sources.USER)
       this.tableSelection.clearSelection()
     }
+  },
+
+  deleteTable: {
+    text: 'Delete table',
+    handler () {
+      const betterTableModule = this.quill.getModule('better-table')
+      const tableContainer = Quill.find(this.table)
+      betterTableModule.hideTableTools()
+      tableContainer.remove()
+      this.quill.update(Quill.sources.USER)
+    }
   }
 }
 
