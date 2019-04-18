@@ -1,10 +1,9 @@
-import Quill from 'quill'
-import BetterTableModule from 'src/quill-better-table.js'
+import QuillBetterTable from 'quill-better-table'
 // import better-table styles file
 import 'src/assets/quill-better-table.scss'
 
 Quill.register({
-  'modules/better-table': BetterTableModule
+  'modules/better-table': QuillBetterTable
 }, true)
 
 window.onload = () => {
@@ -22,7 +21,7 @@ window.onload = () => {
         }
       },
       keyboard: {
-        bindings: BetterTableModule.keyboardBindings
+        bindings: QuillBetterTable.keyboardBindings
       }
     }
   })
