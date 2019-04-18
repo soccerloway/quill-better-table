@@ -12,7 +12,10 @@ window.onload = () => {
     theme: 'snow',
     modules: {
       table: false,
-      'better-table': true
+      'better-table': true,
+      keyboard: {
+        bindings: BetterTableModule.keyboardBindings
+      }
     }
   })
 

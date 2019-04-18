@@ -34,6 +34,7 @@ class BetterTable extends Module {
   constructor(quill, options) {
     super(quill, options);
 
+    // handle click on quill-better-table
     this.quill.root.addEventListener('click', (evt) => {
       if (!evt.path || evt.path.length <= 0) return
 
@@ -105,6 +106,29 @@ class BetterTable extends Module {
       }
     }, false)
 
+    // add keyboard binding：Backspace
+    // prevent user hits backspace to delete table cell
+    const KeyBoard = quill.getModule('keyboard')
+    quill.keyboard.addBinding(
+      { key: 'Backspace' },
+      {},
+      function (range, context) {
+        if (range.index === 0 || this.quill.getLength() <= 1) return true;
+        const [line] = this.quill.getLine(range.index);
+        if (context.offset === 0) {
+          const [prev] = this.quill.getLine(range.index - 1);
+          if (prev != null) {
+            if (prev.statics.blotName === 'table-cell-line' &&
+              line.statics.blotName !== 'table-cell-line') return false;
+          }
+        }
+        return true
+      })
+    // since only one matched bindings callback will excute.
+    // expected my binding callback excute first
+    // I changed the order of binding callbacks
+    let thisBinding = quill.keyboard.bindings['Backspace'].pop()
+    quill.keyboard.bindings['Backspace'].splice(0, 1, thisBinding)
   }
 
   getTable(range = this.quill.getSelection()) {
@@ -159,6 +183,65 @@ class BetterTable extends Module {
     this.tableSelection = null
     this.tableOperationMenu = null
     this.table = null
+  }
+}
+
+BetterTable.keyboardBindings = {
+  'table-cell-line backspace': {
+    key: 'Backspace',
+    format: ['table-cell-line'],
+    collapsed: true,
+    offset: 0,
+    handler(range, context) {
+      const [line, offset] = this.quill.getLine(range.index)
+      if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
+        return false
+      }
+      return true
+    },
+  },
+
+  'table-cell-line delete': {
+    key: 'Delete',
+    format: ['table-cell-line'],
+    collapsed: true,
+    suffix: /^$/,
+    handler() {},
+  },
+
+  'table-cell-line enter': {
+    key: 'Enter',
+    shiftKey: null,
+    format: ['table-cell-line'],
+    handler(range, context) {
+      // bugfix: a unexpected new line inserted when user compositionend with hitting Enter
+      if (this.quill.selection && this.quill.selection.composing) return
+      const Scope = Quill.imports.parchment.Scope
+      if (range.length > 0) {
+        this.quill.scroll.deleteAt(range.index, range.length); // So we do not trigger text-change
+      }
+      const lineFormats = Object.keys(context.format).reduce((formats, format) => {
+        if (
+          this.quill.scroll.query(format, Scope.BLOCK) &&
+          !Array.isArray(context.format[format])
+        ) {
+          formats[format] = context.format[format];
+        }
+        return formats;
+      }, {});
+      // insert new cellLine with lineFormats
+      this.quill.insertText(range.index, '\n', lineFormats['table-cell-line'], Quill.sources.USER);
+      // Earlier scroll.deleteAt might have messed up our selection,
+      // so insertText's built in selection preservation is not reliable
+      this.quill.setSelection(range.index + 1, Quill.sources.SILENT);
+      this.quill.focus();
+      Object.keys(context.format).forEach(name => {
+        if (lineFormats[name] != null) return;
+        if (Array.isArray(context.format[name])) return;
+        if (name === 'link') return;
+        this.quill.format(name, context.format[name], Quill.sources.USER);
+      });
+    },
   }
 }
 
