@@ -1,10 +1,10 @@
 import Quill from 'quill'
-import Delta from 'quill-delta'
 import TableColumnTool from './modules/table-column-tool'
 import TableSelection from './modules/table-selection'
 import TableOperationMenu from './modules/table-operation-menu'
 
 const Module = Quill.import('core/module')
+const Delta = Quill.import('delta')
 
 import {
   TableCol,

@@ -4,16 +4,16 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["quill-better-table"] = factory();
+		exports["quillBetterTable"] = factory();
 	else
-		root["quill-better-table"] = factory();
+		root["quillBetterTable"] = factory();
 })(window, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	function hotDisposeChunk(chunkId) {
 /******/ 		delete installedChunks[chunkId];
 /******/ 	}
-/******/ 	var parentHotUpdateCallback = window["webpackHotUpdatequill_better_table"];
-/******/ 	window["webpackHotUpdatequill_better_table"] = // eslint-disable-next-line no-unused-vars
+/******/ 	var parentHotUpdateCallback = window["webpackHotUpdatequillBetterTable"];
+/******/ 	window["webpackHotUpdatequillBetterTable"] = // eslint-disable-next-line no-unused-vars
 /******/ 	function webpackHotUpdateCallback(chunkId, moreModules) {
 /******/ 		hotAddUpdateChunk(chunkId, moreModules);
 /******/ 		if (parentHotUpdateCallback) parentHotUpdateCallback(chunkId, moreModules);
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "0f51455657c453bb2e71";
+/******/ 	var hotCurrentHash = "0669b40ee22f22cb9299";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -798,22 +798,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(18)(__webpack_require__.s = 18);
+/******/ 	return hotCreateRequire(9)(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 16:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ 18:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(16);
+module.exports = __webpack_require__(7);
 
 
 /***/ })

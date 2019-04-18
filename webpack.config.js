@@ -15,7 +15,7 @@ module.exports = (env, argv) => {
 
     output:{
       filename: '[name]',
-      library: 'quill-better-table',
+      library: 'quillBetterTable',
       libraryExport: 'default',
       libraryTarget: 'umd',
       path: path.resolve(__dirname, './dist/')
@@ -23,9 +23,19 @@ module.exports = (env, argv) => {
 
     resolve: {
       alias: {
-        'src': path.resolve(__dirname, './src')
+        'src': path.resolve(__dirname, './src'),
+        'dist': path.resolve(__dirname, './dist')
       },
       extensions: ['.js', '.scss', '.html']
+    },
+
+    externals: {
+      'quill': {
+        commonjs: 'quill',
+        commonjs2: 'quill',
+        amd: 'quill',
+        root: 'Quill'
+      }
     },
 
     module: {

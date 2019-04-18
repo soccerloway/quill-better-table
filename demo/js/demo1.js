@@ -15,9 +15,8 @@ window.onload = () => {
       'better-table': {
         operationMenu: {
           items: {
-            mergeCells: false,
             unmergeCells: {
-              text: '拆分单元格'
+              text: 'Another unmerge cells name'
             }
           }
         }
