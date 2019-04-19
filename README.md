@@ -27,7 +27,7 @@ Since I use webpack externals to bundle, you must expose `Quill` to window objec
 npm install quill-better-table
 ```
 
-# Useage
+# Usage
 Load quill and style dependencies
 ```
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.min.js" type="text/javascript"></script>
