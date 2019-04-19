@@ -26,9 +26,14 @@ window.onload = () => {
     }
   })
 
+  let tableModule = quill.getModule('better-table')
   document.body.querySelector('#insert-table')
     .onclick = () => {
-      let tableModule = quill.getModule('better-table')
       tableModule.insertTable(3, 3)
+    }
+
+  document.body.querySelector('#get-table')
+    .onclick = () => {
+      console.log(tableModule.getTable())
     }
 }
