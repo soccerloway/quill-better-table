@@ -115,12 +115,14 @@ const quill = new Quill('#editor', {
 OperationMenu configures the operation list in right-click menu.
 
 ## operationMenu.items
-operationMenu show all operations as default.
+operationMenu show all operations as default. `false` will remove the operation.
 ```
 {
   operationKey: {
     text: 'foo'
-  }
+  },
+
+  operationKey: false
 }
 ```
 `operationKey` is the name of operation, there is a list below:
