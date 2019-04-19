@@ -16,7 +16,8 @@
     "quill",
     "quilljs",
     "table",
-    "multiline"
+    "multiline",
+    "quilltable"
   ],
   "author": "soccerloway",
   "license": "SEE LICENSE IN LICENSE file",
