@@ -1,6 +1,9 @@
 # quill-better-table
 A module for better table in Quill, more useful features are supported. There is a list of features below. Thanks [quilljs](https://quilljs.com/) for its awesome extensibility. Hope that quill-better-table could help you.
 
+# Online Demo
+[quill-better-table](https://codepen.io/soccerloway/pen/WWJowj)
+
 # Features
 <ul>
   <li>Multiple lines in table cell ☑</li>
