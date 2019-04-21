@@ -5,16 +5,45 @@ A module for better table in Quill, more useful features are supported. There is
 [quill-better-table Codepen Demo](https://codepen.io/soccerloway/pen/WWJowj)
 
 # Features
+Clicking on tables in quill editor will initialize the tools for table, all features are based on it.
+
 <ul>
-  <li>Multiple lines in table cell ☑</li>
-  <li>Add table column left/right ☑</li>
-  <li>Add table row top/bottom ☑</li>
-  <li>Remove table selected columns ☑</li>
-  <li>Remove table selected rows ☑</li>
-  <li>Selects multiple table cells ☑</li>
-  <li>Merge/Unmerge table cells ☑</li>
-  <li>Modify the width of column ☑</li>
-  <li>Delete table ☑</li>
+  <li>
+    <h3>Multiple lines in table cell</h3>
+    <p>Press Enter to add new lines in the table cell now.</p>
+  </li>
+  <li>
+    <h3>Add table column left/right</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
+  <li>
+    <h3>Add table row top/bottom</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
+  <li>
+    <h3>Remove selected table columns</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
+  <li>
+    <h3>Remove selected table rows</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
+  <li>
+    <h3>Selects multiple table cells</h3>
+    <p>Dragging over the table cells could select the tableCells surrounded by the highlight borders.</p>
+  </li>
+  <li>
+    <h3>Merge/Unmerge table cells</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
+  <li>
+    <h3>Resize the width of column</h3>
+    <p>Dragging lines between the top tool for columns could resize width of columns.</p>
+  </li>
+  <li>
+    <h3>Delete table</h3>
+    <p>Right-click on table to open context menu, you can see the button.</p>
+  </li>
 </ul>
 
 # Requirements
