@@ -766,6 +766,11 @@ class TableViewWrapper extends Container {
       if (tableModule.columnTool) {
         tableModule.columnTool.domNode.scrollLeft = e.target.scrollLeft
       }
+
+      if (tableModule.tableSelection &&
+        tableModule.tableSelection.selectedTds.length > 0) {
+        tableModule.tableSelection.repositionHelpLines()
+      }
     }, false)
   }
 }

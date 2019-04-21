@@ -119,9 +119,10 @@ export default class TableSelection {
 
   repositionHelpLines () {
     const containerRect = this.quill.root.parentNode.getBoundingClientRect()
+    const tableViewScrollLeft = this.table.parentNode.scrollLeft
     css(this.left, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1}px`,
+      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
       top: `${this.boundary.y - containerRect.y}px`,
       height: `${this.boundary.y1 - this.boundary.y + 1}px`,
       width: '1px'
@@ -129,7 +130,7 @@ export default class TableSelection {
 
     css(this.right, {
       display: 'block',
-      left: `${this.boundary.x1 - containerRect.x}px`,
+      left: `${this.boundary.x1 - containerRect.x - tableViewScrollLeft}px`,
       top: `${this.boundary.y - containerRect.y}px`,
       height: `${this.boundary.y1 - this.boundary.y + 1}px`,
       width: '1px'
@@ -137,7 +138,7 @@ export default class TableSelection {
 
     css(this.top, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1}px`,
+      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
       top: `${this.boundary.y - containerRect.y}px`,
       width: `${this.boundary.x1 - this.boundary.x + 1}px`,
       height: '1px'
@@ -145,7 +146,7 @@ export default class TableSelection {
 
     css(this.bottom, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1}px`,
+      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
       top: `${this.boundary.y1 - containerRect.y + 1}px`,
       width: `${this.boundary.x1 - this.boundary.x + 1}px`,
       height: '1px'
