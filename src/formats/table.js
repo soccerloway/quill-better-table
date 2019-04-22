@@ -1,4 +1,5 @@
 import Quill from "quill"
+import { getRelativeRect } from '../utils'
 
 const Break = Quill.import("blots/break")
 const Block = Quill.import("blots/block")
@@ -315,11 +316,6 @@ class TableContainer extends Container {
     }, 0)
   }
 
-  // 获得选中的td
-  getSelectedTds() {
-    return this.selectedTds
-  }
-
   cells(column) {
     return this.rows().map(row => row.children.at(column))
   }
@@ -328,7 +324,7 @@ class TableContainer extends Container {
     return this.children.head
   }
 
-  deleteColumns(compareRect, delIndexes = []) {
+  deleteColumns(compareRect, delIndexes = [], editorWrapper) {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
@@ -337,20 +333,19 @@ class TableContainer extends Container {
     const modifiedCells = []
 
     tableCells.forEach(cell => {
-      const cellRect = cell.domNode.getBoundingClientRect()
-      const compareLeft = compareRect.x
-      const compareRight = compareRect.x + compareRect.width
-      const cellLeft = cellRect.x
-      const cellRight = cellRect.x + cellRect.width
+      const cellRect = getRelativeRect(
+        cell.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
 
       if (
-        cellLeft + ERROR_LIMIT > compareLeft &&
-        cellRight - ERROR_LIMIT < compareRight
+        cellRect.x + ERROR_LIMIT > compareRect.x &&
+        cellRect.x1 - ERROR_LIMIT < compareRect.x1
       ) {
         removedCells.push(cell)
       } else if (
-        cellLeft < compareLeft + ERROR_LIMIT &&
-        cellRight > compareRight - ERROR_LIMIT
+        cellRect.x < compareRect.x + ERROR_LIMIT &&
+        cellRect.x1 > compareRect.x1 - ERROR_LIMIT
       ) {
         modifiedCells.push(cell)
       }
@@ -361,7 +356,7 @@ class TableContainer extends Container {
       return true
     }
 
-    // 删除该列对应的colBlot
+    // remove the matches column tool cell
     delIndexes.forEach((delIndex) => {
       this.colGroup().children.at(delIndexes[0]).remove()
     })
@@ -379,33 +374,33 @@ class TableContainer extends Container {
     this.updateTableWidth()
   }
 
-  deleteRow(compareRect) {
+  deleteRow(compareRect, editorWrapper) {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
     const tableCells = this.descendants(TableCell)
-    const removedCells = []  // 将被删掉的单元格
-    const modifiedCells = [] // 将被修改属性的单元格
-    const fallCells = []     // 将从上一行落到下一行的单元格
+    const removedCells = []  // cells to be removed
+    const modifiedCells = [] // cells to be modified
+    const fallCells = []     // cells to fall into next row
 
     tableCells.forEach(cell => {
-      const cellRect = cell.domNode.getBoundingClientRect()
-      const compareTop = compareRect.y
-      const compareBottom = compareRect.y + compareRect.height
-      const cellTop = cellRect.y
-      const cellBottom = cellRect.y + cellRect.height
+      const cellRect = getRelativeRect(
+        cell.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
+
       if (
-        cellTop > compareTop - ERROR_LIMIT &&
-        cellBottom < compareBottom + ERROR_LIMIT
+        cellRect.y > compareRect.y - ERROR_LIMIT &&
+        cellRect.y1 < compareRect.y1 + ERROR_LIMIT
       ) {
         removedCells.push(cell)
       } else if (
-        cellTop < compareTop + ERROR_LIMIT &&
-        cellBottom > compareBottom - ERROR_LIMIT
+        cellRect.y < compareRect.y + ERROR_LIMIT &&
+        cellRect.y1 > compareRect.y1 - ERROR_LIMIT
       ) {
         modifiedCells.push(cell)
 
-        if (Math.abs(cellTop - compareTop) < ERROR_LIMIT) {
+        if (Math.abs(cellRect.y - compareRect.y) < ERROR_LIMIT) {
           fallCells.push(cell)
         }
       }
@@ -418,26 +413,35 @@ class TableContainer extends Container {
 
     // compute length of removed rows
     const removedRowsLength = this.rows().reduce((sum, row) => {
-      let rowRect  = row.domNode.getBoundingClientRect()
+      let rowRect  = getRelativeRect(
+        row.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
+
       if (
         rowRect.y > compareRect.y - ERROR_LIMIT &&
-        rowRect.y + rowRect.height < compareRect.y + compareRect.height + ERROR_LIMIT
+        rowRect.y1 < compareRect.y1 + ERROR_LIMIT
       ) {
         sum += 1
       }
       return sum
     }, 0)
 
-    // 需要根据当前cell位置处理，必须放在删除单元格等改变布局的逻辑之前
+    // it must excute before the table layout changed with other operation
     fallCells.forEach(cell => {
-      const cellRect = cell.domNode.getBoundingClientRect()
-      const cellRight = cellRect.x + cellRect.width
+      const cellRect = getRelativeRect(
+        cell.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
       const nextRow = cell.parent.next
       const cellsInNextRow = nextRow.children
 
       const refCell = cellsInNextRow.reduce((ref, compareCell) => {
-        const compareRect = compareCell.domNode.getBoundingClientRect()
-        if (Math.abs(cellRight - compareRect.x) < ERROR_LIMIT) {
+        const compareRect = getRelativeRect(
+          compareCell.domNode.getBoundingClientRect(),
+          editorWrapper
+        )
+        if (Math.abs(cellRect.x1 - compareRect.x) < ERROR_LIMIT) {
           ref = compareCell
         }
         return ref
@@ -487,49 +491,52 @@ class TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect, colIndex, isRight = true) {
+  insertColumn(compareRect, colIndex, isRight = true, editorWrapper) {
     const [body] = this.descendants(TableBody)
     const [tableColGroup] = this.descendants(TableColGroup)
     const tableCols = this.descendants(TableCol)
-    let addRightCells = []
+    let addAsideCells = []
     let modifiedCells = []
     let affectedCells = []
 
     if (body == null || body.children.head == null) return
     const tableCells = this.descendants(TableCell)
     tableCells.forEach(cell => {
-      const cellRect = cell.domNode.getBoundingClientRect()
-      const cellLeft = cellRect.x
-      const cellRight = cellRect.x + cellRect.width
-      const compareLeft = compareRect.x
-      const compareRight = compareRect.x + compareRect.width
+      const cellRect = getRelativeRect(
+        cell.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
 
       if (isRight) {
-        if (Math.abs(cellRight - compareRight) < ERROR_LIMIT) {
-          // 列工具单元的右边线与单元格右边线重合，此时在该单元格右边新增一格
-          addRightCells.push(cell)
+        if (Math.abs(cellRect.x1 - compareRect.x1) < ERROR_LIMIT) {
+          // the right of selected boundary equal to the right of table cell,
+          // add a new table cell right aside this table cell
+          addAsideCells.push(cell)
         } else if (
-          compareRight - cellLeft > ERROR_LIMIT &&
-          compareRight - cellRight < -ERROR_LIMIT
+          compareRect.x1 - cellRect.x > ERROR_LIMIT &&
+          compareRect.x1 - cellRect.x1 < -ERROR_LIMIT
         ) {
-          // 列工具单元的右边线位于单元格之中
+          // the right of selected boundary is inside this table cell
+          // colspan of this table cell will increase 1
           modifiedCells.push(cell)
         }
       } else {
-        if (Math.abs(cellLeft - compareLeft) < ERROR_LIMIT) {
-          // compareRect的左边线与单元格左边线重合，此时在该单元格左边新增一格
-          addRightCells.push(cell)
+        if (Math.abs(cellRect.x - compareRect.x) < ERROR_LIMIT) {
+          // left of selected boundary equal to left of table cell,
+          // add a new table cell left aside this table cell
+          addAsideCells.push(cell)
         } else if (
-          compareLeft - cellLeft > ERROR_LIMIT &&
-          compareLeft - cellRight < -ERROR_LIMIT
+          compareRect.x - cellRect.x > ERROR_LIMIT &&
+          compareRect.x - cellRect.x1 < -ERROR_LIMIT
         ) {
-          // compareRect的左边线位于单元格之中
+          // the left of selected boundary is inside this table cell
+          // colspan of this table cell will increase 1
           modifiedCells.push(cell)
         }
       }
     })
 
-    addRightCells.forEach(cell => {
+    addAsideCells.forEach(cell => {
       const ref = isRight ? cell.next : cell
       const id = cellId()
       const tableRow = cell.parent
@@ -557,7 +564,7 @@ class TableContainer extends Container {
       affectedCells.push(tableCell)
     })
 
-    // 插入新的TableCol
+    // insert new tableCol
     const tableCol = this.scroll.create(TableCol.blotName, true)
     let colRef = isRight ? tableCols[colIndex].next : tableCols[colIndex]
     if (colRef) {
@@ -582,7 +589,7 @@ class TableContainer extends Container {
     return affectedCells
   }
 
-  insertRow(compareRect, isDown) {
+  insertRow(compareRect, isDown, editorWrapper) {
     const [body] = this.descendants(TableBody)
     if (body == null || body.children.head == null) return
 
@@ -596,38 +603,34 @@ class TableContainer extends Container {
     let affectedCells = []
 
     tableCells.forEach(cell => {
-      const cellRect = cell.domNode.getBoundingClientRect()
-      const compareTop = compareRect.y
-      const compareBottom = compareRect.y + compareRect.height
-      const cellTop = cellRect.y
-      const cellBottom = cellRect.y + cellRect.height
+      const cellRect = getRelativeRect(
+        cell.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
 
       if (isDown) {
-        if (Math.abs(cellBottom - compareBottom) < ERROR_LIMIT) {
-          // 行工具单元的下边线与单元格下边线重合，此时在该单元格下边新增一格
+        if (Math.abs(cellRect.y1 - compareRect.y1) < ERROR_LIMIT) {
           addBelowCells.push(cell)
         } else if (
-          compareBottom - cellTop > ERROR_LIMIT &&
-          compareBottom - cellBottom < -ERROR_LIMIT
+          compareRect.y1 - cellRect.y > ERROR_LIMIT &&
+          compareRect.y1 - cellRect.y1 < -ERROR_LIMIT
         ) {
-          // 行工具单元的下边线位于单元格之中
           modifiedCells.push(cell)
         }
       } else {
-        if (Math.abs(cellTop - compareTop) < ERROR_LIMIT) {
-          // 行工具单元的上边线与单元格上边线重合，此时在该单元格下边新增一格
+        if (Math.abs(cellRect.y - compareRect.y) < ERROR_LIMIT) {
           addBelowCells.push(cell)
         } else if (
-          compareTop - cellTop > ERROR_LIMIT &&
-          compareTop - cellBottom < -ERROR_LIMIT
+          compareRect.y - cellRect.y > ERROR_LIMIT &&
+          compareRect.y - cellRect.y1 < -ERROR_LIMIT
         ) {
-          // 行工具单元的下边线位于单元格之中
           modifiedCells.push(cell)
         }
       }
     })
 
-    // 根据单元格Rect.x排序，防止异形表格插入新单元格顺序错误的问题
+    // ordered table cells with rect.x, fix error for inserting
+    // new table cell in complicated table with wrong order.
     const sortFunc = (cellA, cellB) => {
       let x1 = cellA.domNode.getBoundingClientRect().x
       let x2 = cellB.domNode.getBoundingClientRect().x
@@ -661,7 +664,10 @@ class TableContainer extends Container {
     })
 
     const refRow = this.rows().find(row => {
-      let rowRect = row.domNode.getBoundingClientRect()
+      let rowRect = getRelativeRect(
+        row.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
       if (isDown) {
         return Math.abs(rowRect.y - compareRect.y - compareRect.height) < ERROR_LIMIT
       } else {
@@ -670,12 +676,12 @@ class TableContainer extends Container {
     })
     body.insertBefore(newRow, refRow)
 
-    // affectedCells根据rect.x排序
+    // reordering affectedCells
     affectedCells.sort(sortFunc)
     return affectedCells
   }
 
-  mergeCells (compareRect, mergingCells, rowspan, colspan) {
+  mergeCells (compareRect, mergingCells, rowspan, colspan, editorWrapper) {
     const mergedCell = mergingCells.reduce((result, tableCell, index) => {
       if (index !== 0) {
         result && tableCell.moveChildren(result)
@@ -701,7 +707,7 @@ class TableContainer extends Container {
     return mergedCell
   }
 
-  unmergeCells (unmergingCells) {
+  unmergeCells (unmergingCells, editorWrapper) {
     let cellFormats = {}
     let cellRowspan = 1
     let cellColspan = 1
@@ -726,9 +732,15 @@ class TableContainer extends Container {
         while (i > 1) {
           let refInNextRow = nextRow.children
             .reduce((result, cell) => {
-              let compareRect = tableCell.domNode.getBoundingClientRect()
-              let cellRect = cell.domNode.getBoundingClientRect()
-              if (Math.abs(compareRect.x + compareRect.width - cellRect.x) < ERROR_LIMIT) {
+              let compareRect = getRelativeRect(
+                tableCell.domNode.getBoundingClientRect(),
+                editorWrapper
+              )
+              let cellRect = getRelativeRect(
+                cell.domNode.getBoundingClientRect(),
+                editorWrapper
+              )
+              if (Math.abs(compareRect.x1 - cellRect.x) < ERROR_LIMIT) {
                 result = cell
               }
               return result

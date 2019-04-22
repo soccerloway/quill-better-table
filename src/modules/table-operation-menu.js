@@ -1,9 +1,9 @@
 import Quill from 'quill'
-import { css } from '../utils'
+import { css, getRelativeRect } from '../utils'
 
 const MENU_MIN_HEIHGT = 150
 const MENU_WIDTH = 200
-const ERROR_LIMIT = 3
+const ERROR_LIMIT = 5
 
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
@@ -15,10 +15,16 @@ const MENU_ITEMS_DEFAULT = {
         this.boundary,
         (cellRect, boundary) => {
           return Math.abs(cellRect.x + cellRect.width - boundary.x1) <= ERROR_LIMIT
-        }
+        },
+        this.quill.root.parentNode
       )
 
-      const newColumn = tableContainer.insertColumn(this.boundary, colIndex, true)
+      const newColumn = tableContainer.insertColumn(
+        this.boundary,
+        colIndex,
+        true,
+        this.quill.root.parentNode)
+
       this.tableColumnTool.updateToolCells()
       this.quill.update(Quill.sources.USER)
       this.quill.setSelection(
@@ -42,10 +48,16 @@ const MENU_ITEMS_DEFAULT = {
         this.boundary,
         (cellRect, boundary) => {
           return Math.abs(cellRect.x - boundary.x) <= ERROR_LIMIT
-        }
+        },
+        this.quill.root.parentNode
       )
 
-      const newColumn = tableContainer.insertColumn(this.boundary, colIndex, false)
+      const newColumn = tableContainer.insertColumn(
+        this.boundary,
+        colIndex,
+        false,
+        this.quill.root.parentNode)
+
       this.tableColumnTool.updateToolCells()
       this.quill.update(Quill.sources.USER)
       this.quill.setSelection(
@@ -64,7 +76,11 @@ const MENU_ITEMS_DEFAULT = {
     text: 'Insert row up',
     handler () {
       const tableContainer = Quill.find(this.table)
-      const affectedCells = tableContainer.insertRow(this.boundary, false)
+      const affectedCells = tableContainer.insertRow(
+        this.boundary,
+        false,
+        this.quill.root.parentNode
+      )
       this.quill.update(Quill.sources.USER)
       this.quill.setSelection(
         this.quill.getIndex(affectedCells[0]),
@@ -82,7 +98,11 @@ const MENU_ITEMS_DEFAULT = {
     text: 'Insert row down',
     handler () {
       const tableContainer = Quill.find(this.table)
-      const affectedCells = tableContainer.insertRow(this.boundary, true)
+      const affectedCells = tableContainer.insertRow(
+        this.boundary,
+        true,
+        this.quill.root.parentNode
+      )
       this.quill.update(Quill.sources.USER)
       this.quill.setSelection(
         this.quill.getIndex(affectedCells[0]),
@@ -102,7 +122,10 @@ const MENU_ITEMS_DEFAULT = {
       const tableContainer = Quill.find(this.table)
       // compute merged Cell rowspan, equal to length of selected rows
       const rowspan = tableContainer.rows().reduce((sum, row) => {
-        let rowRect  = row.domNode.getBoundingClientRect()
+        let rowRect  = getRelativeRect(
+          row.domNode.getBoundingClientRect(),
+          this.quill.root.parentNode
+        )
         if (
           rowRect.y > this.boundary.y - ERROR_LIMIT &&
           rowRect.y + rowRect.height < this.boundary.y + this.boundary.height + ERROR_LIMIT
@@ -114,7 +137,10 @@ const MENU_ITEMS_DEFAULT = {
 
       // compute merged cell colspan, equal to length of selected cols
       const colspan = this.columnToolCells.reduce((sum, cell) => {
-        let cellRect = cell.getBoundingClientRect()
+        let cellRect = getRelativeRect(
+          cell.getBoundingClientRect(),
+          this.quill.root.parentNode
+        )
         if (
           cellRect.x > this.boundary.x - ERROR_LIMIT &&
           cellRect.x + cellRect.width < this.boundary.x + this.boundary.width + ERROR_LIMIT
@@ -124,7 +150,13 @@ const MENU_ITEMS_DEFAULT = {
         return sum
       }, 0)
 
-      const mergedCell = tableContainer.mergeCells(this.boundary, this.selectedTds, rowspan, colspan)
+      const mergedCell = tableContainer.mergeCells(
+        this.boundary,
+        this.selectedTds,
+        rowspan,
+        colspan,
+        this.quill.root.parentNode
+      )
       this.quill.update(Quill.sources.USER)
       this.tableSelection.setSelection(
         mergedCell.domNode.getBoundingClientRect(),
@@ -137,7 +169,10 @@ const MENU_ITEMS_DEFAULT = {
     text: 'Unmerge cells',
     handler () {
       const tableContainer = Quill.find(this.table)
-      tableContainer.unmergeCells(this.selectedTds)
+      tableContainer.unmergeCells(
+        this.selectedTds,
+        this.quill.root.parentNode
+      )
       this.quill.update(Quill.sources.USER)
       this.tableSelection.clearSelection()
     }
@@ -153,10 +188,15 @@ const MENU_ITEMS_DEFAULT = {
         (cellRect, boundary) => {
           return cellRect.x + ERROR_LIMIT > boundary.x &&
             cellRect.x + cellRect.width - ERROR_LIMIT < boundary.x1
-        }
+        },
+        this.quill.root.parentNode
       )
 
-      let isDeleteTable = tableContainer.deleteColumns(this.boundary, colIndexes)
+      let isDeleteTable = tableContainer.deleteColumns(
+        this.boundary,
+        colIndexes,
+        this.quill.root.parentNode
+      )
       if (!isDeleteTable) {
         this.tableColumnTool.updateToolCells()
         this.quill.update(Quill.sources.USER)
@@ -169,7 +209,10 @@ const MENU_ITEMS_DEFAULT = {
     text: 'Delete selected rows',
     handler () {
       const tableContainer = Quill.find(this.table)
-      tableContainer.deleteRow(this.boundary)
+      tableContainer.deleteRow(
+        this.boundary,
+        this.quill.root.parentNode
+      )
       this.quill.update(Quill.sources.USER)
       this.tableSelection.clearSelection()
     }
@@ -247,9 +290,9 @@ export default class TableOperationMenu {
   }
 }
 
-function getColToolCellIndexByBoundary (cells, boundary, conditionFn) {
+function getColToolCellIndexByBoundary (cells, boundary, conditionFn, container) {
   return cells.reduce((findIndex, cell) => {
-    let cellRect = cell.getBoundingClientRect()
+    let cellRect = getRelativeRect(cell.getBoundingClientRect(), container)
     if (conditionFn(cellRect, boundary)) {
       findIndex = cells.indexOf(cell)
     }
@@ -257,9 +300,12 @@ function getColToolCellIndexByBoundary (cells, boundary, conditionFn) {
   }, false)
 }
 
-function getColToolCellIndexesByBoundary (cells, boundary, conditionFn) {
+function getColToolCellIndexesByBoundary (cells, boundary, conditionFn, container) {
   return cells.reduce((findIndexes, cell) => {
-    let cellRect = cell.getBoundingClientRect()
+    let cellRect = getRelativeRect(
+      cell.getBoundingClientRect(),
+      container
+    )
     if (conditionFn(cellRect, boundary)) {
       findIndexes.push(cells.indexOf(cell))
     }

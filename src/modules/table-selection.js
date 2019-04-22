@@ -1,5 +1,5 @@
 import Quill from 'quill'
-import { css } from '../utils'
+import { css, getRelativeRect } from '../utils'
 import { TableCell } from '../formats/table'
 
 const PRIMARY_COLOR = '#35A7ED'
@@ -47,7 +47,10 @@ export default class TableSelection {
 
     const self = this
     const startTd = e.target.closest('td[data-row]')
-    const startTdRect = startTd.getBoundingClientRect()
+    const startTdRect = getRelativeRect(
+      startTd.getBoundingClientRect(),
+      this.quill.root.parentNode
+    )
     this.dragging = true
     this.boundary = computeBoundaryFromRects(startTdRect, startTdRect)
     this.correctBoundary()
@@ -57,7 +60,10 @@ export default class TableSelection {
     function mouseMoveHandler (e) {
       if (e.button !== 0 || !e.target.closest(".quill-better-table")) return
       const endTd = e.target.closest('td[data-row]')
-      const endTdRect = endTd.getBoundingClientRect()
+      const endTdRect = getRelativeRect(
+        endTd.getBoundingClientRect(),
+        self.quill.root.parentNode
+      )
       self.boundary = computeBoundaryFromRects(startTdRect, endTdRect)
       self.correctBoundary()
       self.selectedTds = self.computeSelectedTds()
@@ -81,7 +87,10 @@ export default class TableSelection {
     const tableCells = tableContainer.descendants(TableCell)
 
     tableCells.forEach(tableCell => {
-      let { x, y, width, height } = tableCell.domNode.getBoundingClientRect()
+      let { x, y, width, height } = getRelativeRect(
+        tableCell.domNode.getBoundingClientRect(),
+        this.quill.root.parentNode
+      )
       let isCellIntersected = (
           (x + ERROR_LIMIT >= this.boundary.x && x + ERROR_LIMIT <= this.boundary.x1) ||
           (x - ERROR_LIMIT + width >= this.boundary.x && x - ERROR_LIMIT + width <= this.boundary.x1)
@@ -100,7 +109,10 @@ export default class TableSelection {
     const tableCells = tableContainer.descendants(TableCell)
 
     return tableCells.reduce((selectedCells, tableCell) => {
-      let { x, y, width, height } = tableCell.domNode.getBoundingClientRect()
+      let { x, y, width, height } = getRelativeRect(
+        tableCell.domNode.getBoundingClientRect(),
+        this.quill.root.parentNode
+      )
       let isCellIncluded = (
           x + ERROR_LIMIT >= this.boundary.x &&
           x - ERROR_LIMIT + width <= this.boundary.x1
@@ -118,37 +130,36 @@ export default class TableSelection {
   }
 
   repositionHelpLines () {
-    const containerRect = this.quill.root.parentNode.getBoundingClientRect()
     const tableViewScrollLeft = this.table.parentNode.scrollLeft
     css(this.left, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
-      top: `${this.boundary.y - containerRect.y}px`,
-      height: `${this.boundary.y1 - this.boundary.y + 1}px`,
+      left: `${this.boundary.x - tableViewScrollLeft - 1}px`,
+      top: `${this.boundary.y}px`,
+      height: `${this.boundary.height + 1}px`,
       width: '1px'
     })
 
     css(this.right, {
       display: 'block',
-      left: `${this.boundary.x1 - containerRect.x - tableViewScrollLeft}px`,
-      top: `${this.boundary.y - containerRect.y}px`,
-      height: `${this.boundary.y1 - this.boundary.y + 1}px`,
+      left: `${this.boundary.x1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y}px`,
+      height: `${this.boundary.height + 1}px`,
       width: '1px'
     })
 
     css(this.top, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
-      top: `${this.boundary.y - containerRect.y}px`,
-      width: `${this.boundary.x1 - this.boundary.x + 1}px`,
+      left: `${this.boundary.x - 1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y}px`,
+      width: `${this.boundary.width + 1}px`,
       height: '1px'
     })
 
     css(this.bottom, {
       display: 'block',
-      left: `${this.boundary.x - containerRect.x - 1 - tableViewScrollLeft}px`,
-      top: `${this.boundary.y1 - containerRect.y + 1}px`,
-      width: `${this.boundary.x1 - this.boundary.x + 1}px`,
+      left: `${this.boundary.x - 1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y1 + 1}px`,
+      width: `${this.boundary.width + 1}px`,
       height: '1px'
     })
   }
@@ -156,9 +167,15 @@ export default class TableSelection {
   // based on selectedTds compute positions of help lines
   // It is useful when selectedTds are not changed
   refreshHelpLinesPosition () {
-    const startRect = this.selectedTds[0].domNode.getBoundingClientRect()
-    const endRect = this.selectedTds[this.selectedTds.length - 1].domNode.getBoundingClientRect()
-    this.boundary = computeBoundaryFromRects(startTdRect, endRect)
+    const startRect = getRelativeRect(
+      this.selectedTds[0].domNode.getBoundingClientRect(),
+      this.quill.root.parentNode
+    )
+    const endRect = getRelativeRect(
+      this.selectedTds[this.selectedTds.length - 1].domNode.getBoundingClientRect(),
+      this.quill.root.parentNode
+    )
+    this.boundary = computeBoundaryFromRects(startRect, endRect)
     this.repositionHelpLines()
   }
 
@@ -178,7 +195,10 @@ export default class TableSelection {
   }
 
   setSelection (startRect, endRect) {
-    this.boundary = computeBoundaryFromRects(startRect, endRect)
+    this.boundary = computeBoundaryFromRects(
+      getRelativeRect(startRect, this.quill.root.parentNode),
+      getRelativeRect(endRect, this.quill.root.parentNode)
+    )
     this.correctBoundary()
     this.selectedTds = this.computeSelectedTds()
     this.repositionHelpLines()
