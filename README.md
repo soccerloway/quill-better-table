@@ -173,7 +173,7 @@ operationMenu show all operations as default. `false` will remove the operation.
 You may need to modify the menu text, `operationKey.text` will do that.
 
 # Community
-Send me an email(<a href="mailto: lw54760187@hotmail.com">lw54760187@hotmail.com</a>) or Contribute on Issues, I glad to hear your suggestion.
+Send me an email(<a href="mailto: lw54760187@hotmail.com">lw54760187@hotmail.com</a>) or Contribute on [Issues](https://github.com/soccerloway/quill-better-table/issues), I glad to hear your suggestion.
 
 # License
 [MIT License](https://rmm5t.mit-license.org/)
