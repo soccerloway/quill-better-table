@@ -850,6 +850,7 @@ function cellId() {
 }
 
 export {
+  // blots
   TableCol,
   TableColGroup,
   TableCellLine,
@@ -858,7 +859,12 @@ export {
   TableBody,
   TableContainer,
   TableViewWrapper,
+
+  // identity getters
   rowId,
-  cellId
+  cellId,
+
+  // attributes
+  CELL_ATTRIBUTES
 }
 
