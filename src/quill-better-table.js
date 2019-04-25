@@ -3,6 +3,9 @@ import TableColumnTool from './modules/table-column-tool'
 import TableSelection from './modules/table-selection'
 import TableOperationMenu from './modules/table-operation-menu'
 
+// import table node matchers
+import { matchTableCell, matchTable } from './utils/node-matchers'
+
 const Module = Quill.import('core/module')
 const Delta = Quill.import('delta')
 
@@ -129,6 +132,16 @@ class BetterTable extends Module {
     // I changed the order of binding callbacks
     let thisBinding = quill.keyboard.bindings['Backspace'].pop()
     quill.keyboard.bindings['Backspace'].splice(0, 1, thisBinding)
+
+    // add Matchers to match and render quill-better-table for initialization
+    // or pasting
+    quill.clipboard.addMatcher('td', matchTableCell)
+    quill.clipboard.addMatcher('table', matchTable)
+
+    // remove matcher for tr tag
+    quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
+      return matcher[0] !== 'tr'
+    })
   }
 
   getTable(range = this.quill.getSelection()) {

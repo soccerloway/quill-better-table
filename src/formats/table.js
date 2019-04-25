@@ -237,6 +237,30 @@ class TableRow extends Container {
     }, {})
   }
 
+  optimize (context) {
+    // optimize function of ShadowBlot
+    if (
+      this.statics.requiredContainer &&
+      !(this.parent instanceof this.statics.requiredContainer)
+    ) {
+      this.wrap(this.statics.requiredContainer.blotName)
+    }
+
+    // optimize function of ParentBlot
+    // note: modified this optimize function because
+    // TableRow should not be removed when the length of its children was 0
+    this.enforceAllowedChildren()
+    if (this.uiNode != null && this.uiNode !== this.domNode.firstChild) {
+      this.domNode.insertBefore(this.uiNode, this.domNode.firstChild)
+    }
+
+    // optimize function of ContainerBlot
+    if (this.children.length > 0 && this.next != null && this.checkMerge()) {
+      this.next.moveChildren(this)
+      this.next.remove()
+    }
+  }
+
   rowOffset() {
     if (this.parent) {
       return this.parent.children.indexOf(this)
@@ -826,6 +850,7 @@ function cellId() {
 }
 
 export {
+  // blots
   TableCol,
   TableColGroup,
   TableCellLine,
@@ -834,7 +859,12 @@ export {
   TableBody,
   TableContainer,
   TableViewWrapper,
+
+  // identity getters
   rowId,
-  cellId
+  cellId,
+
+  // attributes
+  CELL_ATTRIBUTES
 }
 
