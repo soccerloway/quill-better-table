@@ -74,7 +74,6 @@ export function matchTableCell (node, delta, scroll) {
 
 // supplement colgroup and col
 export function matchTable (node, delta, scroll) {
-  if (node.querySelectorAll('colgroup').length > 0) return delta
   let newDelta = new Delta()
 
   const topRow = node.querySelector('tr')
@@ -84,8 +83,12 @@ export function matchTable (node, delta, scroll) {
     sum = sum + parseInt(cellColspan, 10)
     return sum
   }, 0)
+  const colsNumber = node.querySelectorAll('col').length
 
-  for (let i = 0; i < maxCellsNumber; i++) {
+  // issue #2
+  // bugfix: the table copied from Excel had some default col tags missing
+  //         add missing col tags
+  for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
     newDelta.insert('\n', { 'table-col': true })
   }
 
