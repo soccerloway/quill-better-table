@@ -19,6 +19,14 @@ export function matchTableCell (node, delta, scroll) {
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
 
+  // bugfix: empty table cells copied from other place will be removed unexpectedly
+  if (delta.length() === 0) {
+    delta = new Delta().insert('\n', {
+      'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan }
+    })
+    return delta
+  }
+
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
       const lines = []
