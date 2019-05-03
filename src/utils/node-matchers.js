@@ -19,6 +19,14 @@ export function matchTableCell (node, delta, scroll) {
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
 
+  // bugfix: empty table cells copied from other place will be removed unexpectedly
+  if (delta.length() === 0) {
+    delta = new Delta().insert('\n', {
+      'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan }
+    })
+    return delta
+  }
+
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
       const lines = []
@@ -74,7 +82,6 @@ export function matchTableCell (node, delta, scroll) {
 
 // supplement colgroup and col
 export function matchTable (node, delta, scroll) {
-  if (node.querySelectorAll('colgroup').length > 0) return delta
   let newDelta = new Delta()
 
   const topRow = node.querySelector('tr')
@@ -84,8 +91,12 @@ export function matchTable (node, delta, scroll) {
     sum = sum + parseInt(cellColspan, 10)
     return sum
   }, 0)
+  const colsNumber = node.querySelectorAll('col').length
 
-  for (let i = 0; i < maxCellsNumber; i++) {
+  // issue #2
+  // bugfix: the table copied from Excel had some default col tags missing
+  //         add missing col tags
+  for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
     newDelta.insert('\n', { 'table-col': true })
   }
 
