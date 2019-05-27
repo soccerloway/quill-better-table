@@ -179,7 +179,7 @@ class BetterTable extends Module {
     }, delta)
 
     this.quill.updateContents(delta, Quill.sources.USER)
-    this.quill.setSelection(range.index + 1, Quill.sources.SILENT)
+    this.quill.setSelection(range.index + columns + 1, Quill.sources.API)
   }
 
   showTableTools (table, quill, options) {
