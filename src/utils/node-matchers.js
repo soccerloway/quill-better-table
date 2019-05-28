@@ -1,13 +1,10 @@
 import Quill from 'quill'
 import { _omit } from './index'
-import { CELL_ATTRIBUTES } from '../formats/table';
 
 const Delta = Quill.import('delta')
 
 // rebuild delta
 export function matchTableCell (node, delta, scroll) {
-  const CELL_ATTRIBUTES = ['rowspan', 'colspan']
-
   const row = node.parentNode;
   const table = row.parentNode.tagName === 'TABLE'
     ? row.parentNode
@@ -62,13 +59,12 @@ export function matchTableCell (node, delta, scroll) {
   return delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string' &&
       op.insert.startsWith('\n')) {
-      newDelta.insert('\n', Object.assign(
+      newDelta.insert(op.insert, Object.assign(
         {},
         Object.assign({}, { row: rowId }, op.attributes.table),
         { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan } },
         _omit(op.attributes, ['table'])
       ))
-        .insert(op.insert.substring(1), _omit(op.attributes, ['table', 'table-cell-line']))
     } else {
       newDelta.insert(op.insert, Object.assign(
         {},
