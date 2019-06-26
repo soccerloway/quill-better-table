@@ -189,8 +189,8 @@ class BetterTable extends Module {
   }
 
   hideTableTools () {
-    this.columnTool.destroy()
-    this.tableSelection.destroy()
+    this.columnTool && this.columnTool.destroy()
+    this.tableSelection && this.tableSelection.destroy()
     this.tableOperationMenu && this.tableOperationMenu.destroy()
     this.columnTool = null
     this.tableSelection = null
