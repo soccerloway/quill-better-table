@@ -71,6 +71,82 @@ export function matchTableCell (node, delta, scroll) {
         _omit(op.attributes, ['table', 'table-cell-line'])
       ))
     }
+    
+    return newDelta
+  }, new Delta())
+}
+
+// replace th tag with td tag
+export function matchTableHeader (node, delta, scroll) {
+  const row = node.parentNode;
+  const table = row.parentNode.tagName === 'TABLE'
+    ? row.parentNode
+    : row.parentNode.parentNode;
+  const rows = Array.from(table.querySelectorAll('tr'));
+  const cells = Array.from(row.querySelectorAll('th'));
+  const rowId = rows.indexOf(row) + 1;
+  const cellId = cells.indexOf(node) + 1;
+  const colspan = node.getAttribute('colspan') || false
+  const rowspan = node.getAttribute('rowspan') || false
+
+  // bugfix: empty table cells copied from other place will be removed unexpectedly
+  if (delta.length() === 0) {
+    delta = new Delta().insert('\n', {
+      'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan }
+    })
+    return delta
+  }
+
+  delta = delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string') {
+      const lines = []
+      let insertStr = op.insert
+      let start = 0
+      for (let i = 0; i < op.insert.length; i++) {
+        if (insertStr.charAt(i) === '\n') {
+          if (i === 0) {
+            lines.push('\n')
+          } else {
+            lines.push(insertStr.substring(start, i))
+            lines.push('\n')
+          }
+          start = i + 1
+        }
+      }
+
+      const tailStr = insertStr.substring(start)
+      if (tailStr) lines.push(tailStr)
+
+      // bugfix: no '\n' in op.insert, push a '\n' to lines
+      if (lines.indexOf('\n') < 0) {
+        lines.push('\n')
+      }
+
+      lines.forEach(text => {
+        text === '\n'
+        ? newDelta.insert('\n', { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan } })
+        : newDelta.insert(text, op.attributes)
+      })
+    } else {
+      newDelta.insert(op.insert, op.attributes)
+    }
+    
+    return newDelta
+  }, new Delta())
+
+  return delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string' &&
+      op.insert.startsWith('\n')) {
+      newDelta.insert(op.insert, Object.assign(
+        {},
+        { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan } }
+      ))
+    } else {
+      newDelta.insert(op.insert, Object.assign(
+        {},
+        _omit(op.attributes, ['table', 'table-cell-line'])
+      ))
+    }
 
     return newDelta
   }, new Delta())
@@ -82,6 +158,7 @@ export function matchTable (node, delta, scroll) {
 
   const topRow = node.querySelector('tr')
   const cellsInTopRow = Array.from(topRow.querySelectorAll('td'))
+    .concat(Array.from(topRow.querySelectorAll('th')))
   const maxCellsNumber = cellsInTopRow.reduce((sum, cell) => {
     const cellColspan = cell.getAttribute('colspan') || 1
     sum = sum + parseInt(cellColspan, 10)
