@@ -172,11 +172,27 @@ export function matchTable (node, delta, scroll) {
   // issue #2
   // bugfix: the table copied from Excel had some default col tags missing
   //         add missing col tags
-  for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
-    newColDelta.insert('\n', { 'table-col': true })
+  if (colsNumber === maxCellsNumber) {
+    return delta
+  } else {
+    for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
+      newColDelta.insert('\n', { 'table-col': true })
+    }
+    
+    if (colsNumber === 0) return newColDelta.concat(delta)
+
+    let lastNumber = 0
+    return delta.reduce((finalDelta, op) => {
+      finalDelta.insert(op.insert, op.attributes)
+  
+      if (op.attributes && op.attributes['table-col']) {
+        lastNumber += op.insert.length
+        if (lastNumber === colsNumber) {
+          finalDelta = finalDelta.concat(newColDelta)
+        }
+      }
+  
+      return finalDelta
+    }, new Delta())
   }
-
-  newColDelta = newColDelta.concat(delta)
-
-  return newColDelta
 }

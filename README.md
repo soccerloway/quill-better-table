@@ -63,7 +63,7 @@ Load quill and style dependencies
 ```
 ```
 <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.snow.min.css" rel="stylesheet">
-<link href="unpkg.com/quill-better-table@1.0.0/dist/quill-better-table.css" rel="stylesheet">
+<link href="unpkg.com/quill-better-table@1.1.5/dist/quill-better-table.css" rel="stylesheet">
 ```
 
 ES6
@@ -171,6 +171,9 @@ operationMenu show all operations as default. `false` will remove the operation.
 </ul>
 
 You may need to modify the menu text, `operationKey.text` will do that.
+
+# Community
+Send me an email(<a href="mailto: lw54760187@hotmail.com">lw54760187@hotmail.com</a>) or Contribute on [Issues](https://github.com/soccerloway/quill-better-table/issues), I glad to hear your suggestion.
 
 # License
 [MIT License](https://rmm5t.mit-license.org/)
