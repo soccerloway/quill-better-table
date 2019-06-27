@@ -158,7 +158,7 @@ export function matchTable (node, delta, scroll) {
   const topRow = node.querySelector('tr')
 
   // bugfix: empty table will return empty delta
-  if (topRow === null) return new newColDelta
+  if (topRow === null) return newColDelta
 
   const cellsInTopRow = Array.from(topRow.querySelectorAll('td'))
     .concat(Array.from(topRow.querySelectorAll('th')))
