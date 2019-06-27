@@ -154,8 +154,12 @@ export function matchTableHeader (node, delta, scroll) {
 
 // supplement colgroup and col
 export function matchTable (node, delta, scroll) {
-  let newDelta = new Delta()
+  let newColDelta = new Delta()
   const topRow = node.querySelector('tr')
+
+  // bugfix: empty table will return empty delta
+  if (topRow === null) return new newColDelta
+
   const cellsInTopRow = Array.from(topRow.querySelectorAll('td'))
     .concat(Array.from(topRow.querySelectorAll('th')))
   const maxCellsNumber = cellsInTopRow.reduce((sum, cell) => {
@@ -169,10 +173,10 @@ export function matchTable (node, delta, scroll) {
   // bugfix: the table copied from Excel had some default col tags missing
   //         add missing col tags
   for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
-    newDelta.insert('\n', { 'table-col': true })
+    newColDelta.insert('\n', { 'table-col': true })
   }
 
-  newDelta = newDelta.concat(delta)
+  newColDelta = newColDelta.concat(delta)
 
-  return newDelta
+  return newColDelta
 }
