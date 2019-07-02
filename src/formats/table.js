@@ -22,7 +22,8 @@ class TableCellLine extends Block {
     const node = super.create(value)
 
     CELL_IDENTITY_KEYS.forEach(key => {
-      let identityMaker = `${key}Id`
+      let identityMaker = key === 'row'
+        ? rowId : cellId
       node.setAttribute(`data-${key}`, value[key] || identityMaker())
     })
 
