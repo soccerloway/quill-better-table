@@ -63,7 +63,7 @@ Load quill and style dependencies
 ```
 ```
 <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.snow.min.css" rel="stylesheet">
-<link href="unpkg.com/quill-better-table@1.1.5/dist/quill-better-table.css" rel="stylesheet">
+<link href="unpkg.com/quill-better-table@1.1.8/dist/quill-better-table.css" rel="stylesheet">
 ```
 
 ES6
