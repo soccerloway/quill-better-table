@@ -5,12 +5,27 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production'
+  let entry, minimize
+
+  if (env && env.minimize) {
+    entry = {
+      'quill-better-table.min.js': ['./src/quill-better-table.js']
+    }
+    minimize = true
+  } else {
+    entry = {
+      'quill-better-table.js': ['./src/quill-better-table.js'],
+      'quill-better-table': './src/assets/quill-better-table.scss',
+      'demo/demo1.js': './demo/js/demo1.js'
+    }
+    minimize = false
+  }
 
   return {
-    entry:{
-      'quill-better-table.js': ['./src/quill-better-table.js'],
-      'quill-better-table': ['./src/assets/quill-better-table.scss'],
-      'demo/demo1.js': './demo/js/demo1.js'
+    entry,
+
+    optimization: {
+      minimize
     },
 
     output:{
@@ -81,7 +96,7 @@ module.exports = (env, argv) => {
             options: {
               presets: [
                 [
-                  'env',
+                  '@babel/env',
                   {
                     targets: {
                       browsers: [

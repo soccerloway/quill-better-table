@@ -5,7 +5,7 @@
   "main": "dist/quill-better-table.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack.config.js --mode=development",
-    "build": "webpack --config webpack.config.js --mode=production",
+    "build": "webpack --config webpack.config.js --mode=production; rm dist/quill-better-table; webpack --config webpack.config.js --mode=production --env.minimize",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,9 +28,10 @@
   "dependencies": {},
   "devDependencies": {
     "quill": "^2.0.0-dev.3",
-    "babel-core": "^6.26.3",
-    "babel-loader": "7",
-    "babel-preset-env": "^1.7.0",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-loader": "^8.0.5",
+    "babel-plugin-istanbul": "^5.1.1",
     "css-loader": "^2.1.1",
     "file-loader": "^3.0.1",
     "html-loader": "^0.5.5",
