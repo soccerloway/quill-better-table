@@ -1,1 +1,2854 @@
-!function(e,t){"object"==typeof exports&&"object"==typeof module?module.exports=t(require("quill")):"function"==typeof define&&define.amd?define(["quill"],t):"object"==typeof exports?exports.quillBetterTable=t(require("quill")):e.quillBetterTable=t(e.Quill)}(window,function(e){return function(e){var t=window.webpackHotUpdatequillBetterTable;window.webpackHotUpdatequillBetterTable=function(e,r){!function(e,t){if(!v[e]||!x[e])return;for(var r in x[e]=!1,t)Object.prototype.hasOwnProperty.call(t,r)&&(b[r]=t[r]);0==--g&&0===y&&q()}(e,r),t&&t(e,r)};var r,o=!0,n="984675d52ac262591eab",l=1e4,i={},s=[],a=[];function d(e){var t=R[e];if(!t)return S;var o=function(o){return t.hot.active?(R[o]?-1===R[o].parents.indexOf(e)&&R[o].parents.push(e):(s=[e],r=o),-1===t.children.indexOf(o)&&t.children.push(o)):(console.warn("[HMR] unexpected require("+o+") from disposed module "+e),s=[]),S(o)},n=function(e){return{configurable:!0,enumerable:!0,get:function(){return S[e]},set:function(t){S[e]=t}}};for(var l in S)Object.prototype.hasOwnProperty.call(S,l)&&"e"!==l&&"t"!==l&&Object.defineProperty(o,l,n(l));return o.e=function(e){return"ready"===h&&p("prepare"),y++,S.e(e).then(t,function(e){throw t(),e});function t(){y--,"prepare"===h&&(w[e]||T(e),0===y&&0===g&&q())}},o.t=function(e,t){return 1&t&&(e=o(e)),S.t(e,-2&t)},o}function c(e){var t={_acceptedDependencies:{},_declinedDependencies:{},_selfAccepted:!1,_selfDeclined:!1,_disposeHandlers:[],_main:r!==e,active:!0,accept:function(e,r){if(void 0===e)t._selfAccepted=!0;else if("function"==typeof e)t._selfAccepted=e;else if("object"==typeof e)for(var o=0;o<e.length;o++)t._acceptedDependencies[e[o]]=r||function(){};else t._acceptedDependencies[e]=r||function(){}},decline:function(e){if(void 0===e)t._selfDeclined=!0;else if("object"==typeof e)for(var r=0;r<e.length;r++)t._declinedDependencies[e[r]]=!0;else t._declinedDependencies[e]=!0},dispose:function(e){t._disposeHandlers.push(e)},addDisposeHandler:function(e){t._disposeHandlers.push(e)},removeDisposeHandler:function(e){var r=t._disposeHandlers.indexOf(e);r>=0&&t._disposeHandlers.splice(r,1)},check:C,apply:E,status:function(e){if(!e)return h;u.push(e)},addStatusHandler:function(e){u.push(e)},removeStatusHandler:function(e){var t=u.indexOf(e);t>=0&&u.splice(t,1)},data:i[e]};return r=void 0,t}var u=[],h="idle";function p(e){h=e;for(var t=0;t<u.length;t++)u[t].call(null,e)}var f,b,m,g=0,y=0,w={},x={},v={};function N(e){return+e+""===e?+e:e}function C(e){if("idle"!==h)throw new Error("check() is only allowed in idle status");return o=e,p("check"),(t=l,t=t||1e4,new Promise(function(e,r){if("undefined"==typeof XMLHttpRequest)return r(new Error("No browser support"));try{var o=new XMLHttpRequest,l=S.p+""+n+".hot-update.json";o.open("GET",l,!0),o.timeout=t,o.send(null)}catch(e){return r(e)}o.onreadystatechange=function(){if(4===o.readyState)if(0===o.status)r(new Error("Manifest request to "+l+" timed out."));else if(404===o.status)e();else if(200!==o.status&&304!==o.status)r(new Error("Manifest request to "+l+" failed."));else{try{var t=JSON.parse(o.responseText)}catch(e){return void r(e)}e(t)}}})).then(function(e){if(!e)return p("idle"),null;x={},w={},v=e.c,m=e.h,p("prepare");var t=new Promise(function(e,t){f={resolve:e,reject:t}});b={};return T(2),"prepare"===h&&0===y&&0===g&&q(),t});var t}function T(e){v[e]?(x[e]=!0,g++,function(e){var t=document.createElement("script");t.charset="utf-8",t.src=S.p+""+e+"."+n+".hot-update.js",document.head.appendChild(t)}(e)):w[e]=!0}function q(){p("ready");var e=f;if(f=null,e)if(o)Promise.resolve().then(function(){return E(o)}).then(function(t){e.resolve(t)},function(t){e.reject(t)});else{var t=[];for(var r in b)Object.prototype.hasOwnProperty.call(b,r)&&t.push(N(r));e.resolve(t)}}function E(t){if("ready"!==h)throw new Error("apply() is only allowed in ready status");var r,o,l,a,d;function c(e){for(var t=[e],r={},o=t.slice().map(function(e){return{chain:[e],id:e}});o.length>0;){var n=o.pop(),l=n.id,i=n.chain;if((a=R[l])&&!a.hot._selfAccepted){if(a.hot._selfDeclined)return{type:"self-declined",chain:i,moduleId:l};if(a.hot._main)return{type:"unaccepted",chain:i,moduleId:l};for(var s=0;s<a.parents.length;s++){var d=a.parents[s],c=R[d];if(c){if(c.hot._declinedDependencies[l])return{type:"declined",chain:i.concat([d]),moduleId:l,parentId:d};-1===t.indexOf(d)&&(c.hot._acceptedDependencies[l]?(r[d]||(r[d]=[]),u(r[d],[l])):(delete r[d],t.push(d),o.push({chain:i.concat([d]),id:d})))}}}}return{type:"accepted",moduleId:e,outdatedModules:t,outdatedDependencies:r}}function u(e,t){for(var r=0;r<t.length;r++){var o=t[r];-1===e.indexOf(o)&&e.push(o)}}t=t||{};var f={},g=[],y={},w=function(){console.warn("[HMR] unexpected require("+C.moduleId+") to disposed module")};for(var x in b)if(Object.prototype.hasOwnProperty.call(b,x)){var C;d=N(x);var T=!1,q=!1,E=!1,A="";switch((C=b[x]?c(d):{type:"disposed",moduleId:x}).chain&&(A="\nUpdate propagation: "+C.chain.join(" -> ")),C.type){case"self-declined":t.onDeclined&&t.onDeclined(C),t.ignoreDeclined||(T=new Error("Aborted because of self decline: "+C.moduleId+A));break;case"declined":t.onDeclined&&t.onDeclined(C),t.ignoreDeclined||(T=new Error("Aborted because of declined dependency: "+C.moduleId+" in "+C.parentId+A));break;case"unaccepted":t.onUnaccepted&&t.onUnaccepted(C),t.ignoreUnaccepted||(T=new Error("Aborted because "+d+" is not accepted"+A));break;case"accepted":t.onAccepted&&t.onAccepted(C),q=!0;break;case"disposed":t.onDisposed&&t.onDisposed(C),E=!0;break;default:throw new Error("Unexception type "+C.type)}if(T)return p("abort"),Promise.reject(T);if(q)for(d in y[d]=b[d],u(g,C.outdatedModules),C.outdatedDependencies)Object.prototype.hasOwnProperty.call(C.outdatedDependencies,d)&&(f[d]||(f[d]=[]),u(f[d],C.outdatedDependencies[d]));E&&(u(g,[C.moduleId]),y[d]=w)}var O,L=[];for(o=0;o<g.length;o++)d=g[o],R[d]&&R[d].hot._selfAccepted&&L.push({module:d,errorHandler:R[d].hot._selfAccepted});p("dispose"),Object.keys(v).forEach(function(e){!1===v[e]&&function(e){delete installedChunks[e]}(e)});for(var _,B,I=g.slice();I.length>0;)if(d=I.pop(),a=R[d]){var M={},j=a.hot._disposeHandlers;for(l=0;l<j.length;l++)(r=j[l])(M);for(i[d]=M,a.hot.active=!1,delete R[d],delete f[d],l=0;l<a.children.length;l++){var H=R[a.children[l]];H&&((O=H.parents.indexOf(d))>=0&&H.parents.splice(O,1))}}for(d in f)if(Object.prototype.hasOwnProperty.call(f,d)&&(a=R[d]))for(B=f[d],l=0;l<B.length;l++)_=B[l],(O=a.children.indexOf(_))>=0&&a.children.splice(O,1);for(d in p("apply"),n=m,y)Object.prototype.hasOwnProperty.call(y,d)&&(e[d]=y[d]);var D=null;for(d in f)if(Object.prototype.hasOwnProperty.call(f,d)&&(a=R[d])){B=f[d];var $=[];for(o=0;o<B.length;o++)if(_=B[o],r=a.hot._acceptedDependencies[_]){if(-1!==$.indexOf(r))continue;$.push(r)}for(o=0;o<$.length;o++){r=$[o];try{r(B)}catch(e){t.onErrored&&t.onErrored({type:"accept-errored",moduleId:d,dependencyId:B[o],error:e}),t.ignoreErrored||D||(D=e)}}}for(o=0;o<L.length;o++){var k=L[o];d=k.module,s=[d];try{S(d)}catch(e){if("function"==typeof k.errorHandler)try{k.errorHandler(e)}catch(r){t.onErrored&&t.onErrored({type:"self-accept-error-handler-errored",moduleId:d,error:r,originalError:e}),t.ignoreErrored||D||(D=r),D||(D=e)}else t.onErrored&&t.onErrored({type:"self-accept-errored",moduleId:d,error:e}),t.ignoreErrored||D||(D=e)}}return D?(p("fail"),Promise.reject(D)):(p("idle"),new Promise(function(e){e(g)}))}var R={};function S(t){if(R[t])return R[t].exports;var r=R[t]={i:t,l:!1,exports:{},hot:c(t),parents:(a=s,s=[],a),children:[]};return e[t].call(r.exports,r,r.exports,d(t)),r.l=!0,r.exports}return S.m=e,S.c=R,S.d=function(e,t,r){S.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},S.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},S.t=function(e,t){if(1&t&&(e=S(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(S.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)S.d(r,o,function(t){return e[t]}.bind(null,o));return r},S.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return S.d(t,"a",t),t},S.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},S.p="",S.h=function(){return n},d(10)(S.s=10)}([function(t,r){t.exports=e},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.css=function(e,t){if("object"==typeof t)for(let r in t)e.style[r]=t[r]},t.getRelativeRect=function(e,t){let r=t.getBoundingClientRect();return{x:e.x-r.x-t.scrollLeft,y:e.y-r.y-t.scrollTop,x1:e.x-r.x-t.scrollLeft+e.width,y1:e.y-r.y-t.scrollTop+e.height,width:e.width,height:e.height}},t._omit=function(e,t){return e&&Object.keys(e).reduce((r,o)=>t.includes(o)?r:Object.assign({},r,{[o]:e[o]}),{})}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.CELL_ATTRIBUTES=t.CELL_IDENTITY_KEYS=t.cellId=t.rowId=t.TableViewWrapper=t.TableContainer=t.TableBody=t.TableRow=t.TableCell=t.TableCellLine=t.TableColGroup=t.TableCol=void 0;var o=function(){return function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function(e,t){var r=[],o=!0,n=!1,l=void 0;try{for(var i,s=e[Symbol.iterator]();!(o=(i=s.next()).done)&&(r.push(i.value),!t||r.length!==t);o=!0);}catch(e){n=!0,l=e}finally{try{!o&&s.return&&s.return()}finally{if(n)throw l}}return r}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),n=s(r(0)),l=r(1),i=s(r(3));function s(e){return e&&e.__esModule?e:{default:e}}const a=n.default.import("blots/break"),d=n.default.import("blots/block"),c=n.default.import("blots/container"),u=["width"],h={width:100},p=["row","cell"],f=["rowspan","colspan"],b={rowspan:1,colspan:1},m=5;class g extends d{static create(e){const t=super.create(e);return p.forEach(r=>{let o="row"===r?q:E;t.setAttribute(`data-${r}`,e[r]||o())}),f.forEach(r=>{t.setAttribute(`data-${r}`,e[r]||b[r])}),t}static formats(e){return f.concat(p).reduce((t,r)=>(e.hasAttribute(`data-${r}`)&&(t[r]=e.getAttribute(`data-${r}`)||void 0),t),{})}format(e,t){if(f.concat(p).indexOf(e)>-1)t?this.domNode.setAttribute(`data-${e}`,t):this.domNode.removeAttribute(`data-${e}`);else if("header"===e){if(!t)return;var r=g.formats(this.domNode);const o=r.row,n=r.cell,l=r.rowspan,i=r.colspan;super.format(e,{value:t,row:o,cell:n,rowspan:l,colspan:i})}else super.format(e,t)}optimize(e){const t=this.domNode.getAttribute("data-row"),r=this.domNode.getAttribute("data-rowspan"),o=this.domNode.getAttribute("data-colspan");!this.statics.requiredContainer||this.parent instanceof this.statics.requiredContainer||this.wrap(this.statics.requiredContainer.blotName,{row:t,colspan:o,rowspan:r}),super.optimize(e)}tableCell(){return this.parent}}g.blotName="table-cell-line",g.ClassName="qlbt-cell-line",g.tagName="DIV";class y extends c{checkMerge(){if(super.checkMerge()&&null!=this.next.children.head){const e=this.children.head.formats()[this.children.head.statics.blotName],t=this.children.tail.formats()[this.children.tail.statics.blotName],r=this.next.children.head.formats()[this.next.children.head.statics.blotName],o=this.next.children.tail.formats()[this.next.children.tail.statics.blotName];return e.cell===t.cell&&e.cell===r.cell&&e.cell===o.cell}return!1}static create(e){const t=super.create(e);return t.setAttribute("data-row",e.row),f.forEach(r=>{e[r]&&t.setAttribute(r,e[r])}),t}static formats(e){const t={};return e.hasAttribute("data-row")&&(t.row=e.getAttribute("data-row")),f.reduce((t,r)=>(e.hasAttribute(r)&&(t[r]=e.getAttribute(r)),t),t)}cellOffset(){return this.parent?this.parent.children.indexOf(this):-1}formats(){const e={};return this.domNode.hasAttribute("data-row")&&(e.row=this.domNode.getAttribute("data-row")),f.reduce((e,t)=>(this.domNode.hasAttribute(t)&&(e[t]=this.domNode.getAttribute(t)),e),e)}toggleAttribute(e,t){t?this.domNode.setAttribute(e,t):this.domNode.removeAttribute(e)}formatChildren(e,t){this.children.forEach(r=>{r.format(e,t)})}format(e,t){f.indexOf(e)>-1?(this.toggleAttribute(e,t),this.formatChildren(e,t)):["row"].indexOf(e)>-1?(this.toggleAttribute(`data-${e}`,t),this.formatChildren(e,t)):super.format(e,t)}optimize(e){const t=this.domNode.getAttribute("data-row");!this.statics.requiredContainer||this.parent instanceof this.statics.requiredContainer||this.wrap(this.statics.requiredContainer.blotName,{row:t}),super.optimize(e)}row(){return this.parent}rowOffset(){return this.row()?this.row().rowOffset():-1}table(){return this.row()&&this.row().table()}}y.blotName="table",y.tagName="TD";class w extends c{checkMerge(){if(super.checkMerge()&&null!=this.next.children.head){const e=this.children.head.formats(),t=this.children.tail.formats(),r=this.next.children.head.formats(),o=this.next.children.tail.formats();return e.row===t.row&&e.row===r.row&&e.row===o.row}return!1}static create(e){const t=super.create(e);return t.setAttribute("data-row",e.row),t}formats(){return["row"].reduce((e,t)=>(this.domNode.hasAttribute(`data-${t}`)&&(e[t]=this.domNode.getAttribute(`data-${t}`)),e),{})}optimize(e){!this.statics.requiredContainer||this.parent instanceof this.statics.requiredContainer||this.wrap(this.statics.requiredContainer.blotName),this.enforceAllowedChildren(),null!=this.uiNode&&this.uiNode!==this.domNode.firstChild&&this.domNode.insertBefore(this.uiNode,this.domNode.firstChild),this.children.length>0&&null!=this.next&&this.checkMerge()&&(this.next.moveChildren(this),this.next.remove())}rowOffset(){return this.parent?this.parent.children.indexOf(this):-1}table(){return this.parent&&this.parent.parent}}w.blotName="table-row",w.tagName="TR";class x extends c{}x.blotName="table-body",x.tagName="TBODY";class v extends d{static create(e){let t=super.create(e);return u.forEach(r=>{t.setAttribute(`${r}`,e[r]||h[r])}),t}static formats(e){return u.reduce((t,r)=>(e.hasAttribute(`${r}`)&&(t[r]=e.getAttribute(`${r}`)||void 0),t),{})}format(e,t){u.indexOf(e)>-1?this.domNode.setAttribute(`${e}`,t||h[e]):super.format(e,t)}html(){return this.domNode.outerHTML}}v.blotName="table-col",v.tagName="col";class N extends c{}N.blotName="table-col-group",N.tagName="colgroup";class C extends c{static create(){return super.create()}constructor(e,t){super(e,t),this.updateTableWidth()}updateTableWidth(){setTimeout(()=>{const e=this.colGroup();if(!e)return;const t=e.children.reduce((e,t)=>e+=parseInt(t.formats()[v.blotName].width,10),0);this.domNode.style.width=`${t}px`},0)}cells(e){return this.rows().map(t=>t.children.at(e))}colGroup(){return this.children.head}deleteColumns(e,t=[],r){var n=this.descendants(x);const i=o(n,1)[0];if(null==i||null==i.children.head)return;const s=this.descendants(y),a=[],d=[];if(s.forEach(t=>{const o=(0,l.getRelativeRect)(t.domNode.getBoundingClientRect(),r);o.x+m>e.x&&o.x1-m<e.x1?a.push(t):o.x<e.x+m&&o.x1>e.x1-m&&d.push(t)}),a.length===s.length)return this.tableDestroy(),!0;t.forEach(e=>{this.colGroup().children.at(t[0]).remove()}),a.forEach(e=>{e.remove()}),d.forEach(e=>{const r=parseInt(e.formats().colspan,10);parseInt(e.formats().width,10);e.format("colspan",r-t.length)}),this.updateTableWidth()}deleteRow(e,t){var r=this.descendants(x);const n=o(r,1)[0];if(null==n||null==n.children.head)return;const i=this.descendants(y),s=[],a=[],d=[];if(i.forEach(r=>{const o=(0,l.getRelativeRect)(r.domNode.getBoundingClientRect(),t);o.y>e.y-m&&o.y1<e.y1+m?s.push(r):o.y<e.y+m&&o.y1>e.y1-m&&(a.push(r),Math.abs(o.y-e.y)<m&&d.push(r))}),s.length===i.length)return void this.tableDestroy();const c=this.rows().reduce((r,o)=>{let n=(0,l.getRelativeRect)(o.domNode.getBoundingClientRect(),t);return n.y>e.y-m&&n.y1<e.y1+m&&(r+=1),r},0);d.forEach(e=>{const r=(0,l.getRelativeRect)(e.domNode.getBoundingClientRect(),t),o=e.parent.next,n=o.children.reduce((e,o)=>{const n=(0,l.getRelativeRect)(o.domNode.getBoundingClientRect(),t);return Math.abs(r.x1-n.x)<m&&(e=o),e},null);o.insertBefore(e,n),e.format("row",o.formats().row)}),s.forEach(e=>{e.remove()}),a.forEach(e=>{const t=parseInt(e.formats().rowspan,10);e.format("rowspan",t-c)})}tableDestroy(){const e=n.default.find(this.scroll.domNode.parentNode),t=e.getModule("better-table");this.remove(),t.hideTableTools(),e.update(n.default.sources.USER)}insertCell(e,t){const r=E(),o=e.formats().row,n=this.scroll.create(y.blotName,Object.assign({},b,{row:o})),l=this.scroll.create(g.blotName,{row:o,cell:r});n.appendChild(l),t?e.insertBefore(n,t):e.appendChild(n)}insertColumn(e,t,r=!0,n){var i=this.descendants(x);const s=o(i,1)[0];var a=this.descendants(N);const d=o(a,1)[0],c=this.descendants(v);let u=[],h=[],p=[];if(null==s||null==s.children.head)return;this.descendants(y).forEach(t=>{const o=(0,l.getRelativeRect)(t.domNode.getBoundingClientRect(),n);r?Math.abs(o.x1-e.x1)<m?u.push(t):e.x1-o.x>m&&e.x1-o.x1<-m&&h.push(t):Math.abs(o.x-e.x)<m?u.push(t):e.x-o.x>m&&e.x-o.x1<-m&&h.push(t)}),u.forEach(e=>{const t=r?e.next:e,o=E(),n=e.parent,l=n.formats().row,i=e.formats(),s=this.scroll.create(y.blotName,Object.assign({},b,{row:l,rowspan:i.rowspan})),a=this.scroll.create(g.blotName,{row:l,cell:o,rowspan:i.rowspan});s.appendChild(a),t?n.insertBefore(s,t):n.appendChild(s),p.push(s)});const f=this.scroll.create(v.blotName,!0);let w=r?c[t].next:c[t];return w?d.insertBefore(f,w):d.appendChild(f),h.forEach(e=>{const t=e.formats().colspan;e.format("colspan",parseInt(t,10)+1),p.push(e)}),p.sort((e,t)=>{return e.domNode.getBoundingClientRect().y-t.domNode.getBoundingClientRect().y}),this.updateTableWidth(),p}insertRow(e,t,r){var n=this.descendants(x);const i=o(n,1)[0];if(null==i||null==i.children.head)return;const s=this.descendants(y),d=q(),c=this.scroll.create(w.blotName,{row:d});let u=[],h=[],p=[];s.forEach(o=>{const n=(0,l.getRelativeRect)(o.domNode.getBoundingClientRect(),r);t?Math.abs(n.y1-e.y1)<m?u.push(o):e.y1-n.y>m&&e.y1-n.y1<-m&&h.push(o):Math.abs(n.y-e.y)<m?u.push(o):e.y-n.y>m&&e.y-n.y1<-m&&h.push(o)});const f=(e,t)=>{return e.domNode.getBoundingClientRect().x-t.domNode.getBoundingClientRect().x};u.sort(f),u.forEach(e=>{const t=E(),r=e.formats(),o=this.scroll.create(y.blotName,Object.assign({},b,{row:d,colspan:r.colspan})),n=this.scroll.create(g.blotName,{row:d,cell:t,colspan:r.colspan}),l=this.scroll.create(a.blotName);n.appendChild(l),o.appendChild(n),c.appendChild(o),p.push(o)}),h.forEach(e=>{const t=parseInt(e.formats().rowspan,10);e.format("rowspan",t+1),p.push(e)});const v=this.rows().find(o=>{let n=(0,l.getRelativeRect)(o.domNode.getBoundingClientRect(),r);return t?Math.abs(n.y-e.y-e.height)<m:Math.abs(n.y-e.y)<m});return i.insertBefore(c,v),p.sort(f),p}mergeCells(e,t,r,o,n){const l=t.reduce((e,t,n)=>(0!==n?(e&&t.moveChildren(e),t.remove()):(t.format("colspan",o),t.format("rowspan",r),e=t),e),null);let i=l.domNode.getAttribute("data-row"),s=l.children.head.domNode.getAttribute("data-cell");return l.children.forEach(e=>{e.format("cell",s),e.format("row",i),e.format("colspan",o),e.format("rowspan",r)}),l}unmergeCells(e,t){let r={},o=1,n=1;e.forEach(e=>{if(r=e.formats(),o=r.rowspan,(n=r.colspan)>1){let t=e.next,r=e.row();e.format("colspan",1);for(let e=n;e>1;e--)this.insertCell(r,t)}if(o>1){let r=o,i=e.row().next;for(;r>1;){let o=i.children.reduce((r,o)=>{let n=(0,l.getRelativeRect)(e.domNode.getBoundingClientRect(),t),i=(0,l.getRelativeRect)(o.domNode.getBoundingClientRect(),t);return Math.abs(n.x1-i.x)<m&&(r=o),r},null);for(let e=n;e>0;e--)this.insertCell(i,o);r-=1,i=i.next}e.format("rowspan",1)}})}rows(){const e=this.children.tail;return null==e?[]:e.children.map(e=>e)}}C.blotName="table-container",C.className="quill-better-table",C.tagName="TABLE";class T extends c{constructor(e,t){super(e,t);const r=n.default.find(e.domNode.parentNode);t.addEventListener("scroll",e=>{const t=r.getModule("better-table");t.columnTool&&(t.columnTool.domNode.scrollLeft=e.target.scrollLeft),t.tableSelection&&t.tableSelection.selectedTds.length>0&&t.tableSelection.repositionHelpLines()},!1)}}function q(){return`row-${Math.random().toString(36).slice(2,6)}`}function E(){return`cell-${Math.random().toString(36).slice(2,6)}`}T.blotName="table-view",T.className="quill-better-table-wrapper",T.tagName="DIV",T.allowedChildren=[C],C.requiredContainer=T,C.allowedChildren=[x,N],x.requiredContainer=C,x.allowedChildren=[w],w.requiredContainer=x,w.allowedChildren=[y],y.requiredContainer=w,y.allowedChildren=[g,i.default],g.requiredContainer=y,N.allowedChildren=[v],N.requiredContainer=C,v.requiredContainer=N,t.TableCol=v,t.TableColGroup=N,t.TableCellLine=g,t.TableCell=y,t.TableRow=w,t.TableBody=x,t.TableContainer=C,t.TableViewWrapper=T,t.rowId=q,t.cellId=E,t.CELL_IDENTITY_KEYS=p,t.CELL_ATTRIBUTES=f},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o,n=r(0),l=(o=n)&&o.__esModule?o:{default:o},i=r(2);const s=l.default.import("blots/block");class a extends s{static create(e){"string"==typeof e&&(e={value:e});const t=super.create(e.value);return i.CELL_IDENTITY_KEYS.forEach(r=>{e[r]&&t.setAttribute(`data-${r}`,e[r])}),i.CELL_ATTRIBUTES.forEach(r=>{e[r]&&t.setAttribute(`data-${r}`,e[r])}),t}static formats(e){const t={};return t.value=this.tagName.indexOf(e.tagName)+1,i.CELL_ATTRIBUTES.concat(i.CELL_IDENTITY_KEYS).reduce((t,r)=>(e.hasAttribute(`data-${r}`)&&(t[r]=e.getAttribute(`data-${r}`)||void 0),t),t)}format(e,t){var r=a.formats(this.domNode);const o=r.row,n=r.cell,l=r.rowspan,s=r.colspan;e===a.blotName?t?super.format(e,{value:t,row:o,cell:n,rowspan:l,colspan:s}):o?this.replaceWith(i.TableCellLine.blotName,{row:o,cell:n,rowspan:l,colspan:s}):super.format(e,t):super.format(e,t)}optimize(e){var t=a.formats(this.domNode);const r=t.row,o=t.rowspan,n=t.colspan;if(!r||this.parent instanceof i.TableCell||this.wrap(i.TableCell.blotName,{row:r,colspan:n,rowspan:o}),this.enforceAllowedChildren(),null!=this.uiNode&&this.uiNode!==this.domNode.firstChild&&this.domNode.insertBefore(this.uiNode,this.domNode.firstChild),0===this.children.length)if(null!=this.statics.defaultChild){const e=this.scroll.create(this.statics.defaultChild.blotName);this.appendChild(e)}else this.remove();this.cache={}}}a.blotName="header",a.tagName=["H1","H2","H3","H4","H5","H6"],t.default=a},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o=function(){return function(e,t){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return function(e,t){var r=[],o=!0,n=!1,l=void 0;try{for(var i,s=e[Symbol.iterator]();!(o=(i=s.next()).done)&&(r.push(i.value),!t||r.length!==t);o=!0);}catch(e){n=!0,l=e}finally{try{!o&&s.return&&s.return()}finally{if(n)throw l}}return r}(e,t);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),n=u(r(0)),l=u(r(5)),i=u(r(6)),s=u(r(7)),a=r(8),d=r(2),c=u(r(3));function u(e){return e&&e.__esModule?e:{default:e}}const h=n.default.import("core/module"),p=n.default.import("delta");class f extends h{static register(){n.default.register(d.TableCol,!0),n.default.register(d.TableColGroup,!0),n.default.register(d.TableCellLine,!0),n.default.register(d.TableCell,!0),n.default.register(d.TableRow,!0),n.default.register(d.TableBody,!0),n.default.register(d.TableContainer,!0),n.default.register(d.TableViewWrapper,!0),n.default.register(d.TableViewWrapper,!0),n.default.register("formats/header",c.default,!0)}constructor(e,t){super(e,t),this.quill.root.addEventListener("click",r=>{if(!r.path||r.path.length<=0)return;const o=r.path.filter(e=>e.tagName&&"TABLE"===e.tagName.toUpperCase()&&e.classList.contains("quill-better-table"))[0];if(o){if(this.table===o)return;this.table&&this.hideTableTools(),this.showTableTools(o,e,t)}else this.table&&this.hideTableTools()},!1),this.quill.root.addEventListener("contextmenu",r=>{if(!this.table)return!0;if(r.preventDefault(),!r.path||r.path.length<=0)return;const o=r.path.filter(e=>e.tagName&&"TABLE"===e.tagName.toUpperCase()&&e.classList.contains("quill-better-table"))[0],n=r.path.filter(e=>e.tagName&&"TR"===e.tagName.toUpperCase()&&e.getAttribute("data-row"))[0],l=r.path.filter(e=>e.tagName&&"TD"===e.tagName.toUpperCase()&&e.getAttribute("data-row"))[0];let i=this.tableSelection.selectedTds.map(e=>e.domNode).includes(l);(this.tableSelection.selectedTds.length<=0||!i)&&this.tableSelection.setSelection(l.getBoundingClientRect(),l.getBoundingClientRect()),this.tableOperationMenu&&(this.tableOperationMenu=this.tableOperationMenu.destroy()),o&&(this.tableOperationMenu=new s.default({table:o,row:n,cell:l,left:r.pageX,top:r.pageY},e,t.operationMenu))},!1);e.getModule("keyboard");e.keyboard.addBinding({key:"Backspace"},{},function(e,t){if(0===e.index||this.quill.getLength()<=1)return!0;var r=this.quill.getLine(e.index);const n=o(r,1)[0];if(0===t.offset){var l=this.quill.getLine(e.index-1);const t=o(l,1)[0];if(null!=t&&"table-cell-line"===t.statics.blotName&&"table-cell-line"!==n.statics.blotName)return!1}return!0});let r=e.keyboard.bindings.Backspace.pop();e.keyboard.bindings.Backspace.splice(0,1,r),e.clipboard.addMatcher("td",a.matchTableCell),e.clipboard.addMatcher("th",a.matchTableHeader),e.clipboard.addMatcher("table",a.matchTable),e.clipboard.addMatcher("h1, h2, h3, h4, h5, h6",a.matchHeader),e.clipboard.matchers=e.clipboard.matchers.filter(e=>"tr"!==e[0])}getTable(e=this.quill.getSelection()){if(null==e)return[null,null,null,-1];var t=this.quill.getLine(e.index),r=o(t,2);const n=r[0],l=r[1];if(null==n||n.statics.blotName!==d.TableCellLine.blotName)return[null,null,null,-1];const i=n.tableCell(),s=i.row();return[s.table(),s,i,l]}insertTable(e,t){const r=this.quill.getSelection(!0);if(null==r)return;this.quill.getLeaf(r.index)[0],this.quill.getLeaf(r.index+1)[0];let o=(new p).retain(r.index);o.insert("\n"),o=new Array(t).fill("\n").reduce((e,t)=>(e.insert(t,{"table-col":!0}),e),o),o=new Array(e).fill(0).reduce(e=>{let r=(0,d.rowId)();return new Array(t).fill("\n").reduce((e,t)=>(e.insert(t,{"table-cell-line":{row:r,cell:(0,d.cellId)()}}),e),e)},o),this.quill.updateContents(o,n.default.sources.USER),this.quill.setSelection(r.index+t+1,n.default.sources.API)}showTableTools(e,t,r){this.table=e,this.columnTool=new l.default(e,t,r),this.tableSelection=new i.default(e,t,r)}hideTableTools(){this.columnTool&&this.columnTool.destroy(),this.tableSelection&&this.tableSelection.destroy(),this.tableOperationMenu&&this.tableOperationMenu.destroy(),this.columnTool=null,this.tableSelection=null,this.tableOperationMenu=null,this.table=null}}f.keyboardBindings={"table-cell-line backspace":{key:"Backspace",format:["table-cell-line"],collapsed:!0,offset:0,handler(e,t){var r=this.quill.getLine(e.index),n=o(r,2);const l=n[0];n[1];return!(!l.prev||"table-cell-line"!==l.prev.statics.blotName)}},"table-cell-line delete":{key:"Delete",format:["table-cell-line"],collapsed:!0,suffix:/^$/,handler(){}},"table-cell-line enter":{key:"Enter",shiftKey:null,format:["table-cell-line"],handler(e,t){if(this.quill.selection&&this.quill.selection.composing)return;const r=n.default.imports.parchment.Scope;e.length>0&&this.quill.scroll.deleteAt(e.index,e.length);const o=Object.keys(t.format).reduce((e,o)=>(this.quill.scroll.query(o,r.BLOCK)&&!Array.isArray(t.format[o])&&(e[o]=t.format[o]),e),{});this.quill.insertText(e.index,"\n",o["table-cell-line"],n.default.sources.USER),this.quill.setSelection(e.index+1,n.default.sources.SILENT),this.quill.focus(),Object.keys(t.format).forEach(e=>{null==o[e]&&(Array.isArray(t.format[e])||"link"!==e&&this.quill.format(e,t.format[e],n.default.sources.USER))})}}},t.default=f},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o,n=r(0),l=(o=n)&&o.__esModule?o:{default:o},i=r(1);const s=12,a=12,d=50,c="#35A7ED";t.default=class{constructor(e,t,r){if(!e)return null;this.table=e,this.quill=t,this.options=r,this.domNode=null,this.initColTool()}initColTool(){const e=this.quill.root.parentNode,t=(this.table.getBoundingClientRect(),e.getBoundingClientRect()),r=this.table.parentNode.getBoundingClientRect();this.domNode=document.createElement("div"),this.domNode.classList.add("qlbt-col-tool"),this.updateToolCells(),e.appendChild(this.domNode),(0,i.css)(this.domNode,{width:`${r.width}px`,height:`${s}px`,left:`${r.left-t.left+e.scrollLeft}px`,top:`${r.top-t.top+e.scrollTop-s-5}px`})}createToolCell(){const e=document.createElement("div");e.classList.add("qlbt-col-tool-cell");const t=document.createElement("div");return t.classList.add("qlbt-col-tool-cell-holder"),(0,i.css)(e,{height:`${a}px`}),e.appendChild(t),e}updateToolCells(){const e=l.default.find(this.table),t=e.children.tail.children.head.children,r=e.colGroup().children,o=function(e){return e.reduce((e,t)=>{const r=t.formats().colspan;return e+=parseInt(r,10)},0)}(t);let n=Array.from(this.domNode.querySelectorAll(".qlbt-col-tool-cell"));for(let e=0;e<Math.max(o,n.length);e++){let t=r.at(e),l=t&&parseInt(t.formats()[t.statics.blotName].width,10),s=null;n[e]?n[e]&&e>=o?n[e].remove():(s=n[e],(0,i.css)(s,{"min-width":`${l}px`})):(s=this.createToolCell(),this.domNode.appendChild(s),this.addColCellHolderHandler(s),(0,i.css)(s,{"min-width":`${l}px`}))}}destroy(){return this.domNode.remove(),null}addColCellHolderHandler(e){const t=l.default.find(this.table),r=e.querySelector(".qlbt-col-tool-cell-holder");let o=!1,n=0,a=0,u=0,h=0,p={},f={},b=null;const m=e=>{e.preventDefault(),o&&(a=e.clientX,u=h+a-n>=d?a-n:d-h,(0,i.css)(b,{left:`${f.left+f.width-1+u}px`}))},g=l=>{l.preventDefault();const s=Array.from(this.domNode.querySelectorAll(".qlbt-col-tool-cell")).indexOf(e),d=t.colGroup().children.at(s);o&&(d.format("width",h+u),(0,i.css)(e,{"min-width":`${h+u}px`}),n=0,a=0,u=0,h=0,o=!1,r.classList.remove("dragging")),document.removeEventListener("mousemove",m,!1),document.removeEventListener("mouseup",g,!1),p={},f={},b.remove(),b=null,t.updateTableWidth();const c=this.quill.getModule("better-table").tableSelection;c&&c.clearSelection()};r.addEventListener("mousedown",t=>{document.addEventListener("mousemove",m,!1),document.addEventListener("mouseup",g,!1),p=this.table.getBoundingClientRect(),f=e.getBoundingClientRect(),b=document.createElement("div"),(0,i.css)(b,{position:"fixed",top:`${f.top}px`,left:`${f.left+f.width-1}px`,zIndex:"100",height:`${p.height+s+4}px`,width:"1px",backgroundColor:c}),document.body.appendChild(b),o=!0,n=t.clientX,h=f.width,r.classList.add("dragging")},!1)}colToolCells(){return Array.from(this.domNode.querySelectorAll(".qlbt-col-tool-cell"))}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o,n=r(0),l=(o=n)&&o.__esModule?o:{default:o},i=r(1),s=r(2);const a="#35A7ED",d=["left","right","top","bottom"],c=2;function u(e,t){let r=Math.min(e.x,t.x,e.x+e.width-1,t.x+t.width-1),o=Math.max(e.x,t.x,e.x+e.width-1,t.x+t.width-1),n=Math.min(e.y,t.y,e.y+e.height-1,t.y+t.height-1),l=Math.max(e.y,t.y,e.y+e.height-1,t.y+t.height-1);return{x:r,x1:o,y:n,y1:l,width:o-r,height:l-n}}t.default=class{constructor(e,t,r){if(!e)return null;this.table=e,this.quill=t,this.options=r,this.boundary={},this.selectedTds=[],this.dragging=!1,this.selectingHandler=this.mouseDownHandler.bind(this),this.clearSelectionHanler=this.clearSelection.bind(this),this.helpLinesInitial(),this.quill.root.addEventListener("mousedown",this.selectingHandler,!1),this.quill.on("text-change",this.clearSelectionHanler)}helpLinesInitial(){let e=this.quill.root.parentNode;d.forEach(t=>{this[t]=document.createElement("div"),this[t].classList.add("qlbt-selection-line"),(0,i.css)(this[t],{position:"absolute",display:"none","background-color":a}),e.appendChild(this[t])})}mouseDownHandler(e){if(0!==e.button||!e.target.closest(".quill-better-table"))return;this.quill.root.addEventListener("mousemove",n,!1),this.quill.root.addEventListener("mouseup",function e(r){t.quill.root.removeEventListener("mousemove",n,!1),t.quill.root.removeEventListener("mouseup",e,!1),t.dragging=!1},!1);const t=this,r=e.target.closest("td[data-row]"),o=(0,i.getRelativeRect)(r.getBoundingClientRect(),this.quill.root.parentNode);function n(e){if(0!==e.button||!e.target.closest(".quill-better-table"))return;const n=e.target.closest("td[data-row]"),l=(0,i.getRelativeRect)(n.getBoundingClientRect(),t.quill.root.parentNode);t.boundary=u(o,l),t.correctBoundary(),t.selectedTds=t.computeSelectedTds(),t.repositionHelpLines(),r!==n&&t.quill.blur()}this.dragging=!0,this.boundary=u(o,o),this.correctBoundary(),this.selectedTds=this.computeSelectedTds(),this.repositionHelpLines()}correctBoundary(){l.default.find(this.table).descendants(s.TableCell).forEach(e=>{var t=(0,i.getRelativeRect)(e.domNode.getBoundingClientRect(),this.quill.root.parentNode);let r=t.x,o=t.y,n=t.width,l=t.height;(r+c>=this.boundary.x&&r+c<=this.boundary.x1||r-c+n>=this.boundary.x&&r-c+n<=this.boundary.x1)&&(o+c>=this.boundary.y&&o+c<=this.boundary.y1||o-c+l>=this.boundary.y&&o-c+l<=this.boundary.y1)&&(this.boundary=u(this.boundary,{x:r,y:o,width:n,height:l}))})}computeSelectedTds(){return l.default.find(this.table).descendants(s.TableCell).reduce((e,t)=>{var r=(0,i.getRelativeRect)(t.domNode.getBoundingClientRect(),this.quill.root.parentNode);let o=r.x,n=r.y,l=r.width,s=r.height;return o+c>=this.boundary.x&&o-c+l<=this.boundary.x1&&n+c>=this.boundary.y&&n-c+s<=this.boundary.y1&&e.push(t),e},[])}repositionHelpLines(){const e=this.table.parentNode.scrollLeft;(0,i.css)(this.left,{display:"block",left:`${this.boundary.x-e-1}px`,top:`${this.boundary.y}px`,height:`${this.boundary.height+1}px`,width:"1px"}),(0,i.css)(this.right,{display:"block",left:`${this.boundary.x1-e}px`,top:`${this.boundary.y}px`,height:`${this.boundary.height+1}px`,width:"1px"}),(0,i.css)(this.top,{display:"block",left:`${this.boundary.x-1-e}px`,top:`${this.boundary.y}px`,width:`${this.boundary.width+1}px`,height:"1px"}),(0,i.css)(this.bottom,{display:"block",left:`${this.boundary.x-1-e}px`,top:`${this.boundary.y1+1}px`,width:`${this.boundary.width+1}px`,height:"1px"})}refreshHelpLinesPosition(){const e=(0,i.getRelativeRect)(this.selectedTds[0].domNode.getBoundingClientRect(),this.quill.root.parentNode),t=(0,i.getRelativeRect)(this.selectedTds[this.selectedTds.length-1].domNode.getBoundingClientRect(),this.quill.root.parentNode);this.boundary=u(e,t),this.repositionHelpLines()}destroy(){return d.forEach(e=>{this[e].remove(),this[e]=null}),this.quill.root.removeEventListener("mousedown",this.selectingHandler,!1),this.quill.off("text-change",this.clearSelectionHanler),null}setSelection(e,t){this.boundary=u((0,i.getRelativeRect)(e,this.quill.root.parentNode),(0,i.getRelativeRect)(t,this.quill.root.parentNode)),this.correctBoundary(),this.selectedTds=this.computeSelectedTds(),this.repositionHelpLines()}clearSelection(){this.boundary={},this.selectedTds=[],d.forEach(e=>{this[e]&&(0,i.css)(this[e],{display:"none"})})}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o,n=r(0),l=(o=n)&&o.__esModule?o:{default:o},i=r(1);const s=150,a=200,d={insertColumnRight:{text:"Insert column right",handler(){const e=l.default.find(this.table);let t=c(this.columnToolCells,this.boundary,(e,t)=>Math.abs(e.x+e.width-t.x1)<=5,this.quill.root.parentNode);const r=e.insertColumn(this.boundary,t,!0,this.quill.root.parentNode);this.tableColumnTool.updateToolCells(),this.quill.update(l.default.sources.USER),this.quill.setSelection(this.quill.getIndex(r[0]),0,l.default.sources.SILENT),this.tableSelection.setSelection(r[0].domNode.getBoundingClientRect(),r[0].domNode.getBoundingClientRect())}},insertColumnLeft:{text:"Insert column left",handler(){const e=l.default.find(this.table);let t=c(this.columnToolCells,this.boundary,(e,t)=>Math.abs(e.x-t.x)<=5,this.quill.root.parentNode);const r=e.insertColumn(this.boundary,t,!1,this.quill.root.parentNode);this.tableColumnTool.updateToolCells(),this.quill.update(l.default.sources.USER),this.quill.setSelection(this.quill.getIndex(r[0]),0,l.default.sources.SILENT),this.tableSelection.setSelection(r[0].domNode.getBoundingClientRect(),r[0].domNode.getBoundingClientRect())}},insertRowUp:{text:"Insert row up",handler(){const e=l.default.find(this.table).insertRow(this.boundary,!1,this.quill.root.parentNode);this.quill.update(l.default.sources.USER),this.quill.setSelection(this.quill.getIndex(e[0]),0,l.default.sources.SILENT),this.tableSelection.setSelection(e[0].domNode.getBoundingClientRect(),e[0].domNode.getBoundingClientRect())}},insertRowDown:{text:"Insert row down",handler(){const e=l.default.find(this.table).insertRow(this.boundary,!0,this.quill.root.parentNode);this.quill.update(l.default.sources.USER),this.quill.setSelection(this.quill.getIndex(e[0]),0,l.default.sources.SILENT),this.tableSelection.setSelection(e[0].domNode.getBoundingClientRect(),e[0].domNode.getBoundingClientRect())}},mergeCells:{text:"Merge selected cells",handler(){const e=l.default.find(this.table),t=e.rows().reduce((e,t)=>{let r=(0,i.getRelativeRect)(t.domNode.getBoundingClientRect(),this.quill.root.parentNode);return r.y>this.boundary.y-5&&r.y+r.height<this.boundary.y+this.boundary.height+5&&(e+=1),e},0),r=this.columnToolCells.reduce((e,t)=>{let r=(0,i.getRelativeRect)(t.getBoundingClientRect(),this.quill.root.parentNode);return r.x>this.boundary.x-5&&r.x+r.width<this.boundary.x+this.boundary.width+5&&(e+=1),e},0),o=e.mergeCells(this.boundary,this.selectedTds,t,r,this.quill.root.parentNode);this.quill.update(l.default.sources.USER),this.tableSelection.setSelection(o.domNode.getBoundingClientRect(),o.domNode.getBoundingClientRect())}},unmergeCells:{text:"Unmerge cells",handler(){l.default.find(this.table).unmergeCells(this.selectedTds,this.quill.root.parentNode),this.quill.update(l.default.sources.USER),this.tableSelection.clearSelection()}},deleteColumn:{text:"Delete selected columns",handler(){const e=l.default.find(this.table);let t=(r=this.columnToolCells,o=this.boundary,n=((e,t)=>e.x+5>t.x&&e.x+e.width-5<t.x1),s=this.quill.root.parentNode,r.reduce((e,t)=>{let l=(0,i.getRelativeRect)(t.getBoundingClientRect(),s);return n(l,o)&&e.push(r.indexOf(t)),e},[]));var r,o,n,s;e.deleteColumns(this.boundary,t,this.quill.root.parentNode)||(this.tableColumnTool.updateToolCells(),this.quill.update(l.default.sources.USER),this.tableSelection.clearSelection())}},deleteRow:{text:"Delete selected rows",handler(){l.default.find(this.table).deleteRow(this.boundary,this.quill.root.parentNode),this.quill.update(l.default.sources.USER),this.tableSelection.clearSelection()}},deleteTable:{text:"Delete table",handler(){const e=this.quill.getModule("better-table"),t=l.default.find(this.table);e.hideTableTools(),t.remove(),this.quill.update(l.default.sources.USER)}}};function c(e,t,r,o){return e.reduce((n,l)=>{let s=(0,i.getRelativeRect)(l.getBoundingClientRect(),o);return r(s,t)&&(n=e.indexOf(l)),n},!1)}t.default=class{constructor(e,t,r){const o=t.getModule("better-table");this.tableSelection=o.tableSelection,this.table=e.table,this.quill=t,this.options=r,this.menuItems=Object.assign({},d,r.items),this.tableColumnTool=o.columnTool,this.boundary=this.tableSelection.boundary,this.selectedTds=this.tableSelection.selectedTds,this.destroyHanlder=this.destroy.bind(this),this.columnToolCells=this.tableColumnTool.colToolCells(),this.menuInitial(e),this.mount(),document.addEventListener("click",this.destroyHanlder,!1)}mount(){document.body.appendChild(this.domNode)}destroy(){return this.domNode.remove(),document.removeEventListener("click",this.destroyHanlder,!1),null}menuInitial({table:e,left:t,top:r}){this.domNode=document.createElement("div"),this.domNode.classList.add("qlbt-operation-menu"),(0,i.css)(this.domNode,{position:"absolute",left:`${t}px`,top:`${r}px`,"min-height":`${s}px`,width:`${a}px`});for(let e in this.menuItems)this.menuItems[e]&&this.domNode.appendChild(this.menuItemCreator(Object.assign({},d[e],this.menuItems[e])))}menuItemCreator({text:e,handler:t}){const r=document.createElement("div");return r.classList.add("qlbt-operation-menu-item"),r.innerText=e,r.addEventListener("click",t.bind(this),!1),r}}},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),t.matchTableCell=function(e,t,r){const o=e.parentNode,n="TABLE"===o.parentNode.tagName?o.parentNode:o.parentNode.parentNode,l=Array.from(n.querySelectorAll("tr")),a=Array.from(o.querySelectorAll("td")),d=l.indexOf(o)+1,c=a.indexOf(e)+1,u=e.getAttribute("colspan")||!1,h=e.getAttribute("rowspan")||!1;if(0===t.length())return t=(new s).insert("\n",{"table-cell-line":{row:d,cell:c,rowspan:h,colspan:u}});return(t=t.reduce((e,t)=>{if(t.insert&&"string"==typeof t.insert){const r=[];let o=t.insert,n=0;for(let e=0;e<t.insert.length;e++)"\n"===o.charAt(e)&&(0===e?r.push("\n"):(r.push(o.substring(n,e)),r.push("\n")),n=e+1);const l=o.substring(n);l&&r.push(l),r.forEach(r=>{"\n"===r?e.insert("\n",t.attributes):e.insert(r,(0,i._omit)(t.attributes,["table","table-cell-line","header"]))})}else e.insert(t.insert,t.attributes);return e},new s)).reduce((e,t)=>{if(t.insert&&"string"==typeof t.insert&&t.insert.startsWith("\n")){let r={};t.attributes.header?r.header={row:d,cell:c,rowspan:h,colspan:u}:t.attributes["table-cell-line"]&&(r["table-cell-line"]={row:d,cell:c,rowspan:h,colspan:u}),e.insert(t.insert,Object.assign({},Object.assign({},{row:d},t.attributes.table),r,(0,i._omit)(t.attributes,["table"])))}else e.insert(t.insert,Object.assign({},(0,i._omit)(t.attributes,["table","table-cell-line"])));return console.log(e),e},new s)},t.matchTableHeader=function(e,t,r){const o=e.parentNode,n="TABLE"===o.parentNode.tagName?o.parentNode:o.parentNode.parentNode,l=Array.from(n.querySelectorAll("tr")),a=Array.from(o.querySelectorAll("th")),d=l.indexOf(o)+1,c=a.indexOf(e)+1,u=e.getAttribute("colspan")||!1,h=e.getAttribute("rowspan")||!1;if(0===t.length())return t=(new s).insert("\n",{"table-cell-line":{row:d,cell:c,rowspan:h,colspan:u}});return(t=t.reduce((e,t)=>{if(t.insert&&"string"==typeof t.insert){const r=[];let o=t.insert,n=0;for(let e=0;e<t.insert.length;e++)"\n"===o.charAt(e)&&(0===e?r.push("\n"):(r.push(o.substring(n,e)),r.push("\n")),n=e+1);const l=o.substring(n);l&&r.push(l),r.indexOf("\n")<0&&r.push("\n"),r.forEach(r=>{"\n"===r?e.insert("\n",{"table-cell-line":{row:d,cell:c,rowspan:h,colspan:u}}):e.insert(r,t.attributes)})}else e.insert(t.insert,t.attributes);return e},new s)).reduce((e,t)=>(t.insert&&"string"==typeof t.insert&&t.insert.startsWith("\n")?e.insert(t.insert,Object.assign({},{"table-cell-line":{row:d,cell:c,rowspan:h,colspan:u}})):e.insert(t.insert,Object.assign({},(0,i._omit)(t.attributes,["table","table-cell-line"]))),e),new s)},t.matchTable=function(e,t,r){let o=new s;const n=e.querySelector("tr");if(null===n)return o;const l=Array.from(n.querySelectorAll("td")).concat(Array.from(n.querySelectorAll("th"))).reduce((e,t)=>{const r=t.getAttribute("colspan")||1;return e+=parseInt(r,10)},0),i=e.querySelectorAll("col").length;if(i===l)return t;{for(let e=0;e<l-i;e++)o.insert("\n",{"table-col":!0});if(0===i)return o.concat(t);let e=0;return t.reduce((t,r)=>(t.insert(r.insert,r.attributes),r.attributes&&r.attributes["table-col"]&&(e+=r.insert.length)===i&&(t=t.concat(o)),t),new s)}},t.matchHeader=function(e,t,r){return t};var o,n=r(0),l=(o=n)&&o.__esModule?o:{default:o},i=r(1);const s=l.default.import("delta")},,function(e,t,r){e.exports=r(4)}]).default});
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory(require("quill"));
+	else if(typeof define === 'function' && define.amd)
+		define(["quill"], factory);
+	else if(typeof exports === 'object')
+		exports["quillBetterTable"] = factory(require("quill"));
+	else
+		root["quillBetterTable"] = factory(root["Quill"]);
+})(window, function(__WEBPACK_EXTERNAL_MODULE__0__) {
+return /******/ (function(modules) { // webpackBootstrap
+/******/ 	function hotDisposeChunk(chunkId) {
+/******/ 		delete installedChunks[chunkId];
+/******/ 	}
+/******/ 	var parentHotUpdateCallback = window["webpackHotUpdatequillBetterTable"];
+/******/ 	window["webpackHotUpdatequillBetterTable"] = // eslint-disable-next-line no-unused-vars
+/******/ 	function webpackHotUpdateCallback(chunkId, moreModules) {
+/******/ 		hotAddUpdateChunk(chunkId, moreModules);
+/******/ 		if (parentHotUpdateCallback) parentHotUpdateCallback(chunkId, moreModules);
+/******/ 	} ;
+/******/
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	function hotDownloadUpdateChunk(chunkId) {
+/******/ 		var script = document.createElement("script");
+/******/ 		script.charset = "utf-8";
+/******/ 		script.src = __webpack_require__.p + "" + chunkId + "." + hotCurrentHash + ".hot-update.js";
+/******/ 		if (null) script.crossOrigin = null;
+/******/ 		document.head.appendChild(script);
+/******/ 	}
+/******/
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	function hotDownloadManifest(requestTimeout) {
+/******/ 		requestTimeout = requestTimeout || 10000;
+/******/ 		return new Promise(function(resolve, reject) {
+/******/ 			if (typeof XMLHttpRequest === "undefined") {
+/******/ 				return reject(new Error("No browser support"));
+/******/ 			}
+/******/ 			try {
+/******/ 				var request = new XMLHttpRequest();
+/******/ 				var requestPath = __webpack_require__.p + "" + hotCurrentHash + ".hot-update.json";
+/******/ 				request.open("GET", requestPath, true);
+/******/ 				request.timeout = requestTimeout;
+/******/ 				request.send(null);
+/******/ 			} catch (err) {
+/******/ 				return reject(err);
+/******/ 			}
+/******/ 			request.onreadystatechange = function() {
+/******/ 				if (request.readyState !== 4) return;
+/******/ 				if (request.status === 0) {
+/******/ 					// timeout
+/******/ 					reject(
+/******/ 						new Error("Manifest request to " + requestPath + " timed out.")
+/******/ 					);
+/******/ 				} else if (request.status === 404) {
+/******/ 					// no update available
+/******/ 					resolve();
+/******/ 				} else if (request.status !== 200 && request.status !== 304) {
+/******/ 					// other failure
+/******/ 					reject(new Error("Manifest request to " + requestPath + " failed."));
+/******/ 				} else {
+/******/ 					// success
+/******/ 					try {
+/******/ 						var update = JSON.parse(request.responseText);
+/******/ 					} catch (e) {
+/******/ 						reject(e);
+/******/ 						return;
+/******/ 					}
+/******/ 					resolve(update);
+/******/ 				}
+/******/ 			};
+/******/ 		});
+/******/ 	}
+/******/
+/******/ 	var hotApplyOnUpdate = true;
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	var hotCurrentHash = "8a6f6d369ffdae22d862";
+/******/ 	var hotRequestTimeout = 10000;
+/******/ 	var hotCurrentModuleData = {};
+/******/ 	var hotCurrentChildModule;
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	var hotCurrentParents = [];
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	var hotCurrentParentsTemp = [];
+/******/
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	function hotCreateRequire(moduleId) {
+/******/ 		var me = installedModules[moduleId];
+/******/ 		if (!me) return __webpack_require__;
+/******/ 		var fn = function(request) {
+/******/ 			if (me.hot.active) {
+/******/ 				if (installedModules[request]) {
+/******/ 					if (installedModules[request].parents.indexOf(moduleId) === -1) {
+/******/ 						installedModules[request].parents.push(moduleId);
+/******/ 					}
+/******/ 				} else {
+/******/ 					hotCurrentParents = [moduleId];
+/******/ 					hotCurrentChildModule = request;
+/******/ 				}
+/******/ 				if (me.children.indexOf(request) === -1) {
+/******/ 					me.children.push(request);
+/******/ 				}
+/******/ 			} else {
+/******/ 				console.warn(
+/******/ 					"[HMR] unexpected require(" +
+/******/ 						request +
+/******/ 						") from disposed module " +
+/******/ 						moduleId
+/******/ 				);
+/******/ 				hotCurrentParents = [];
+/******/ 			}
+/******/ 			return __webpack_require__(request);
+/******/ 		};
+/******/ 		var ObjectFactory = function ObjectFactory(name) {
+/******/ 			return {
+/******/ 				configurable: true,
+/******/ 				enumerable: true,
+/******/ 				get: function() {
+/******/ 					return __webpack_require__[name];
+/******/ 				},
+/******/ 				set: function(value) {
+/******/ 					__webpack_require__[name] = value;
+/******/ 				}
+/******/ 			};
+/******/ 		};
+/******/ 		for (var name in __webpack_require__) {
+/******/ 			if (
+/******/ 				Object.prototype.hasOwnProperty.call(__webpack_require__, name) &&
+/******/ 				name !== "e" &&
+/******/ 				name !== "t"
+/******/ 			) {
+/******/ 				Object.defineProperty(fn, name, ObjectFactory(name));
+/******/ 			}
+/******/ 		}
+/******/ 		fn.e = function(chunkId) {
+/******/ 			if (hotStatus === "ready") hotSetStatus("prepare");
+/******/ 			hotChunksLoading++;
+/******/ 			return __webpack_require__.e(chunkId).then(finishChunkLoading, function(err) {
+/******/ 				finishChunkLoading();
+/******/ 				throw err;
+/******/ 			});
+/******/
+/******/ 			function finishChunkLoading() {
+/******/ 				hotChunksLoading--;
+/******/ 				if (hotStatus === "prepare") {
+/******/ 					if (!hotWaitingFilesMap[chunkId]) {
+/******/ 						hotEnsureUpdateChunk(chunkId);
+/******/ 					}
+/******/ 					if (hotChunksLoading === 0 && hotWaitingFiles === 0) {
+/******/ 						hotUpdateDownloaded();
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 		fn.t = function(value, mode) {
+/******/ 			if (mode & 1) value = fn(value);
+/******/ 			return __webpack_require__.t(value, mode & ~1);
+/******/ 		};
+/******/ 		return fn;
+/******/ 	}
+/******/
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	function hotCreateModule(moduleId) {
+/******/ 		var hot = {
+/******/ 			// private stuff
+/******/ 			_acceptedDependencies: {},
+/******/ 			_declinedDependencies: {},
+/******/ 			_selfAccepted: false,
+/******/ 			_selfDeclined: false,
+/******/ 			_disposeHandlers: [],
+/******/ 			_main: hotCurrentChildModule !== moduleId,
+/******/
+/******/ 			// Module API
+/******/ 			active: true,
+/******/ 			accept: function(dep, callback) {
+/******/ 				if (dep === undefined) hot._selfAccepted = true;
+/******/ 				else if (typeof dep === "function") hot._selfAccepted = dep;
+/******/ 				else if (typeof dep === "object")
+/******/ 					for (var i = 0; i < dep.length; i++)
+/******/ 						hot._acceptedDependencies[dep[i]] = callback || function() {};
+/******/ 				else hot._acceptedDependencies[dep] = callback || function() {};
+/******/ 			},
+/******/ 			decline: function(dep) {
+/******/ 				if (dep === undefined) hot._selfDeclined = true;
+/******/ 				else if (typeof dep === "object")
+/******/ 					for (var i = 0; i < dep.length; i++)
+/******/ 						hot._declinedDependencies[dep[i]] = true;
+/******/ 				else hot._declinedDependencies[dep] = true;
+/******/ 			},
+/******/ 			dispose: function(callback) {
+/******/ 				hot._disposeHandlers.push(callback);
+/******/ 			},
+/******/ 			addDisposeHandler: function(callback) {
+/******/ 				hot._disposeHandlers.push(callback);
+/******/ 			},
+/******/ 			removeDisposeHandler: function(callback) {
+/******/ 				var idx = hot._disposeHandlers.indexOf(callback);
+/******/ 				if (idx >= 0) hot._disposeHandlers.splice(idx, 1);
+/******/ 			},
+/******/
+/******/ 			// Management API
+/******/ 			check: hotCheck,
+/******/ 			apply: hotApply,
+/******/ 			status: function(l) {
+/******/ 				if (!l) return hotStatus;
+/******/ 				hotStatusHandlers.push(l);
+/******/ 			},
+/******/ 			addStatusHandler: function(l) {
+/******/ 				hotStatusHandlers.push(l);
+/******/ 			},
+/******/ 			removeStatusHandler: function(l) {
+/******/ 				var idx = hotStatusHandlers.indexOf(l);
+/******/ 				if (idx >= 0) hotStatusHandlers.splice(idx, 1);
+/******/ 			},
+/******/
+/******/ 			//inherit from previous dispose call
+/******/ 			data: hotCurrentModuleData[moduleId]
+/******/ 		};
+/******/ 		hotCurrentChildModule = undefined;
+/******/ 		return hot;
+/******/ 	}
+/******/
+/******/ 	var hotStatusHandlers = [];
+/******/ 	var hotStatus = "idle";
+/******/
+/******/ 	function hotSetStatus(newStatus) {
+/******/ 		hotStatus = newStatus;
+/******/ 		for (var i = 0; i < hotStatusHandlers.length; i++)
+/******/ 			hotStatusHandlers[i].call(null, newStatus);
+/******/ 	}
+/******/
+/******/ 	// while downloading
+/******/ 	var hotWaitingFiles = 0;
+/******/ 	var hotChunksLoading = 0;
+/******/ 	var hotWaitingFilesMap = {};
+/******/ 	var hotRequestedFilesMap = {};
+/******/ 	var hotAvailableFilesMap = {};
+/******/ 	var hotDeferred;
+/******/
+/******/ 	// The update info
+/******/ 	var hotUpdate, hotUpdateNewHash;
+/******/
+/******/ 	function toModuleId(id) {
+/******/ 		var isNumber = +id + "" === id;
+/******/ 		return isNumber ? +id : id;
+/******/ 	}
+/******/
+/******/ 	function hotCheck(apply) {
+/******/ 		if (hotStatus !== "idle") {
+/******/ 			throw new Error("check() is only allowed in idle status");
+/******/ 		}
+/******/ 		hotApplyOnUpdate = apply;
+/******/ 		hotSetStatus("check");
+/******/ 		return hotDownloadManifest(hotRequestTimeout).then(function(update) {
+/******/ 			if (!update) {
+/******/ 				hotSetStatus("idle");
+/******/ 				return null;
+/******/ 			}
+/******/ 			hotRequestedFilesMap = {};
+/******/ 			hotWaitingFilesMap = {};
+/******/ 			hotAvailableFilesMap = update.c;
+/******/ 			hotUpdateNewHash = update.h;
+/******/
+/******/ 			hotSetStatus("prepare");
+/******/ 			var promise = new Promise(function(resolve, reject) {
+/******/ 				hotDeferred = {
+/******/ 					resolve: resolve,
+/******/ 					reject: reject
+/******/ 				};
+/******/ 			});
+/******/ 			hotUpdate = {};
+/******/ 			var chunkId = 2;
+/******/ 			// eslint-disable-next-line no-lone-blocks
+/******/ 			{
+/******/ 				/*globals chunkId */
+/******/ 				hotEnsureUpdateChunk(chunkId);
+/******/ 			}
+/******/ 			if (
+/******/ 				hotStatus === "prepare" &&
+/******/ 				hotChunksLoading === 0 &&
+/******/ 				hotWaitingFiles === 0
+/******/ 			) {
+/******/ 				hotUpdateDownloaded();
+/******/ 			}
+/******/ 			return promise;
+/******/ 		});
+/******/ 	}
+/******/
+/******/ 	// eslint-disable-next-line no-unused-vars
+/******/ 	function hotAddUpdateChunk(chunkId, moreModules) {
+/******/ 		if (!hotAvailableFilesMap[chunkId] || !hotRequestedFilesMap[chunkId])
+/******/ 			return;
+/******/ 		hotRequestedFilesMap[chunkId] = false;
+/******/ 		for (var moduleId in moreModules) {
+/******/ 			if (Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				hotUpdate[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if (--hotWaitingFiles === 0 && hotChunksLoading === 0) {
+/******/ 			hotUpdateDownloaded();
+/******/ 		}
+/******/ 	}
+/******/
+/******/ 	function hotEnsureUpdateChunk(chunkId) {
+/******/ 		if (!hotAvailableFilesMap[chunkId]) {
+/******/ 			hotWaitingFilesMap[chunkId] = true;
+/******/ 		} else {
+/******/ 			hotRequestedFilesMap[chunkId] = true;
+/******/ 			hotWaitingFiles++;
+/******/ 			hotDownloadUpdateChunk(chunkId);
+/******/ 		}
+/******/ 	}
+/******/
+/******/ 	function hotUpdateDownloaded() {
+/******/ 		hotSetStatus("ready");
+/******/ 		var deferred = hotDeferred;
+/******/ 		hotDeferred = null;
+/******/ 		if (!deferred) return;
+/******/ 		if (hotApplyOnUpdate) {
+/******/ 			// Wrap deferred object in Promise to mark it as a well-handled Promise to
+/******/ 			// avoid triggering uncaught exception warning in Chrome.
+/******/ 			// See https://bugs.chromium.org/p/chromium/issues/detail?id=465666
+/******/ 			Promise.resolve()
+/******/ 				.then(function() {
+/******/ 					return hotApply(hotApplyOnUpdate);
+/******/ 				})
+/******/ 				.then(
+/******/ 					function(result) {
+/******/ 						deferred.resolve(result);
+/******/ 					},
+/******/ 					function(err) {
+/******/ 						deferred.reject(err);
+/******/ 					}
+/******/ 				);
+/******/ 		} else {
+/******/ 			var outdatedModules = [];
+/******/ 			for (var id in hotUpdate) {
+/******/ 				if (Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
+/******/ 					outdatedModules.push(toModuleId(id));
+/******/ 				}
+/******/ 			}
+/******/ 			deferred.resolve(outdatedModules);
+/******/ 		}
+/******/ 	}
+/******/
+/******/ 	function hotApply(options) {
+/******/ 		if (hotStatus !== "ready")
+/******/ 			throw new Error("apply() is only allowed in ready status");
+/******/ 		options = options || {};
+/******/
+/******/ 		var cb;
+/******/ 		var i;
+/******/ 		var j;
+/******/ 		var module;
+/******/ 		var moduleId;
+/******/
+/******/ 		function getAffectedStuff(updateModuleId) {
+/******/ 			var outdatedModules = [updateModuleId];
+/******/ 			var outdatedDependencies = {};
+/******/
+/******/ 			var queue = outdatedModules.map(function(id) {
+/******/ 				return {
+/******/ 					chain: [id],
+/******/ 					id: id
+/******/ 				};
+/******/ 			});
+/******/ 			while (queue.length > 0) {
+/******/ 				var queueItem = queue.pop();
+/******/ 				var moduleId = queueItem.id;
+/******/ 				var chain = queueItem.chain;
+/******/ 				module = installedModules[moduleId];
+/******/ 				if (!module || module.hot._selfAccepted) continue;
+/******/ 				if (module.hot._selfDeclined) {
+/******/ 					return {
+/******/ 						type: "self-declined",
+/******/ 						chain: chain,
+/******/ 						moduleId: moduleId
+/******/ 					};
+/******/ 				}
+/******/ 				if (module.hot._main) {
+/******/ 					return {
+/******/ 						type: "unaccepted",
+/******/ 						chain: chain,
+/******/ 						moduleId: moduleId
+/******/ 					};
+/******/ 				}
+/******/ 				for (var i = 0; i < module.parents.length; i++) {
+/******/ 					var parentId = module.parents[i];
+/******/ 					var parent = installedModules[parentId];
+/******/ 					if (!parent) continue;
+/******/ 					if (parent.hot._declinedDependencies[moduleId]) {
+/******/ 						return {
+/******/ 							type: "declined",
+/******/ 							chain: chain.concat([parentId]),
+/******/ 							moduleId: moduleId,
+/******/ 							parentId: parentId
+/******/ 						};
+/******/ 					}
+/******/ 					if (outdatedModules.indexOf(parentId) !== -1) continue;
+/******/ 					if (parent.hot._acceptedDependencies[moduleId]) {
+/******/ 						if (!outdatedDependencies[parentId])
+/******/ 							outdatedDependencies[parentId] = [];
+/******/ 						addAllToSet(outdatedDependencies[parentId], [moduleId]);
+/******/ 						continue;
+/******/ 					}
+/******/ 					delete outdatedDependencies[parentId];
+/******/ 					outdatedModules.push(parentId);
+/******/ 					queue.push({
+/******/ 						chain: chain.concat([parentId]),
+/******/ 						id: parentId
+/******/ 					});
+/******/ 				}
+/******/ 			}
+/******/
+/******/ 			return {
+/******/ 				type: "accepted",
+/******/ 				moduleId: updateModuleId,
+/******/ 				outdatedModules: outdatedModules,
+/******/ 				outdatedDependencies: outdatedDependencies
+/******/ 			};
+/******/ 		}
+/******/
+/******/ 		function addAllToSet(a, b) {
+/******/ 			for (var i = 0; i < b.length; i++) {
+/******/ 				var item = b[i];
+/******/ 				if (a.indexOf(item) === -1) a.push(item);
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// at begin all updates modules are outdated
+/******/ 		// the "outdated" status can propagate to parents if they don't accept the children
+/******/ 		var outdatedDependencies = {};
+/******/ 		var outdatedModules = [];
+/******/ 		var appliedUpdate = {};
+/******/
+/******/ 		var warnUnexpectedRequire = function warnUnexpectedRequire() {
+/******/ 			console.warn(
+/******/ 				"[HMR] unexpected require(" + result.moduleId + ") to disposed module"
+/******/ 			);
+/******/ 		};
+/******/
+/******/ 		for (var id in hotUpdate) {
+/******/ 			if (Object.prototype.hasOwnProperty.call(hotUpdate, id)) {
+/******/ 				moduleId = toModuleId(id);
+/******/ 				/** @type {TODO} */
+/******/ 				var result;
+/******/ 				if (hotUpdate[id]) {
+/******/ 					result = getAffectedStuff(moduleId);
+/******/ 				} else {
+/******/ 					result = {
+/******/ 						type: "disposed",
+/******/ 						moduleId: id
+/******/ 					};
+/******/ 				}
+/******/ 				/** @type {Error|false} */
+/******/ 				var abortError = false;
+/******/ 				var doApply = false;
+/******/ 				var doDispose = false;
+/******/ 				var chainInfo = "";
+/******/ 				if (result.chain) {
+/******/ 					chainInfo = "\nUpdate propagation: " + result.chain.join(" -> ");
+/******/ 				}
+/******/ 				switch (result.type) {
+/******/ 					case "self-declined":
+/******/ 						if (options.onDeclined) options.onDeclined(result);
+/******/ 						if (!options.ignoreDeclined)
+/******/ 							abortError = new Error(
+/******/ 								"Aborted because of self decline: " +
+/******/ 									result.moduleId +
+/******/ 									chainInfo
+/******/ 							);
+/******/ 						break;
+/******/ 					case "declined":
+/******/ 						if (options.onDeclined) options.onDeclined(result);
+/******/ 						if (!options.ignoreDeclined)
+/******/ 							abortError = new Error(
+/******/ 								"Aborted because of declined dependency: " +
+/******/ 									result.moduleId +
+/******/ 									" in " +
+/******/ 									result.parentId +
+/******/ 									chainInfo
+/******/ 							);
+/******/ 						break;
+/******/ 					case "unaccepted":
+/******/ 						if (options.onUnaccepted) options.onUnaccepted(result);
+/******/ 						if (!options.ignoreUnaccepted)
+/******/ 							abortError = new Error(
+/******/ 								"Aborted because " + moduleId + " is not accepted" + chainInfo
+/******/ 							);
+/******/ 						break;
+/******/ 					case "accepted":
+/******/ 						if (options.onAccepted) options.onAccepted(result);
+/******/ 						doApply = true;
+/******/ 						break;
+/******/ 					case "disposed":
+/******/ 						if (options.onDisposed) options.onDisposed(result);
+/******/ 						doDispose = true;
+/******/ 						break;
+/******/ 					default:
+/******/ 						throw new Error("Unexception type " + result.type);
+/******/ 				}
+/******/ 				if (abortError) {
+/******/ 					hotSetStatus("abort");
+/******/ 					return Promise.reject(abortError);
+/******/ 				}
+/******/ 				if (doApply) {
+/******/ 					appliedUpdate[moduleId] = hotUpdate[moduleId];
+/******/ 					addAllToSet(outdatedModules, result.outdatedModules);
+/******/ 					for (moduleId in result.outdatedDependencies) {
+/******/ 						if (
+/******/ 							Object.prototype.hasOwnProperty.call(
+/******/ 								result.outdatedDependencies,
+/******/ 								moduleId
+/******/ 							)
+/******/ 						) {
+/******/ 							if (!outdatedDependencies[moduleId])
+/******/ 								outdatedDependencies[moduleId] = [];
+/******/ 							addAllToSet(
+/******/ 								outdatedDependencies[moduleId],
+/******/ 								result.outdatedDependencies[moduleId]
+/******/ 							);
+/******/ 						}
+/******/ 					}
+/******/ 				}
+/******/ 				if (doDispose) {
+/******/ 					addAllToSet(outdatedModules, [result.moduleId]);
+/******/ 					appliedUpdate[moduleId] = warnUnexpectedRequire;
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// Store self accepted outdated modules to require them later by the module system
+/******/ 		var outdatedSelfAcceptedModules = [];
+/******/ 		for (i = 0; i < outdatedModules.length; i++) {
+/******/ 			moduleId = outdatedModules[i];
+/******/ 			if (
+/******/ 				installedModules[moduleId] &&
+/******/ 				installedModules[moduleId].hot._selfAccepted &&
+/******/ 				// removed self-accepted modules should not be required
+/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire
+/******/ 			) {
+/******/ 				outdatedSelfAcceptedModules.push({
+/******/ 					module: moduleId,
+/******/ 					errorHandler: installedModules[moduleId].hot._selfAccepted
+/******/ 				});
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// Now in "dispose" phase
+/******/ 		hotSetStatus("dispose");
+/******/ 		Object.keys(hotAvailableFilesMap).forEach(function(chunkId) {
+/******/ 			if (hotAvailableFilesMap[chunkId] === false) {
+/******/ 				hotDisposeChunk(chunkId);
+/******/ 			}
+/******/ 		});
+/******/
+/******/ 		var idx;
+/******/ 		var queue = outdatedModules.slice();
+/******/ 		while (queue.length > 0) {
+/******/ 			moduleId = queue.pop();
+/******/ 			module = installedModules[moduleId];
+/******/ 			if (!module) continue;
+/******/
+/******/ 			var data = {};
+/******/
+/******/ 			// Call dispose handlers
+/******/ 			var disposeHandlers = module.hot._disposeHandlers;
+/******/ 			for (j = 0; j < disposeHandlers.length; j++) {
+/******/ 				cb = disposeHandlers[j];
+/******/ 				cb(data);
+/******/ 			}
+/******/ 			hotCurrentModuleData[moduleId] = data;
+/******/
+/******/ 			// disable module (this disables requires from this module)
+/******/ 			module.hot.active = false;
+/******/
+/******/ 			// remove module from cache
+/******/ 			delete installedModules[moduleId];
+/******/
+/******/ 			// when disposing there is no need to call dispose handler
+/******/ 			delete outdatedDependencies[moduleId];
+/******/
+/******/ 			// remove "parents" references from all children
+/******/ 			for (j = 0; j < module.children.length; j++) {
+/******/ 				var child = installedModules[module.children[j]];
+/******/ 				if (!child) continue;
+/******/ 				idx = child.parents.indexOf(moduleId);
+/******/ 				if (idx >= 0) {
+/******/ 					child.parents.splice(idx, 1);
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// remove outdated dependency from module children
+/******/ 		var dependency;
+/******/ 		var moduleOutdatedDependencies;
+/******/ 		for (moduleId in outdatedDependencies) {
+/******/ 			if (
+/******/ 				Object.prototype.hasOwnProperty.call(outdatedDependencies, moduleId)
+/******/ 			) {
+/******/ 				module = installedModules[moduleId];
+/******/ 				if (module) {
+/******/ 					moduleOutdatedDependencies = outdatedDependencies[moduleId];
+/******/ 					for (j = 0; j < moduleOutdatedDependencies.length; j++) {
+/******/ 						dependency = moduleOutdatedDependencies[j];
+/******/ 						idx = module.children.indexOf(dependency);
+/******/ 						if (idx >= 0) module.children.splice(idx, 1);
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// Now in "apply" phase
+/******/ 		hotSetStatus("apply");
+/******/
+/******/ 		hotCurrentHash = hotUpdateNewHash;
+/******/
+/******/ 		// insert new code
+/******/ 		for (moduleId in appliedUpdate) {
+/******/ 			if (Object.prototype.hasOwnProperty.call(appliedUpdate, moduleId)) {
+/******/ 				modules[moduleId] = appliedUpdate[moduleId];
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// call accept handlers
+/******/ 		var error = null;
+/******/ 		for (moduleId in outdatedDependencies) {
+/******/ 			if (
+/******/ 				Object.prototype.hasOwnProperty.call(outdatedDependencies, moduleId)
+/******/ 			) {
+/******/ 				module = installedModules[moduleId];
+/******/ 				if (module) {
+/******/ 					moduleOutdatedDependencies = outdatedDependencies[moduleId];
+/******/ 					var callbacks = [];
+/******/ 					for (i = 0; i < moduleOutdatedDependencies.length; i++) {
+/******/ 						dependency = moduleOutdatedDependencies[i];
+/******/ 						cb = module.hot._acceptedDependencies[dependency];
+/******/ 						if (cb) {
+/******/ 							if (callbacks.indexOf(cb) !== -1) continue;
+/******/ 							callbacks.push(cb);
+/******/ 						}
+/******/ 					}
+/******/ 					for (i = 0; i < callbacks.length; i++) {
+/******/ 						cb = callbacks[i];
+/******/ 						try {
+/******/ 							cb(moduleOutdatedDependencies);
+/******/ 						} catch (err) {
+/******/ 							if (options.onErrored) {
+/******/ 								options.onErrored({
+/******/ 									type: "accept-errored",
+/******/ 									moduleId: moduleId,
+/******/ 									dependencyId: moduleOutdatedDependencies[i],
+/******/ 									error: err
+/******/ 								});
+/******/ 							}
+/******/ 							if (!options.ignoreErrored) {
+/******/ 								if (!error) error = err;
+/******/ 							}
+/******/ 						}
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// Load self accepted modules
+/******/ 		for (i = 0; i < outdatedSelfAcceptedModules.length; i++) {
+/******/ 			var item = outdatedSelfAcceptedModules[i];
+/******/ 			moduleId = item.module;
+/******/ 			hotCurrentParents = [moduleId];
+/******/ 			try {
+/******/ 				__webpack_require__(moduleId);
+/******/ 			} catch (err) {
+/******/ 				if (typeof item.errorHandler === "function") {
+/******/ 					try {
+/******/ 						item.errorHandler(err);
+/******/ 					} catch (err2) {
+/******/ 						if (options.onErrored) {
+/******/ 							options.onErrored({
+/******/ 								type: "self-accept-error-handler-errored",
+/******/ 								moduleId: moduleId,
+/******/ 								error: err2,
+/******/ 								originalError: err
+/******/ 							});
+/******/ 						}
+/******/ 						if (!options.ignoreErrored) {
+/******/ 							if (!error) error = err2;
+/******/ 						}
+/******/ 						if (!error) error = err;
+/******/ 					}
+/******/ 				} else {
+/******/ 					if (options.onErrored) {
+/******/ 						options.onErrored({
+/******/ 							type: "self-accept-errored",
+/******/ 							moduleId: moduleId,
+/******/ 							error: err
+/******/ 						});
+/******/ 					}
+/******/ 					if (!options.ignoreErrored) {
+/******/ 						if (!error) error = err;
+/******/ 					}
+/******/ 				}
+/******/ 			}
+/******/ 		}
+/******/
+/******/ 		// handle errors in accept handlers and self accepted module load
+/******/ 		if (error) {
+/******/ 			hotSetStatus("fail");
+/******/ 			return Promise.reject(error);
+/******/ 		}
+/******/
+/******/ 		hotSetStatus("idle");
+/******/ 		return new Promise(function(resolve) {
+/******/ 			resolve(outdatedModules);
+/******/ 		});
+/******/ 	}
+/******/
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {},
+/******/ 			hot: hotCreateModule(moduleId),
+/******/ 			parents: (hotCurrentParentsTemp = hotCurrentParents, hotCurrentParents = [], hotCurrentParentsTemp),
+/******/ 			children: []
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, hotCreateRequire(moduleId));
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// __webpack_hash__
+/******/ 	__webpack_require__.h = function() { return hotCurrentHash; };
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return hotCreateRequire(3)(__webpack_require__.s = 3);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__0__;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: external {"commonjs":"quill","commonjs2":"quill","amd":"quill","root":"Quill"}
+var external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_ = __webpack_require__(0);
+var external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_);
+
+// CONCATENATED MODULE: ./src/utils/index.js
+function css(domNode, rules) {
+  if (typeof rules === 'object') {
+    for (let prop in rules) {
+      domNode.style[prop] = rules[prop];
+    }
+  }
+}
+/**
+ * getRelativeRect
+ * @param  {Object} targetRect  rect data for target element
+ * @param  {Element} container  container element
+ * @return {Object}             an object with rect data
+ */
+
+function getRelativeRect(targetRect, container) {
+  let containerRect = container.getBoundingClientRect();
+  return {
+    x: targetRect.x - containerRect.x - container.scrollLeft,
+    y: targetRect.y - containerRect.y - container.scrollTop,
+    x1: targetRect.x - containerRect.x - container.scrollLeft + targetRect.width,
+    y1: targetRect.y - containerRect.y - container.scrollTop + targetRect.height,
+    width: targetRect.width,
+    height: targetRect.height
+  };
+}
+/**
+ * _omit
+ * @param  {Object} obj         target Object
+ * @param  {Array} uselessKeys  keys of removed properties
+ * @return {Object}             new Object without useless properties
+ */
+
+function _omit(obj, uselessKeys) {
+  return obj && Object.keys(obj).reduce((acc, key) => {
+    return uselessKeys.includes(key) ? acc : Object.assign({}, acc, {
+      [key]: obj[key]
+    });
+  }, {});
+}
+// CONCATENATED MODULE: ./src/modules/table-column-tool.js
+
+
+const COL_TOOL_HEIGHT = 12;
+const COL_TOOL_CELL_HEIGHT = 12;
+const ROW_TOOL_WIDTH = 12;
+const CELL_MIN_WIDTH = 50;
+const PRIMARY_COLOR = '#35A7ED';
+class table_column_tool_TableColumnTool {
+  constructor(table, quill, options) {
+    if (!table) return null;
+    this.table = table;
+    this.quill = quill;
+    this.options = options;
+    this.domNode = null;
+    this.initColTool();
+  }
+
+  initColTool() {
+    const parent = this.quill.root.parentNode;
+    const tableRect = this.table.getBoundingClientRect();
+    const containerRect = parent.getBoundingClientRect();
+    const tableViewRect = this.table.parentNode.getBoundingClientRect();
+    this.domNode = document.createElement('div');
+    this.domNode.classList.add('qlbt-col-tool');
+    this.updateToolCells();
+    parent.appendChild(this.domNode);
+    css(this.domNode, {
+      width: "".concat(tableViewRect.width, "px"),
+      height: "".concat(COL_TOOL_HEIGHT, "px"),
+      left: "".concat(tableViewRect.left - containerRect.left + parent.scrollLeft, "px"),
+      top: "".concat(tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5, "px")
+    });
+  }
+
+  createToolCell() {
+    const toolCell = document.createElement('div');
+    toolCell.classList.add('qlbt-col-tool-cell');
+    const resizeHolder = document.createElement('div');
+    resizeHolder.classList.add('qlbt-col-tool-cell-holder');
+    css(toolCell, {
+      'height': "".concat(COL_TOOL_CELL_HEIGHT, "px")
+    });
+    toolCell.appendChild(resizeHolder);
+    return toolCell;
+  }
+
+  updateToolCells() {
+    const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+    const CellsInFirstRow = tableContainer.children.tail.children.head.children;
+    const tableCols = tableContainer.colGroup().children;
+    const cellsNumber = computeCellsNumber(CellsInFirstRow);
+    let existCells = Array.from(this.domNode.querySelectorAll('.qlbt-col-tool-cell'));
+
+    for (let index = 0; index < Math.max(cellsNumber, existCells.length); index++) {
+      let col = tableCols.at(index);
+      let colWidth = col && parseInt(col.formats()[col.statics.blotName].width, 10); // if cell already exist
+
+      let toolCell = null;
+
+      if (!existCells[index]) {
+        toolCell = this.createToolCell();
+        this.domNode.appendChild(toolCell);
+        this.addColCellHolderHandler(toolCell); // set tool cell min-width
+
+        css(toolCell, {
+          'min-width': "".concat(colWidth, "px")
+        });
+      } else if (existCells[index] && index >= cellsNumber) {
+        existCells[index].remove();
+      } else {
+        toolCell = existCells[index]; // set tool cell min-width
+
+        css(toolCell, {
+          'min-width': "".concat(colWidth, "px")
+        });
+      }
+    }
+  }
+
+  destroy() {
+    this.domNode.remove();
+    return null;
+  }
+
+  addColCellHolderHandler(cell) {
+    const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+    const $holder = cell.querySelector(".qlbt-col-tool-cell-holder");
+    let dragging = false;
+    let x0 = 0;
+    let x = 0;
+    let delta = 0;
+    let width0 = 0; // helpLine relation varrible
+
+    let tableRect = {};
+    let cellRect = {};
+    let $helpLine = null;
+
+    const handleDrag = e => {
+      e.preventDefault();
+
+      if (dragging) {
+        x = e.clientX;
+
+        if (width0 + x - x0 >= CELL_MIN_WIDTH) {
+          delta = x - x0;
+        } else {
+          delta = CELL_MIN_WIDTH - width0;
+        }
+
+        css($helpLine, {
+          'left': "".concat(cellRect.left + cellRect.width - 1 + delta, "px")
+        });
+      }
+    };
+
+    const handleMouseup = e => {
+      e.preventDefault();
+      const existCells = Array.from(this.domNode.querySelectorAll('.qlbt-col-tool-cell'));
+      const colIndex = existCells.indexOf(cell);
+      const colBlot = tableContainer.colGroup().children.at(colIndex);
+
+      if (dragging) {
+        colBlot.format('width', width0 + delta);
+        css(cell, {
+          'min-width': "".concat(width0 + delta, "px")
+        });
+        x0 = 0;
+        x = 0;
+        delta = 0;
+        width0 = 0;
+        dragging = false;
+        $holder.classList.remove('dragging');
+      }
+
+      document.removeEventListener('mousemove', handleDrag, false);
+      document.removeEventListener('mouseup', handleMouseup, false);
+      tableRect = {};
+      cellRect = {};
+      $helpLine.remove();
+      $helpLine = null;
+      tableContainer.updateTableWidth();
+      const tableSelection = this.quill.getModule('better-table').tableSelection;
+      tableSelection && tableSelection.clearSelection();
+    };
+
+    const handleMousedown = e => {
+      document.addEventListener('mousemove', handleDrag, false);
+      document.addEventListener('mouseup', handleMouseup, false);
+      tableRect = this.table.getBoundingClientRect();
+      cellRect = cell.getBoundingClientRect();
+      $helpLine = document.createElement('div');
+      css($helpLine, {
+        position: 'fixed',
+        top: "".concat(cellRect.top, "px"),
+        left: "".concat(cellRect.left + cellRect.width - 1, "px"),
+        zIndex: '100',
+        height: "".concat(tableRect.height + COL_TOOL_HEIGHT + 4, "px"),
+        width: '1px',
+        backgroundColor: PRIMARY_COLOR
+      });
+      document.body.appendChild($helpLine);
+      dragging = true;
+      x0 = e.clientX;
+      width0 = cellRect.width;
+      $holder.classList.add('dragging');
+    };
+
+    $holder.addEventListener('mousedown', handleMousedown, false);
+  }
+
+  colToolCells() {
+    return Array.from(this.domNode.querySelectorAll('.qlbt-col-tool-cell'));
+  }
+
+}
+
+function computeCellsNumber(CellsInFirstRow) {
+  return CellsInFirstRow.reduce((sum, cell) => {
+    const cellColspan = cell.formats().colspan;
+    sum = sum + parseInt(cellColspan, 10);
+    return sum;
+  }, 0);
+}
+// CONCATENATED MODULE: ./src/formats/header.js
+
+
+const Block = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/block");
+
+class header_Header extends Block {
+  static create(value) {
+    if (typeof value === 'string') {
+      value = {
+        value
+      };
+    }
+
+    const node = super.create(value.value);
+    CELL_IDENTITY_KEYS.forEach(key => {
+      if (value[key]) node.setAttribute("data-".concat(key), value[key]);
+    });
+    CELL_ATTRIBUTES.forEach(key => {
+      if (value[key]) node.setAttribute("data-".concat(key), value[key]);
+    });
+    return node;
+  }
+
+  static formats(domNode) {
+    const formats = {};
+    formats.value = this.tagName.indexOf(domNode.tagName) + 1;
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).reduce((formats, attribute) => {
+      if (domNode.hasAttribute("data-".concat(attribute))) {
+        formats[attribute] = domNode.getAttribute("data-".concat(attribute)) || undefined;
+      }
+
+      return formats;
+    }, formats);
+  }
+
+  format(name, value) {
+    const {
+      row,
+      cell,
+      rowspan,
+      colspan
+    } = header_Header.formats(this.domNode);
+
+    if (name === header_Header.blotName) {
+      if (value) {
+        super.format(name, {
+          value,
+          row,
+          cell,
+          rowspan,
+          colspan
+        });
+      } else {
+        if (row) {
+          this.replaceWith(TableCellLine.blotName, {
+            row,
+            cell,
+            rowspan,
+            colspan
+          });
+        } else {
+          super.format(name, value);
+        }
+      }
+    } else {
+      super.format(name, value);
+    }
+  }
+
+  optimize(context) {
+    const {
+      row,
+      rowspan,
+      colspan
+    } = header_Header.formats(this.domNode);
+
+    if (row && !(this.parent instanceof TableCell)) {
+      this.wrap(TableCell.blotName, {
+        row,
+        colspan,
+        rowspan
+      });
+    } // ShadowBlot optimize
+
+
+    this.enforceAllowedChildren();
+
+    if (this.uiNode != null && this.uiNode !== this.domNode.firstChild) {
+      this.domNode.insertBefore(this.uiNode, this.domNode.firstChild);
+    }
+
+    if (this.children.length === 0) {
+      if (this.statics.defaultChild != null) {
+        const child = this.scroll.create(this.statics.defaultChild.blotName);
+        this.appendChild(child); // TODO double check if necessary
+        // child.optimize(context);
+      } else {
+        this.remove();
+      }
+    } // Block optimize
+
+
+    this.cache = {};
+  }
+
+}
+
+header_Header.blotName = 'header';
+header_Header.tagName = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'];
+/* harmony default export */ var header = (header_Header);
+// CONCATENATED MODULE: ./src/formats/table.js
+
+
+
+const Break = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/break");
+const table_Block = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/block");
+const Container = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import("blots/container");
+const COL_ATTRIBUTES = ["width"];
+const COL_DEFAULT = {
+  width: 100
+};
+const CELL_IDENTITY_KEYS = ["row", "cell"];
+const CELL_ATTRIBUTES = ["rowspan", "colspan"];
+const CELL_DEFAULT = {
+  rowspan: 1,
+  colspan: 1
+};
+const ERROR_LIMIT = 5;
+
+class TableCellLine extends table_Block {
+  static create(value) {
+    const node = super.create(value);
+    CELL_IDENTITY_KEYS.forEach(key => {
+      let identityMaker = key === 'row' ? table_rowId : table_cellId;
+      node.setAttribute("data-".concat(key), value[key] || identityMaker());
+    });
+    CELL_ATTRIBUTES.forEach(attrName => {
+      node.setAttribute("data-".concat(attrName), value[attrName] || CELL_DEFAULT[attrName]);
+    });
+    return node;
+  }
+
+  static formats(domNode) {
+    const formats = {};
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).reduce((formats, attribute) => {
+      if (domNode.hasAttribute("data-".concat(attribute))) {
+        formats[attribute] = domNode.getAttribute("data-".concat(attribute)) || undefined;
+      }
+
+      return formats;
+    }, formats);
+  }
+
+  format(name, value) {
+    if (CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).indexOf(name) > -1) {
+      if (value) {
+        this.domNode.setAttribute("data-".concat(name), value);
+      } else {
+        this.domNode.removeAttribute("data-".concat(name));
+      }
+    } else if (name === 'header') {
+      if (!value) return;
+      const {
+        row,
+        cell,
+        rowspan,
+        colspan
+      } = TableCellLine.formats(this.domNode);
+      super.format(name, {
+        value,
+        row,
+        cell,
+        rowspan,
+        colspan
+      });
+    } else {
+      super.format(name, value);
+    }
+  }
+
+  optimize(context) {
+    // cover shadowBlot's wrap call, pass params parentBlot initialize
+    // needed
+    const rowId = this.domNode.getAttribute('data-row');
+    const rowspan = this.domNode.getAttribute('data-rowspan');
+    const colspan = this.domNode.getAttribute('data-colspan');
+
+    if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
+      this.wrap(this.statics.requiredContainer.blotName, {
+        row: rowId,
+        colspan,
+        rowspan
+      });
+    }
+
+    super.optimize(context);
+  }
+
+  tableCell() {
+    return this.parent;
+  }
+
+}
+
+TableCellLine.blotName = "table-cell-line";
+TableCellLine.ClassName = "qlbt-cell-line";
+TableCellLine.tagName = "DIV";
+
+class TableCell extends Container {
+  checkMerge() {
+    if (super.checkMerge() && this.next.children.head != null) {
+      const thisHead = this.children.head.formats()[this.children.head.statics.blotName];
+      const thisTail = this.children.tail.formats()[this.children.tail.statics.blotName];
+      const nextHead = this.next.children.head.formats()[this.next.children.head.statics.blotName];
+      const nextTail = this.next.children.tail.formats()[this.next.children.tail.statics.blotName];
+      return thisHead.cell === thisTail.cell && thisHead.cell === nextHead.cell && thisHead.cell === nextTail.cell;
+    }
+
+    return false;
+  }
+
+  static create(value) {
+    const node = super.create(value);
+    node.setAttribute("data-row", value.row);
+    CELL_ATTRIBUTES.forEach(attrName => {
+      if (value[attrName]) {
+        node.setAttribute(attrName, value[attrName]);
+      }
+    });
+    return node;
+  }
+
+  static formats(domNode) {
+    const formats = {};
+
+    if (domNode.hasAttribute("data-row")) {
+      formats["row"] = domNode.getAttribute("data-row");
+    }
+
+    return CELL_ATTRIBUTES.reduce((formats, attribute) => {
+      if (domNode.hasAttribute(attribute)) {
+        formats[attribute] = domNode.getAttribute(attribute);
+      }
+
+      return formats;
+    }, formats);
+  }
+
+  cellOffset() {
+    if (this.parent) {
+      return this.parent.children.indexOf(this);
+    }
+
+    return -1;
+  }
+
+  formats() {
+    const formats = {};
+
+    if (this.domNode.hasAttribute("data-row")) {
+      formats["row"] = this.domNode.getAttribute("data-row");
+    }
+
+    return CELL_ATTRIBUTES.reduce((formats, attribute) => {
+      if (this.domNode.hasAttribute(attribute)) {
+        formats[attribute] = this.domNode.getAttribute(attribute);
+      }
+
+      return formats;
+    }, formats);
+  }
+
+  toggleAttribute(name, value) {
+    if (value) {
+      this.domNode.setAttribute(name, value);
+    } else {
+      this.domNode.removeAttribute(name);
+    }
+  }
+
+  formatChildren(name, value) {
+    this.children.forEach(child => {
+      child.format(name, value);
+    });
+  }
+
+  format(name, value) {
+    if (CELL_ATTRIBUTES.indexOf(name) > -1) {
+      this.toggleAttribute(name, value);
+      this.formatChildren(name, value);
+    } else if (['row'].indexOf(name) > -1) {
+      this.toggleAttribute("data-".concat(name), value);
+      this.formatChildren(name, value);
+    } else {
+      super.format(name, value);
+    }
+  }
+
+  optimize(context) {
+    const rowId = this.domNode.getAttribute("data-row");
+
+    if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
+      this.wrap(this.statics.requiredContainer.blotName, {
+        row: rowId
+      });
+    }
+
+    super.optimize(context);
+  }
+
+  row() {
+    return this.parent;
+  }
+
+  rowOffset() {
+    if (this.row()) {
+      return this.row().rowOffset();
+    }
+
+    return -1;
+  }
+
+  table() {
+    return this.row() && this.row().table();
+  }
+
+}
+
+TableCell.blotName = "table";
+TableCell.tagName = "TD";
+
+class TableRow extends Container {
+  checkMerge() {
+    if (super.checkMerge() && this.next.children.head != null) {
+      const thisHead = this.children.head.formats();
+      const thisTail = this.children.tail.formats();
+      const nextHead = this.next.children.head.formats();
+      const nextTail = this.next.children.tail.formats();
+      return thisHead.row === thisTail.row && thisHead.row === nextHead.row && thisHead.row === nextTail.row;
+    }
+
+    return false;
+  }
+
+  static create(value) {
+    const node = super.create(value);
+    node.setAttribute("data-row", value.row);
+    return node;
+  }
+
+  formats() {
+    return ["row"].reduce((formats, attrName) => {
+      if (this.domNode.hasAttribute("data-".concat(attrName))) {
+        formats[attrName] = this.domNode.getAttribute("data-".concat(attrName));
+      }
+
+      return formats;
+    }, {});
+  }
+
+  optimize(context) {
+    // optimize function of ShadowBlot
+    if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
+      this.wrap(this.statics.requiredContainer.blotName);
+    } // optimize function of ParentBlot
+    // note: modified this optimize function because
+    // TableRow should not be removed when the length of its children was 0
+
+
+    this.enforceAllowedChildren();
+
+    if (this.uiNode != null && this.uiNode !== this.domNode.firstChild) {
+      this.domNode.insertBefore(this.uiNode, this.domNode.firstChild);
+    } // optimize function of ContainerBlot
+
+
+    if (this.children.length > 0 && this.next != null && this.checkMerge()) {
+      this.next.moveChildren(this);
+      this.next.remove();
+    }
+  }
+
+  rowOffset() {
+    if (this.parent) {
+      return this.parent.children.indexOf(this);
+    }
+
+    return -1;
+  }
+
+  table() {
+    return this.parent && this.parent.parent;
+  }
+
+}
+
+TableRow.blotName = "table-row";
+TableRow.tagName = "TR";
+
+class TableBody extends Container {}
+
+TableBody.blotName = "table-body";
+TableBody.tagName = "TBODY";
+
+class TableCol extends table_Block {
+  static create(value) {
+    let node = super.create(value);
+    COL_ATTRIBUTES.forEach(attrName => {
+      node.setAttribute("".concat(attrName), value[attrName] || COL_DEFAULT[attrName]);
+    });
+    return node;
+  }
+
+  static formats(domNode) {
+    return COL_ATTRIBUTES.reduce((formats, attribute) => {
+      if (domNode.hasAttribute("".concat(attribute))) {
+        formats[attribute] = domNode.getAttribute("".concat(attribute)) || undefined;
+      }
+
+      return formats;
+    }, {});
+  }
+
+  format(name, value) {
+    if (COL_ATTRIBUTES.indexOf(name) > -1) {
+      this.domNode.setAttribute("".concat(name), value || COL_DEFAULT[name]);
+    } else {
+      super.format(name, value);
+    }
+  }
+
+  html() {
+    return this.domNode.outerHTML;
+  }
+
+}
+
+TableCol.blotName = "table-col";
+TableCol.tagName = "col";
+
+class TableColGroup extends Container {}
+
+TableColGroup.blotName = "table-col-group";
+TableColGroup.tagName = "colgroup";
+
+class table_TableContainer extends Container {
+  static create() {
+    let node = super.create();
+    return node;
+  }
+
+  constructor(scroll, domNode) {
+    super(scroll, domNode);
+    this.updateTableWidth();
+  }
+
+  updateTableWidth() {
+    setTimeout(() => {
+      const colGroup = this.colGroup();
+      if (!colGroup) return;
+      const tableWidth = colGroup.children.reduce((sumWidth, col) => {
+        sumWidth = sumWidth + parseInt(col.formats()[TableCol.blotName].width, 10);
+        return sumWidth;
+      }, 0);
+      this.domNode.style.width = "".concat(tableWidth, "px");
+    }, 0);
+  }
+
+  cells(column) {
+    return this.rows().map(row => row.children.at(column));
+  }
+
+  colGroup() {
+    return this.children.head;
+  }
+
+  deleteColumns(compareRect) {
+    let delIndexes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+    let editorWrapper = arguments.length > 2 ? arguments[2] : undefined;
+    const [body] = this.descendants(TableBody);
+    if (body == null || body.children.head == null) return;
+    const tableCells = this.descendants(TableCell);
+    const removedCells = [];
+    const modifiedCells = [];
+    tableCells.forEach(cell => {
+      const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (cellRect.x + ERROR_LIMIT > compareRect.x && cellRect.x1 - ERROR_LIMIT < compareRect.x1) {
+        removedCells.push(cell);
+      } else if (cellRect.x < compareRect.x + ERROR_LIMIT && cellRect.x1 > compareRect.x1 - ERROR_LIMIT) {
+        modifiedCells.push(cell);
+      }
+    });
+
+    if (removedCells.length === tableCells.length) {
+      this.tableDestroy();
+      return true;
+    } // remove the matches column tool cell
+
+
+    delIndexes.forEach(delIndex => {
+      this.colGroup().children.at(delIndexes[0]).remove();
+    });
+    removedCells.forEach(cell => {
+      cell.remove();
+    });
+    modifiedCells.forEach(cell => {
+      const cellColspan = parseInt(cell.formats().colspan, 10);
+      const cellWidth = parseInt(cell.formats().width, 10);
+      cell.format('colspan', cellColspan - delIndexes.length);
+    });
+    this.updateTableWidth();
+  }
+
+  deleteRow(compareRect, editorWrapper) {
+    const [body] = this.descendants(TableBody);
+    if (body == null || body.children.head == null) return;
+    const tableCells = this.descendants(TableCell);
+    const removedCells = []; // cells to be removed
+
+    const modifiedCells = []; // cells to be modified
+
+    const fallCells = []; // cells to fall into next row
+
+    tableCells.forEach(cell => {
+      const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (cellRect.y > compareRect.y - ERROR_LIMIT && cellRect.y1 < compareRect.y1 + ERROR_LIMIT) {
+        removedCells.push(cell);
+      } else if (cellRect.y < compareRect.y + ERROR_LIMIT && cellRect.y1 > compareRect.y1 - ERROR_LIMIT) {
+        modifiedCells.push(cell);
+
+        if (Math.abs(cellRect.y - compareRect.y) < ERROR_LIMIT) {
+          fallCells.push(cell);
+        }
+      }
+    });
+
+    if (removedCells.length === tableCells.length) {
+      this.tableDestroy();
+      return;
+    } // compute length of removed rows
+
+
+    const removedRowsLength = this.rows().reduce((sum, row) => {
+      let rowRect = getRelativeRect(row.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (rowRect.y > compareRect.y - ERROR_LIMIT && rowRect.y1 < compareRect.y1 + ERROR_LIMIT) {
+        sum += 1;
+      }
+
+      return sum;
+    }, 0); // it must excute before the table layout changed with other operation
+
+    fallCells.forEach(cell => {
+      const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+      const nextRow = cell.parent.next;
+      const cellsInNextRow = nextRow.children;
+      const refCell = cellsInNextRow.reduce((ref, compareCell) => {
+        const compareRect = getRelativeRect(compareCell.domNode.getBoundingClientRect(), editorWrapper);
+
+        if (Math.abs(cellRect.x1 - compareRect.x) < ERROR_LIMIT) {
+          ref = compareCell;
+        }
+
+        return ref;
+      }, null);
+      nextRow.insertBefore(cell, refCell);
+      cell.format('row', nextRow.formats().row);
+    });
+    removedCells.forEach(cell => {
+      cell.remove();
+    });
+    modifiedCells.forEach(cell => {
+      const cellRowspan = parseInt(cell.formats().rowspan, 10);
+      cell.format("rowspan", cellRowspan - removedRowsLength);
+    });
+  }
+
+  tableDestroy() {
+    const quill = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.scroll.domNode.parentNode);
+    const tableModule = quill.getModule("better-table");
+    this.remove();
+    tableModule.hideTableTools();
+    quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+  }
+
+  insertCell(tableRow, ref) {
+    const id = table_cellId();
+    const rId = tableRow.formats().row;
+    const tableCell = this.scroll.create(TableCell.blotName, Object.assign({}, CELL_DEFAULT, {
+      row: rId
+    }));
+    const cellLine = this.scroll.create(TableCellLine.blotName, {
+      row: rId,
+      cell: id
+    });
+    tableCell.appendChild(cellLine);
+
+    if (ref) {
+      tableRow.insertBefore(tableCell, ref);
+    } else {
+      tableRow.appendChild(tableCell);
+    }
+  }
+
+  insertColumn(compareRect, colIndex) {
+    let isRight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+    let editorWrapper = arguments.length > 3 ? arguments[3] : undefined;
+    const [body] = this.descendants(TableBody);
+    const [tableColGroup] = this.descendants(TableColGroup);
+    const tableCols = this.descendants(TableCol);
+    let addAsideCells = [];
+    let modifiedCells = [];
+    let affectedCells = [];
+    if (body == null || body.children.head == null) return;
+    const tableCells = this.descendants(TableCell);
+    tableCells.forEach(cell => {
+      const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (isRight) {
+        if (Math.abs(cellRect.x1 - compareRect.x1) < ERROR_LIMIT) {
+          // the right of selected boundary equal to the right of table cell,
+          // add a new table cell right aside this table cell
+          addAsideCells.push(cell);
+        } else if (compareRect.x1 - cellRect.x > ERROR_LIMIT && compareRect.x1 - cellRect.x1 < -ERROR_LIMIT) {
+          // the right of selected boundary is inside this table cell
+          // colspan of this table cell will increase 1
+          modifiedCells.push(cell);
+        }
+      } else {
+        if (Math.abs(cellRect.x - compareRect.x) < ERROR_LIMIT) {
+          // left of selected boundary equal to left of table cell,
+          // add a new table cell left aside this table cell
+          addAsideCells.push(cell);
+        } else if (compareRect.x - cellRect.x > ERROR_LIMIT && compareRect.x - cellRect.x1 < -ERROR_LIMIT) {
+          // the left of selected boundary is inside this table cell
+          // colspan of this table cell will increase 1
+          modifiedCells.push(cell);
+        }
+      }
+    });
+    addAsideCells.forEach(cell => {
+      const ref = isRight ? cell.next : cell;
+      const id = table_cellId();
+      const tableRow = cell.parent;
+      const rId = tableRow.formats().row;
+      const cellFormats = cell.formats();
+      const tableCell = this.scroll.create(TableCell.blotName, Object.assign({}, CELL_DEFAULT, {
+        row: rId,
+        rowspan: cellFormats.rowspan
+      }));
+      const cellLine = this.scroll.create(TableCellLine.blotName, {
+        row: rId,
+        cell: id,
+        rowspan: cellFormats.rowspan
+      });
+      tableCell.appendChild(cellLine);
+
+      if (ref) {
+        tableRow.insertBefore(tableCell, ref);
+      } else {
+        tableRow.appendChild(tableCell);
+      }
+
+      affectedCells.push(tableCell);
+    }); // insert new tableCol
+
+    const tableCol = this.scroll.create(TableCol.blotName, true);
+    let colRef = isRight ? tableCols[colIndex].next : tableCols[colIndex];
+
+    if (colRef) {
+      tableColGroup.insertBefore(tableCol, colRef);
+    } else {
+      tableColGroup.appendChild(tableCol);
+    }
+
+    modifiedCells.forEach(cell => {
+      const cellColspan = cell.formats().colspan;
+      cell.format('colspan', parseInt(cellColspan, 10) + 1);
+      affectedCells.push(cell);
+    });
+    affectedCells.sort((cellA, cellB) => {
+      let y1 = cellA.domNode.getBoundingClientRect().y;
+      let y2 = cellB.domNode.getBoundingClientRect().y;
+      return y1 - y2;
+    });
+    this.updateTableWidth();
+    return affectedCells;
+  }
+
+  insertRow(compareRect, isDown, editorWrapper) {
+    const [body] = this.descendants(TableBody);
+    if (body == null || body.children.head == null) return;
+    const tableCells = this.descendants(TableCell);
+    const rId = table_rowId();
+    const newRow = this.scroll.create(TableRow.blotName, {
+      row: rId
+    });
+    let addBelowCells = [];
+    let modifiedCells = [];
+    let affectedCells = [];
+    tableCells.forEach(cell => {
+      const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (isDown) {
+        if (Math.abs(cellRect.y1 - compareRect.y1) < ERROR_LIMIT) {
+          addBelowCells.push(cell);
+        } else if (compareRect.y1 - cellRect.y > ERROR_LIMIT && compareRect.y1 - cellRect.y1 < -ERROR_LIMIT) {
+          modifiedCells.push(cell);
+        }
+      } else {
+        if (Math.abs(cellRect.y - compareRect.y) < ERROR_LIMIT) {
+          addBelowCells.push(cell);
+        } else if (compareRect.y - cellRect.y > ERROR_LIMIT && compareRect.y - cellRect.y1 < -ERROR_LIMIT) {
+          modifiedCells.push(cell);
+        }
+      }
+    }); // ordered table cells with rect.x, fix error for inserting
+    // new table cell in complicated table with wrong order.
+
+    const sortFunc = (cellA, cellB) => {
+      let x1 = cellA.domNode.getBoundingClientRect().x;
+      let x2 = cellB.domNode.getBoundingClientRect().x;
+      return x1 - x2;
+    };
+
+    addBelowCells.sort(sortFunc);
+    addBelowCells.forEach(cell => {
+      const cId = table_cellId();
+      const cellFormats = cell.formats();
+      const tableCell = this.scroll.create(TableCell.blotName, Object.assign({}, CELL_DEFAULT, {
+        row: rId,
+        colspan: cellFormats.colspan
+      }));
+      const cellLine = this.scroll.create(TableCellLine.blotName, {
+        row: rId,
+        cell: cId,
+        colspan: cellFormats.colspan
+      });
+      const empty = this.scroll.create(Break.blotName);
+      cellLine.appendChild(empty);
+      tableCell.appendChild(cellLine);
+      newRow.appendChild(tableCell);
+      affectedCells.push(tableCell);
+    });
+    modifiedCells.forEach(cell => {
+      const cellRowspan = parseInt(cell.formats().rowspan, 10);
+      cell.format("rowspan", cellRowspan + 1);
+      affectedCells.push(cell);
+    });
+    const refRow = this.rows().find(row => {
+      let rowRect = getRelativeRect(row.domNode.getBoundingClientRect(), editorWrapper);
+
+      if (isDown) {
+        return Math.abs(rowRect.y - compareRect.y - compareRect.height) < ERROR_LIMIT;
+      } else {
+        return Math.abs(rowRect.y - compareRect.y) < ERROR_LIMIT;
+      }
+    });
+    body.insertBefore(newRow, refRow); // reordering affectedCells
+
+    affectedCells.sort(sortFunc);
+    return affectedCells;
+  }
+
+  mergeCells(compareRect, mergingCells, rowspan, colspan, editorWrapper) {
+    const mergedCell = mergingCells.reduce((result, tableCell, index) => {
+      if (index !== 0) {
+        result && tableCell.moveChildren(result);
+        tableCell.remove();
+      } else {
+        tableCell.format('colspan', colspan);
+        tableCell.format('rowspan', rowspan);
+        result = tableCell;
+      }
+
+      return result;
+    }, null);
+    let rowId = mergedCell.domNode.getAttribute('data-row');
+    let cellId = mergedCell.children.head.domNode.getAttribute('data-cell');
+    mergedCell.children.forEach(cellLine => {
+      cellLine.format('cell', cellId);
+      cellLine.format('row', rowId);
+      cellLine.format('colspan', colspan);
+      cellLine.format('rowspan', rowspan);
+    });
+    return mergedCell;
+  }
+
+  unmergeCells(unmergingCells, editorWrapper) {
+    let cellFormats = {};
+    let cellRowspan = 1;
+    let cellColspan = 1;
+    unmergingCells.forEach(tableCell => {
+      cellFormats = tableCell.formats();
+      cellRowspan = cellFormats.rowspan;
+      cellColspan = cellFormats.colspan;
+
+      if (cellColspan > 1) {
+        let ref = tableCell.next;
+        let row = tableCell.row();
+        tableCell.format('colspan', 1);
+
+        for (let i = cellColspan; i > 1; i--) {
+          this.insertCell(row, ref);
+        }
+      }
+
+      if (cellRowspan > 1) {
+        let i = cellRowspan;
+        let nextRow = tableCell.row().next;
+
+        while (i > 1) {
+          let refInNextRow = nextRow.children.reduce((result, cell) => {
+            let compareRect = getRelativeRect(tableCell.domNode.getBoundingClientRect(), editorWrapper);
+            let cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
+
+            if (Math.abs(compareRect.x1 - cellRect.x) < ERROR_LIMIT) {
+              result = cell;
+            }
+
+            return result;
+          }, null);
+
+          for (let i = cellColspan; i > 0; i--) {
+            this.insertCell(nextRow, refInNextRow);
+          }
+
+          i -= 1;
+          nextRow = nextRow.next;
+        }
+
+        tableCell.format('rowspan', 1);
+      }
+    });
+  }
+
+  rows() {
+    const body = this.children.tail;
+    if (body == null) return [];
+    return body.children.map(row => row);
+  }
+
+}
+
+table_TableContainer.blotName = "table-container";
+table_TableContainer.className = "quill-better-table";
+table_TableContainer.tagName = "TABLE";
+
+class table_TableViewWrapper extends Container {
+  constructor(scroll, domNode) {
+    super(scroll, domNode);
+    const quill = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(scroll.domNode.parentNode);
+    domNode.addEventListener('scroll', e => {
+      const tableModule = quill.getModule('better-table');
+
+      if (tableModule.columnTool) {
+        tableModule.columnTool.domNode.scrollLeft = e.target.scrollLeft;
+      }
+
+      if (tableModule.tableSelection && tableModule.tableSelection.selectedTds.length > 0) {
+        tableModule.tableSelection.repositionHelpLines();
+      }
+    }, false);
+  }
+
+}
+
+table_TableViewWrapper.blotName = "table-view";
+table_TableViewWrapper.className = "quill-better-table-wrapper";
+table_TableViewWrapper.tagName = "DIV";
+table_TableViewWrapper.allowedChildren = [table_TableContainer];
+table_TableContainer.requiredContainer = table_TableViewWrapper;
+table_TableContainer.allowedChildren = [TableBody, TableColGroup];
+TableBody.requiredContainer = table_TableContainer;
+TableBody.allowedChildren = [TableRow];
+TableRow.requiredContainer = TableBody;
+TableRow.allowedChildren = [TableCell];
+TableCell.requiredContainer = TableRow;
+TableCell.allowedChildren = [TableCellLine, header];
+TableCellLine.requiredContainer = TableCell;
+TableColGroup.allowedChildren = [TableCol];
+TableColGroup.requiredContainer = table_TableContainer;
+TableCol.requiredContainer = TableColGroup;
+
+function table_rowId() {
+  const id = Math.random().toString(36).slice(2, 6);
+  return "row-".concat(id);
+}
+
+function table_cellId() {
+  const id = Math.random().toString(36).slice(2, 6);
+  return "cell-".concat(id);
+}
+
+
+// CONCATENATED MODULE: ./src/modules/table-selection.js
+
+
+
+const table_selection_PRIMARY_COLOR = '#35A7ED';
+const LINE_POSITIONS = ['left', 'right', 'top', 'bottom'];
+const table_selection_ERROR_LIMIT = 2;
+class table_selection_TableSelection {
+  constructor(table, quill, options) {
+    if (!table) return null;
+    this.table = table;
+    this.quill = quill;
+    this.options = options;
+    this.boundary = {}; // params for selected square
+
+    this.selectedTds = []; // array for selected table-cells
+
+    this.dragging = false;
+    this.selectingHandler = this.mouseDownHandler.bind(this);
+    this.clearSelectionHanler = this.clearSelection.bind(this);
+    this.helpLinesInitial();
+    this.quill.root.addEventListener('mousedown', this.selectingHandler, false);
+    this.quill.on('text-change', this.clearSelectionHanler);
+  }
+
+  helpLinesInitial() {
+    let parent = this.quill.root.parentNode;
+    LINE_POSITIONS.forEach(direction => {
+      this[direction] = document.createElement('div');
+      this[direction].classList.add('qlbt-selection-line');
+      css(this[direction], {
+        position: 'absolute',
+        display: 'none',
+        'background-color': table_selection_PRIMARY_COLOR
+      });
+      parent.appendChild(this[direction]);
+    });
+  }
+
+  mouseDownHandler(e) {
+    if (e.button !== 0 || !e.target.closest(".quill-better-table")) return;
+    this.quill.root.addEventListener('mousemove', mouseMoveHandler, false);
+    this.quill.root.addEventListener('mouseup', mouseUpHandler, false);
+    const self = this;
+    const startTd = e.target.closest('td[data-row]');
+    const startTdRect = getRelativeRect(startTd.getBoundingClientRect(), this.quill.root.parentNode);
+    this.dragging = true;
+    this.boundary = computeBoundaryFromRects(startTdRect, startTdRect);
+    this.correctBoundary();
+    this.selectedTds = this.computeSelectedTds();
+    this.repositionHelpLines();
+
+    function mouseMoveHandler(e) {
+      if (e.button !== 0 || !e.target.closest(".quill-better-table")) return;
+      const endTd = e.target.closest('td[data-row]');
+      const endTdRect = getRelativeRect(endTd.getBoundingClientRect(), self.quill.root.parentNode);
+      self.boundary = computeBoundaryFromRects(startTdRect, endTdRect);
+      self.correctBoundary();
+      self.selectedTds = self.computeSelectedTds();
+      self.repositionHelpLines(); // avoid select text in multiple table-cell
+
+      if (startTd !== endTd) {
+        self.quill.blur();
+      }
+    }
+
+    function mouseUpHandler(e) {
+      self.quill.root.removeEventListener('mousemove', mouseMoveHandler, false);
+      self.quill.root.removeEventListener('mouseup', mouseUpHandler, false);
+      self.dragging = false;
+    }
+  }
+
+  correctBoundary() {
+    const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+    const tableCells = tableContainer.descendants(TableCell);
+    tableCells.forEach(tableCell => {
+      let {
+        x,
+        y,
+        width,
+        height
+      } = getRelativeRect(tableCell.domNode.getBoundingClientRect(), this.quill.root.parentNode);
+      let isCellIntersected = (x + table_selection_ERROR_LIMIT >= this.boundary.x && x + table_selection_ERROR_LIMIT <= this.boundary.x1 || x - table_selection_ERROR_LIMIT + width >= this.boundary.x && x - table_selection_ERROR_LIMIT + width <= this.boundary.x1) && (y + table_selection_ERROR_LIMIT >= this.boundary.y && y + table_selection_ERROR_LIMIT <= this.boundary.y1 || y - table_selection_ERROR_LIMIT + height >= this.boundary.y && y - table_selection_ERROR_LIMIT + height <= this.boundary.y1);
+
+      if (isCellIntersected) {
+        this.boundary = computeBoundaryFromRects(this.boundary, {
+          x,
+          y,
+          width,
+          height
+        });
+      }
+    });
+  }
+
+  computeSelectedTds() {
+    const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+    const tableCells = tableContainer.descendants(TableCell);
+    return tableCells.reduce((selectedCells, tableCell) => {
+      let {
+        x,
+        y,
+        width,
+        height
+      } = getRelativeRect(tableCell.domNode.getBoundingClientRect(), this.quill.root.parentNode);
+      let isCellIncluded = x + table_selection_ERROR_LIMIT >= this.boundary.x && x - table_selection_ERROR_LIMIT + width <= this.boundary.x1 && y + table_selection_ERROR_LIMIT >= this.boundary.y && y - table_selection_ERROR_LIMIT + height <= this.boundary.y1;
+
+      if (isCellIncluded) {
+        selectedCells.push(tableCell);
+      }
+
+      return selectedCells;
+    }, []);
+  }
+
+  repositionHelpLines() {
+    const tableViewScrollLeft = this.table.parentNode.scrollLeft;
+    css(this.left, {
+      display: 'block',
+      left: "".concat(this.boundary.x - tableViewScrollLeft - 1, "px"),
+      top: "".concat(this.boundary.y, "px"),
+      height: "".concat(this.boundary.height + 1, "px"),
+      width: '1px'
+    });
+    css(this.right, {
+      display: 'block',
+      left: "".concat(this.boundary.x1 - tableViewScrollLeft, "px"),
+      top: "".concat(this.boundary.y, "px"),
+      height: "".concat(this.boundary.height + 1, "px"),
+      width: '1px'
+    });
+    css(this.top, {
+      display: 'block',
+      left: "".concat(this.boundary.x - 1 - tableViewScrollLeft, "px"),
+      top: "".concat(this.boundary.y, "px"),
+      width: "".concat(this.boundary.width + 1, "px"),
+      height: '1px'
+    });
+    css(this.bottom, {
+      display: 'block',
+      left: "".concat(this.boundary.x - 1 - tableViewScrollLeft, "px"),
+      top: "".concat(this.boundary.y1 + 1, "px"),
+      width: "".concat(this.boundary.width + 1, "px"),
+      height: '1px'
+    });
+  } // based on selectedTds compute positions of help lines
+  // It is useful when selectedTds are not changed
+
+
+  refreshHelpLinesPosition() {
+    const startRect = getRelativeRect(this.selectedTds[0].domNode.getBoundingClientRect(), this.quill.root.parentNode);
+    const endRect = getRelativeRect(this.selectedTds[this.selectedTds.length - 1].domNode.getBoundingClientRect(), this.quill.root.parentNode);
+    this.boundary = computeBoundaryFromRects(startRect, endRect);
+    this.repositionHelpLines();
+  }
+
+  destroy() {
+    LINE_POSITIONS.forEach(direction => {
+      this[direction].remove();
+      this[direction] = null;
+    });
+    this.quill.root.removeEventListener('mousedown', this.selectingHandler, false);
+    this.quill.off('text-change', this.clearSelectionHanler);
+    return null;
+  }
+
+  setSelection(startRect, endRect) {
+    this.boundary = computeBoundaryFromRects(getRelativeRect(startRect, this.quill.root.parentNode), getRelativeRect(endRect, this.quill.root.parentNode));
+    this.correctBoundary();
+    this.selectedTds = this.computeSelectedTds();
+    this.repositionHelpLines();
+  }
+
+  clearSelection() {
+    this.boundary = {};
+    this.selectedTds = [];
+    LINE_POSITIONS.forEach(direction => {
+      this[direction] && css(this[direction], {
+        display: 'none'
+      });
+    });
+  }
+
+}
+
+function computeBoundaryFromRects(startRect, endRect) {
+  let x = Math.min(startRect.x, endRect.x, startRect.x + startRect.width - 1, endRect.x + endRect.width - 1);
+  let x1 = Math.max(startRect.x, endRect.x, startRect.x + startRect.width - 1, endRect.x + endRect.width - 1);
+  let y = Math.min(startRect.y, endRect.y, startRect.y + startRect.height - 1, endRect.y + endRect.height - 1);
+  let y1 = Math.max(startRect.y, endRect.y, startRect.y + startRect.height - 1, endRect.y + endRect.height - 1);
+  let width = x1 - x;
+  let height = y1 - y;
+  return {
+    x,
+    x1,
+    y,
+    y1,
+    width,
+    height
+  };
+}
+// CONCATENATED MODULE: ./src/modules/table-operation-menu.js
+
+
+const MENU_MIN_HEIHGT = 150;
+const MENU_WIDTH = 200;
+const table_operation_menu_ERROR_LIMIT = 5;
+const MENU_ITEMS_DEFAULT = {
+  insertColumnRight: {
+    text: 'Insert column right',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      let colIndex = getColToolCellIndexByBoundary(this.columnToolCells, this.boundary, (cellRect, boundary) => {
+        return Math.abs(cellRect.x + cellRect.width - boundary.x1) <= table_operation_menu_ERROR_LIMIT;
+      }, this.quill.root.parentNode);
+      const newColumn = tableContainer.insertColumn(this.boundary, colIndex, true, this.quill.root.parentNode);
+      this.tableColumnTool.updateToolCells();
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.quill.setSelection(this.quill.getIndex(newColumn[0]), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.SILENT);
+      this.tableSelection.setSelection(newColumn[0].domNode.getBoundingClientRect(), newColumn[0].domNode.getBoundingClientRect());
+    }
+
+  },
+  insertColumnLeft: {
+    text: 'Insert column left',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      let colIndex = getColToolCellIndexByBoundary(this.columnToolCells, this.boundary, (cellRect, boundary) => {
+        return Math.abs(cellRect.x - boundary.x) <= table_operation_menu_ERROR_LIMIT;
+      }, this.quill.root.parentNode);
+      const newColumn = tableContainer.insertColumn(this.boundary, colIndex, false, this.quill.root.parentNode);
+      this.tableColumnTool.updateToolCells();
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.quill.setSelection(this.quill.getIndex(newColumn[0]), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.SILENT);
+      this.tableSelection.setSelection(newColumn[0].domNode.getBoundingClientRect(), newColumn[0].domNode.getBoundingClientRect());
+    }
+
+  },
+  insertRowUp: {
+    text: 'Insert row up',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      const affectedCells = tableContainer.insertRow(this.boundary, false, this.quill.root.parentNode);
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.quill.setSelection(this.quill.getIndex(affectedCells[0]), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.SILENT);
+      this.tableSelection.setSelection(affectedCells[0].domNode.getBoundingClientRect(), affectedCells[0].domNode.getBoundingClientRect());
+    }
+
+  },
+  insertRowDown: {
+    text: 'Insert row down',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      const affectedCells = tableContainer.insertRow(this.boundary, true, this.quill.root.parentNode);
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.quill.setSelection(this.quill.getIndex(affectedCells[0]), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.SILENT);
+      this.tableSelection.setSelection(affectedCells[0].domNode.getBoundingClientRect(), affectedCells[0].domNode.getBoundingClientRect());
+    }
+
+  },
+  mergeCells: {
+    text: 'Merge selected cells',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table); // compute merged Cell rowspan, equal to length of selected rows
+
+      const rowspan = tableContainer.rows().reduce((sum, row) => {
+        let rowRect = getRelativeRect(row.domNode.getBoundingClientRect(), this.quill.root.parentNode);
+
+        if (rowRect.y > this.boundary.y - table_operation_menu_ERROR_LIMIT && rowRect.y + rowRect.height < this.boundary.y + this.boundary.height + table_operation_menu_ERROR_LIMIT) {
+          sum += 1;
+        }
+
+        return sum;
+      }, 0); // compute merged cell colspan, equal to length of selected cols
+
+      const colspan = this.columnToolCells.reduce((sum, cell) => {
+        let cellRect = getRelativeRect(cell.getBoundingClientRect(), this.quill.root.parentNode);
+
+        if (cellRect.x > this.boundary.x - table_operation_menu_ERROR_LIMIT && cellRect.x + cellRect.width < this.boundary.x + this.boundary.width + table_operation_menu_ERROR_LIMIT) {
+          sum += 1;
+        }
+
+        return sum;
+      }, 0);
+      const mergedCell = tableContainer.mergeCells(this.boundary, this.selectedTds, rowspan, colspan, this.quill.root.parentNode);
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.tableSelection.setSelection(mergedCell.domNode.getBoundingClientRect(), mergedCell.domNode.getBoundingClientRect());
+    }
+
+  },
+  unmergeCells: {
+    text: 'Unmerge cells',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      tableContainer.unmergeCells(this.selectedTds, this.quill.root.parentNode);
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.tableSelection.clearSelection();
+    }
+
+  },
+  deleteColumn: {
+    text: 'Delete selected columns',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      let colIndexes = getColToolCellIndexesByBoundary(this.columnToolCells, this.boundary, (cellRect, boundary) => {
+        return cellRect.x + table_operation_menu_ERROR_LIMIT > boundary.x && cellRect.x + cellRect.width - table_operation_menu_ERROR_LIMIT < boundary.x1;
+      }, this.quill.root.parentNode);
+      let isDeleteTable = tableContainer.deleteColumns(this.boundary, colIndexes, this.quill.root.parentNode);
+
+      if (!isDeleteTable) {
+        this.tableColumnTool.updateToolCells();
+        this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+        this.tableSelection.clearSelection();
+      }
+    }
+
+  },
+  deleteRow: {
+    text: 'Delete selected rows',
+
+    handler() {
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      tableContainer.deleteRow(this.boundary, this.quill.root.parentNode);
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      this.tableSelection.clearSelection();
+    }
+
+  },
+  deleteTable: {
+    text: 'Delete table',
+
+    handler() {
+      const betterTableModule = this.quill.getModule('better-table');
+      const tableContainer = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.find(this.table);
+      betterTableModule.hideTableTools();
+      tableContainer.remove();
+      this.quill.update(external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+    }
+
+  }
+};
+class table_operation_menu_TableOperationMenu {
+  constructor(params, quill, options) {
+    const betterTableModule = quill.getModule('better-table');
+    this.tableSelection = betterTableModule.tableSelection;
+    this.table = params.table;
+    this.quill = quill;
+    this.options = options;
+    this.menuItems = Object.assign({}, MENU_ITEMS_DEFAULT, options.items);
+    this.tableColumnTool = betterTableModule.columnTool;
+    this.boundary = this.tableSelection.boundary;
+    this.selectedTds = this.tableSelection.selectedTds;
+    this.destroyHanlder = this.destroy.bind(this);
+    this.columnToolCells = this.tableColumnTool.colToolCells();
+    this.menuInitial(params);
+    this.mount();
+    document.addEventListener("click", this.destroyHanlder, false);
+  }
+
+  mount() {
+    document.body.appendChild(this.domNode);
+  }
+
+  destroy() {
+    this.domNode.remove();
+    document.removeEventListener("click", this.destroyHanlder, false);
+    return null;
+  }
+
+  menuInitial(_ref) {
+    let {
+      table,
+      left,
+      top
+    } = _ref;
+    this.domNode = document.createElement('div');
+    this.domNode.classList.add('qlbt-operation-menu');
+    css(this.domNode, {
+      position: 'absolute',
+      left: "".concat(left, "px"),
+      top: "".concat(top, "px"),
+      'min-height': "".concat(MENU_MIN_HEIHGT, "px"),
+      width: "".concat(MENU_WIDTH, "px")
+    });
+
+    for (let name in this.menuItems) {
+      if (this.menuItems[name]) {
+        this.domNode.appendChild(this.menuItemCreator(Object.assign({}, MENU_ITEMS_DEFAULT[name], this.menuItems[name])));
+      }
+    }
+  }
+
+  menuItemCreator(_ref2) {
+    let {
+      text,
+      handler
+    } = _ref2;
+    const node = document.createElement('div');
+    node.classList.add('qlbt-operation-menu-item');
+    node.innerText = text;
+    node.addEventListener('click', handler.bind(this), false);
+    return node;
+  }
+
+}
+
+function getColToolCellIndexByBoundary(cells, boundary, conditionFn, container) {
+  return cells.reduce((findIndex, cell) => {
+    let cellRect = getRelativeRect(cell.getBoundingClientRect(), container);
+
+    if (conditionFn(cellRect, boundary)) {
+      findIndex = cells.indexOf(cell);
+    }
+
+    return findIndex;
+  }, false);
+}
+
+function getColToolCellIndexesByBoundary(cells, boundary, conditionFn, container) {
+  return cells.reduce((findIndexes, cell) => {
+    let cellRect = getRelativeRect(cell.getBoundingClientRect(), container);
+
+    if (conditionFn(cellRect, boundary)) {
+      findIndexes.push(cells.indexOf(cell));
+    }
+
+    return findIndexes;
+  }, []);
+}
+// CONCATENATED MODULE: ./src/utils/node-matchers.js
+
+
+const Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta'); // rebuild delta
+
+function matchTableCell(node, delta, scroll) {
+  const row = node.parentNode;
+  const table = row.parentNode.tagName === 'TABLE' ? row.parentNode : row.parentNode.parentNode;
+  const rows = Array.from(table.querySelectorAll('tr'));
+  const cells = Array.from(row.querySelectorAll('td'));
+  const rowId = rows.indexOf(row) + 1;
+  const cellId = cells.indexOf(node) + 1;
+  const colspan = node.getAttribute('colspan') || false;
+  const rowspan = node.getAttribute('rowspan') || false; // bugfix: empty table cells copied from other place will be removed unexpectedly
+
+  if (delta.length() === 0) {
+    delta = new Delta().insert('\n', {
+      'table-cell-line': {
+        row: rowId,
+        cell: cellId,
+        rowspan,
+        colspan
+      }
+    });
+    return delta;
+  }
+
+  delta = delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string') {
+      const lines = [];
+      let insertStr = op.insert;
+      let start = 0;
+
+      for (let i = 0; i < op.insert.length; i++) {
+        if (insertStr.charAt(i) === '\n') {
+          if (i === 0) {
+            lines.push('\n');
+          } else {
+            lines.push(insertStr.substring(start, i));
+            lines.push('\n');
+          }
+
+          start = i + 1;
+        }
+      }
+
+      const tailStr = insertStr.substring(start);
+      if (tailStr) lines.push(tailStr);
+      lines.forEach(text => {
+        text === '\n' ? newDelta.insert('\n', op.attributes) : newDelta.insert(text, _omit(op.attributes, ['table', 'table-cell-line', 'header']));
+      });
+    } else {
+      newDelta.insert(op.insert, op.attributes);
+    }
+
+    return newDelta;
+  }, new Delta());
+  return delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string' && op.insert.startsWith('\n')) {
+      // distinguish between table-cell-line and header inside td
+      let childAttrs = {};
+
+      if (op.attributes['header']) {
+        childAttrs['header'] = {
+          row: rowId,
+          cell: cellId,
+          rowspan,
+          colspan
+        };
+      } else if (op.attributes['table-cell-line']) {
+        childAttrs['table-cell-line'] = {
+          row: rowId,
+          cell: cellId,
+          rowspan,
+          colspan
+        };
+      }
+
+      newDelta.insert(op.insert, Object.assign({}, Object.assign({}, {
+        row: rowId
+      }, op.attributes.table), childAttrs, _omit(op.attributes, ['table'])));
+    } else {
+      newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line'])));
+    }
+
+    console.log(newDelta);
+    return newDelta;
+  }, new Delta());
+} // replace th tag with td tag
+
+function matchTableHeader(node, delta, scroll) {
+  const row = node.parentNode;
+  const table = row.parentNode.tagName === 'TABLE' ? row.parentNode : row.parentNode.parentNode;
+  const rows = Array.from(table.querySelectorAll('tr'));
+  const cells = Array.from(row.querySelectorAll('th'));
+  const rowId = rows.indexOf(row) + 1;
+  const cellId = cells.indexOf(node) + 1;
+  const colspan = node.getAttribute('colspan') || false;
+  const rowspan = node.getAttribute('rowspan') || false; // bugfix: empty table cells copied from other place will be removed unexpectedly
+
+  if (delta.length() === 0) {
+    delta = new Delta().insert('\n', {
+      'table-cell-line': {
+        row: rowId,
+        cell: cellId,
+        rowspan,
+        colspan
+      }
+    });
+    return delta;
+  }
+
+  delta = delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string') {
+      const lines = [];
+      let insertStr = op.insert;
+      let start = 0;
+
+      for (let i = 0; i < op.insert.length; i++) {
+        if (insertStr.charAt(i) === '\n') {
+          if (i === 0) {
+            lines.push('\n');
+          } else {
+            lines.push(insertStr.substring(start, i));
+            lines.push('\n');
+          }
+
+          start = i + 1;
+        }
+      }
+
+      const tailStr = insertStr.substring(start);
+      if (tailStr) lines.push(tailStr); // bugfix: no '\n' in op.insert, push a '\n' to lines
+
+      if (lines.indexOf('\n') < 0) {
+        lines.push('\n');
+      }
+
+      lines.forEach(text => {
+        text === '\n' ? newDelta.insert('\n', {
+          'table-cell-line': {
+            row: rowId,
+            cell: cellId,
+            rowspan,
+            colspan
+          }
+        }) : newDelta.insert(text, op.attributes);
+      });
+    } else {
+      newDelta.insert(op.insert, op.attributes);
+    }
+
+    return newDelta;
+  }, new Delta());
+  return delta.reduce((newDelta, op) => {
+    if (op.insert && typeof op.insert === 'string' && op.insert.startsWith('\n')) {
+      newDelta.insert(op.insert, Object.assign({}, {
+        'table-cell-line': {
+          row: rowId,
+          cell: cellId,
+          rowspan,
+          colspan
+        }
+      }));
+    } else {
+      newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line'])));
+    }
+
+    return newDelta;
+  }, new Delta());
+} // supplement colgroup and col
+
+function matchTable(node, delta, scroll) {
+  let newColDelta = new Delta();
+  const topRow = node.querySelector('tr'); // bugfix: empty table will return empty delta
+
+  if (topRow === null) return newColDelta;
+  const cellsInTopRow = Array.from(topRow.querySelectorAll('td')).concat(Array.from(topRow.querySelectorAll('th')));
+  const maxCellsNumber = cellsInTopRow.reduce((sum, cell) => {
+    const cellColspan = cell.getAttribute('colspan') || 1;
+    sum = sum + parseInt(cellColspan, 10);
+    return sum;
+  }, 0);
+  const colsNumber = node.querySelectorAll('col').length; // issue #2
+  // bugfix: the table copied from Excel had some default col tags missing
+  //         add missing col tags
+
+  if (colsNumber === maxCellsNumber) {
+    return delta;
+  } else {
+    for (let i = 0; i < maxCellsNumber - colsNumber; i++) {
+      newColDelta.insert('\n', {
+        'table-col': true
+      });
+    }
+
+    if (colsNumber === 0) return newColDelta.concat(delta);
+    let lastNumber = 0;
+    return delta.reduce((finalDelta, op) => {
+      finalDelta.insert(op.insert, op.attributes);
+
+      if (op.attributes && op.attributes['table-col']) {
+        lastNumber += op.insert.length;
+
+        if (lastNumber === colsNumber) {
+          finalDelta = finalDelta.concat(newColDelta);
+        }
+      }
+
+      return finalDelta;
+    }, new Delta());
+  }
+} // match h tags, distinguish between headers in the table and headers outside the table
+
+function matchHeader(node, delta, scroll) {
+  return delta;
+}
+// CONCATENATED MODULE: ./src/quill-better-table.js
+
+
+
+ // import table node matchers
+
+
+const Module = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('core/module');
+const quill_better_table_Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta');
+
+
+
+class quill_better_table_BetterTable extends Module {
+  static register() {
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableCol, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableColGroup, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableCellLine, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableCell, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableRow, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(TableBody, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableContainer, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true); // register customized Header，overwriting quill built-in Header
+
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register('formats/header', header, true);
+  }
+
+  constructor(quill, options) {
+    super(quill, options); // handle click on quill-better-table
+
+    this.quill.root.addEventListener('click', evt => {
+      if (!evt.path || evt.path.length <= 0) return;
+      const tableNode = evt.path.filter(node => {
+        return node.tagName && node.tagName.toUpperCase() === 'TABLE' && node.classList.contains('quill-better-table');
+      })[0];
+
+      if (tableNode) {
+        // current table clicked
+        if (this.table === tableNode) return; // other table clicked
+
+        if (this.table) this.hideTableTools();
+        this.showTableTools(tableNode, quill, options);
+      } else if (this.table) {
+        // other clicked
+        this.hideTableTools();
+      }
+    }, false); // handle right click on quill-better-table
+
+    this.quill.root.addEventListener('contextmenu', evt => {
+      if (!this.table) return true;
+      evt.preventDefault();
+      if (!evt.path || evt.path.length <= 0) return;
+      const tableNode = evt.path.filter(node => {
+        return node.tagName && node.tagName.toUpperCase() === 'TABLE' && node.classList.contains('quill-better-table');
+      })[0];
+      const rowNode = evt.path.filter(node => {
+        return node.tagName && node.tagName.toUpperCase() === 'TR' && node.getAttribute('data-row');
+      })[0];
+      const cellNode = evt.path.filter(node => {
+        return node.tagName && node.tagName.toUpperCase() === 'TD' && node.getAttribute('data-row');
+      })[0];
+      let isTargetCellSelected = this.tableSelection.selectedTds.map(tableCell => tableCell.domNode).includes(cellNode);
+
+      if (this.tableSelection.selectedTds.length <= 0 || !isTargetCellSelected) {
+        this.tableSelection.setSelection(cellNode.getBoundingClientRect(), cellNode.getBoundingClientRect());
+      }
+
+      if (this.tableOperationMenu) this.tableOperationMenu = this.tableOperationMenu.destroy();
+
+      if (tableNode) {
+        this.tableOperationMenu = new table_operation_menu_TableOperationMenu({
+          table: tableNode,
+          row: rowNode,
+          cell: cellNode,
+          left: evt.pageX,
+          top: evt.pageY
+        }, quill, options.operationMenu);
+      }
+    }, false); // add keyboard binding：Backspace
+    // prevent user hits backspace to delete table cell
+
+    const KeyBoard = quill.getModule('keyboard');
+    quill.keyboard.addBinding({
+      key: 'Backspace'
+    }, {}, function (range, context) {
+      if (range.index === 0 || this.quill.getLength() <= 1) return true;
+      const [line] = this.quill.getLine(range.index);
+
+      if (context.offset === 0) {
+        const [prev] = this.quill.getLine(range.index - 1);
+
+        if (prev != null) {
+          if (prev.statics.blotName === 'table-cell-line' && line.statics.blotName !== 'table-cell-line') return false;
+        }
+      }
+
+      return true;
+    }); // since only one matched bindings callback will excute.
+    // expected my binding callback excute first
+    // I changed the order of binding callbacks
+
+    let thisBinding = quill.keyboard.bindings['Backspace'].pop();
+    quill.keyboard.bindings['Backspace'].splice(0, 1, thisBinding); // add Matchers to match and render quill-better-table for initialization
+    // or pasting
+
+    quill.clipboard.addMatcher('td', matchTableCell);
+    quill.clipboard.addMatcher('th', matchTableHeader);
+    quill.clipboard.addMatcher('table', matchTable);
+    quill.clipboard.addMatcher('h1, h2, h3, h4, h5, h6', matchHeader); // remove matcher for tr tag
+
+    quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
+      return matcher[0] !== 'tr';
+    });
+  }
+
+  getTable() {
+    let range = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.quill.getSelection();
+    if (range == null) return [null, null, null, -1];
+    const [cellLine, offset] = this.quill.getLine(range.index);
+
+    if (cellLine == null || cellLine.statics.blotName !== TableCellLine.blotName) {
+      return [null, null, null, -1];
+    }
+
+    const cell = cellLine.tableCell();
+    const row = cell.row();
+    const table = row.table();
+    return [table, row, cell, offset];
+  }
+
+  insertTable(rows, columns) {
+    const range = this.quill.getSelection(true);
+    if (range == null) return;
+    let currentBlot = this.quill.getLeaf(range.index)[0];
+    let nextBlot = this.quill.getLeaf(range.index + 1)[0];
+    let delta = new quill_better_table_Delta().retain(range.index);
+    delta.insert('\n'); // insert table column
+
+    delta = new Array(columns).fill('\n').reduce((memo, text) => {
+      memo.insert(text, {
+        'table-col': true
+      });
+      return memo;
+    }, delta); // insert table cell line with empty line
+
+    delta = new Array(rows).fill(0).reduce(memo => {
+      let tableRowId = table_rowId();
+      return new Array(columns).fill('\n').reduce((memo, text) => {
+        memo.insert(text, {
+          'table-cell-line': {
+            row: tableRowId,
+            cell: table_cellId()
+          }
+        });
+        return memo;
+      }, memo);
+    }, delta);
+    this.quill.updateContents(delta, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+    this.quill.setSelection(range.index + columns + 1, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.API);
+  }
+
+  showTableTools(table, quill, options) {
+    this.table = table;
+    this.columnTool = new table_column_tool_TableColumnTool(table, quill, options);
+    this.tableSelection = new table_selection_TableSelection(table, quill, options);
+  }
+
+  hideTableTools() {
+    this.columnTool && this.columnTool.destroy();
+    this.tableSelection && this.tableSelection.destroy();
+    this.tableOperationMenu && this.tableOperationMenu.destroy();
+    this.columnTool = null;
+    this.tableSelection = null;
+    this.tableOperationMenu = null;
+    this.table = null;
+  }
+
+}
+
+quill_better_table_BetterTable.keyboardBindings = {
+  'table-cell-line backspace': {
+    key: 'Backspace',
+    format: ['table-cell-line'],
+    collapsed: true,
+    offset: 0,
+
+    handler(range, context) {
+      const [line, offset] = this.quill.getLine(range.index);
+
+      if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
+        return false;
+      }
+
+      return true;
+    }
+
+  },
+  'table-cell-line delete': {
+    key: 'Delete',
+    format: ['table-cell-line'],
+    collapsed: true,
+    suffix: /^$/,
+
+    handler() {}
+
+  },
+  'table-cell-line enter': {
+    key: 'Enter',
+    shiftKey: null,
+    format: ['table-cell-line'],
+
+    handler(range, context) {
+      // bugfix: a unexpected new line inserted when user compositionend with hitting Enter
+      if (this.quill.selection && this.quill.selection.composing) return;
+      const Scope = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.imports.parchment.Scope;
+
+      if (range.length > 0) {
+        this.quill.scroll.deleteAt(range.index, range.length); // So we do not trigger text-change
+      }
+
+      const lineFormats = Object.keys(context.format).reduce((formats, format) => {
+        if (this.quill.scroll.query(format, Scope.BLOCK) && !Array.isArray(context.format[format])) {
+          formats[format] = context.format[format];
+        }
+
+        return formats;
+      }, {}); // insert new cellLine with lineFormats
+
+      this.quill.insertText(range.index, '\n', lineFormats['table-cell-line'], external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER); // Earlier scroll.deleteAt might have messed up our selection,
+      // so insertText's built in selection preservation is not reliable
+
+      this.quill.setSelection(range.index + 1, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.SILENT);
+      this.quill.focus();
+      Object.keys(context.format).forEach(name => {
+        if (lineFormats[name] != null) return;
+        if (Array.isArray(context.format[name])) return;
+        if (name === 'link') return;
+        this.quill.format(name, context.format[name], external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+      });
+    }
+
+  }
+};
+/* harmony default export */ var quill_better_table = __webpack_exports__["default"] = (quill_better_table_BetterTable);
+
+/***/ }),
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(1);
+
+
+/***/ })
+/******/ ])["default"];
+});
