@@ -5,7 +5,7 @@
   "main": "dist/quill-better-table.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack.config.js --mode=development",
-    "build": "webpack --config webpack.config.js --mode=production; rm dist/quill-better-table; webpack --config webpack.config.js --mode=production --env.minimize",
+    "build": "webpack --config webpack.config.js --mode=production --env.minimize; webpack --config webpack.config.js --mode=production; rm dist/quill-better-table;",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
