@@ -4,6 +4,19 @@ A module for better table in Quill, more useful features are supported. There is
 # Online Demo
 [quill-better-table Codepen Demo](https://codepen.io/soccerloway/pen/WWJowj)
 
+# Planning to
+<ul>
+  <li>
+    <p>Supporting headers in table cell. (Already done in v1.1.9)</p>
+  </li>
+  <li>
+    <p>Supporting un/ordered list in table cell.</p>
+  </li>
+  <li>
+    <p>UI optimization(icons, selected areas...).</p>
+  </li>
+</ul>
+
 # Features
 Clicking on tables in quill editor will initialize the tools for table, all features are based on it.
 
