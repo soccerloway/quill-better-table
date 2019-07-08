@@ -47,7 +47,7 @@ export function matchTableCell (node, delta, scroll) {
       lines.forEach(text => {
         text === '\n'
         ? newDelta.insert('\n', op.attributes)
-        : newDelta.insert(text, _omit(op.attributes, ['table', 'table-cell-line']))
+        : newDelta.insert(text, _omit(op.attributes, ['table', 'table-cell-line', 'header']))
       })
     } else {
       newDelta.insert(op.insert, op.attributes)
@@ -55,14 +55,27 @@ export function matchTableCell (node, delta, scroll) {
 
     return newDelta
   }, new Delta())
-
+  
   return delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string' &&
-      op.insert.startsWith('\n')) {
+      op.insert.startsWith('\n')
+    ) {
+      // distinguish between table-cell-line and header inside td
+      let childAttrs = {}
+      if (op.attributes['header']) {
+        childAttrs['header'] = {
+          row: rowId, cell: cellId, rowspan, colspan
+        }
+      } else if (op.attributes['table-cell-line']) {
+        childAttrs['table-cell-line'] = {
+          row: rowId, cell: cellId, rowspan, colspan
+        }
+      }
+
       newDelta.insert(op.insert, Object.assign(
         {},
         Object.assign({}, { row: rowId }, op.attributes.table),
-        { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan } },
+        childAttrs,
         _omit(op.attributes, ['table'])
       ))
     } else {
@@ -71,7 +84,7 @@ export function matchTableCell (node, delta, scroll) {
         _omit(op.attributes, ['table', 'table-cell-line'])
       ))
     }
-    
+    console.log(newDelta)
     return newDelta
   }, new Delta())
 }
@@ -195,4 +208,9 @@ export function matchTable (node, delta, scroll) {
       return finalDelta
     }, new Delta())
   }
+}
+
+// match h tags, distinguish between headers in the table and headers outside the table
+export function matchHeader (node, delta, scroll) {
+  return delta
 }

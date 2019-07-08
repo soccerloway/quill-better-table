@@ -36,4 +36,9 @@ window.onload = () => {
     .onclick = () => {
       console.log(tableModule.getTable())
     }
+
+  document.body.querySelector('#get-contents')
+    .onclick = () => {
+      console.log(quill.getContents())
+    }
 }
