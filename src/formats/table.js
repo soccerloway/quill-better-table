@@ -1,5 +1,6 @@
 import Quill from "quill"
 import { getRelativeRect } from '../utils'
+import Header from './header'
 
 const Break = Quill.import("blots/break")
 const Block = Quill.import("blots/block")
@@ -52,6 +53,16 @@ class TableCellLine extends Block {
       } else {
         this.domNode.removeAttribute(`data-${name}`)
       }
+    } else if (name === 'header') {
+      if (!value) return;
+      const { row, cell, rowspan, colspan } = TableCellLine.formats(this.domNode)
+      super.format(name, {
+        value,
+        row,
+        cell,
+        rowspan,
+        colspan
+      })
     } else {
       super.format(name, value)
     }
@@ -62,7 +73,7 @@ class TableCellLine extends Block {
     // needed
     const rowId = this.domNode.getAttribute('data-row')
     const rowspan = this.domNode.getAttribute('data-rowspan')
-    const colspan = parseInt(this.domNode.getAttribute('data-colspan'), 10)
+    const colspan = this.domNode.getAttribute('data-colspan')
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
@@ -85,10 +96,10 @@ TableCellLine.tagName = "DIV"
 class TableCell extends Container {
   checkMerge() {
     if (super.checkMerge() && this.next.children.head != null) {
-      const thisHead = this.children.head.formats()["table-cell-line"]
-      const thisTail = this.children.tail.formats()["table-cell-line"]
-      const nextHead = this.next.children.head.formats()["table-cell-line"]
-      const nextTail = this.next.children.tail.formats()["table-cell-line"]
+      const thisHead = this.children.head.formats()[this.children.head.statics.blotName]
+      const thisTail = this.children.tail.formats()[this.children.tail.statics.blotName]
+      const nextHead = this.next.children.head.formats()[this.next.children.head.statics.blotName]
+      const nextTail = this.next.children.tail.formats()[this.next.children.tail.statics.blotName]
       return (
         thisHead.cell === thisTail.cell &&
         thisHead.cell === nextHead.cell &&
@@ -827,7 +838,7 @@ TableRow.requiredContainer = TableBody
 TableRow.allowedChildren = [TableCell]
 TableCell.requiredContainer = TableRow
 
-TableCell.allowedChildren = [TableCellLine]
+TableCell.allowedChildren = [TableCellLine, Header]
 TableCellLine.requiredContainer = TableCell
 
 TableColGroup.allowedChildren = [TableCol]
@@ -866,6 +877,7 @@ export {
   cellId,
 
   // attributes
+  CELL_IDENTITY_KEYS,
   CELL_ATTRIBUTES
 }
 

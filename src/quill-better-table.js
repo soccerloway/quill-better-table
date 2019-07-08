@@ -4,7 +4,12 @@ import TableSelection from './modules/table-selection'
 import TableOperationMenu from './modules/table-operation-menu'
 
 // import table node matchers
-import { matchTableCell, matchTableHeader, matchTable } from './utils/node-matchers'
+import {
+  matchTableCell,
+  matchTableHeader,
+  matchTable,
+  matchHeader
+} from './utils/node-matchers'
 
 const Module = Quill.import('core/module')
 const Delta = Quill.import('delta')
@@ -22,6 +27,8 @@ import {
   cellId
 } from './formats/table';
 
+import Header from './formats/header'
+
 class BetterTable extends Module {
   static register() {
     Quill.register(TableCol, true);
@@ -32,6 +39,9 @@ class BetterTable extends Module {
     Quill.register(TableBody, true);
     Quill.register(TableContainer, true);
     Quill.register(TableViewWrapper, true);
+    Quill.register(TableViewWrapper, true);
+    // register customized Header，overwriting quill built-in Header
+    Quill.register('formats/header', Header, true);
   }
 
   constructor(quill, options) {
@@ -138,6 +148,7 @@ class BetterTable extends Module {
     quill.clipboard.addMatcher('td', matchTableCell)
     quill.clipboard.addMatcher('th', matchTableHeader)
     quill.clipboard.addMatcher('table', matchTable)
+    quill.clipboard.addMatcher('h1, h2, h3, h4, h5, h6', matchHeader)
 
     // remove matcher for tr tag
     quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
