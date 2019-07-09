@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "8a6f6d369ffdae22d862";
+/******/ 	var hotCurrentHash = "7eea064f0aba78ebf4ab";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -860,6 +860,34 @@ function _omit(obj, uselessKeys) {
       [key]: obj[key]
     });
   }, {});
+}
+/**
+ * getEventComposedPath
+ *  compatibility fixed for Event.path/Event.composedPath
+ *  Event.path is only for chrome/opera
+ *  Event.composedPath is for Safari, FF
+ *  Neither for Micro Edge
+ * @param {Event} evt
+ * @return {Array} an array of event.path
+ */
+
+function getEventComposedPath(evt) {
+  let path; // chrome, opera, safari, firefox
+
+  path = evt.path || evt.composedPath && evt.composedPath(); // other: edge
+
+  if (path == undefined && evt.target) {
+    path = [];
+    let target = evt.target;
+    path.push(target);
+
+    while (target && target.parentNode) {
+      target = target.parentNode;
+      path.push(target);
+    }
+  }
+
+  return path;
 }
 // CONCATENATED MODULE: ./src/modules/table-column-tool.js
 
@@ -2603,6 +2631,7 @@ function matchHeader(node, delta, scroll) {
  // import table node matchers
 
 
+
 const Module = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('core/module');
 const quill_better_table_Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta');
 
@@ -2627,8 +2656,10 @@ class quill_better_table_BetterTable extends Module {
     super(quill, options); // handle click on quill-better-table
 
     this.quill.root.addEventListener('click', evt => {
-      if (!evt.path || evt.path.length <= 0) return;
-      const tableNode = evt.path.filter(node => {
+      // bugfix: evt.path is undefined in Safari, FF, Micro Edge
+      const path = getEventComposedPath(evt);
+      if (!path || path.length <= 0) return;
+      const tableNode = path.filter(node => {
         return node.tagName && node.tagName.toUpperCase() === 'TABLE' && node.classList.contains('quill-better-table');
       })[0];
 
@@ -2646,15 +2677,17 @@ class quill_better_table_BetterTable extends Module {
 
     this.quill.root.addEventListener('contextmenu', evt => {
       if (!this.table) return true;
-      evt.preventDefault();
-      if (!evt.path || evt.path.length <= 0) return;
-      const tableNode = evt.path.filter(node => {
+      evt.preventDefault(); // bugfix: evt.path is undefined in Safari, FF, Micro Edge
+
+      const path = getEventComposedPath(evt);
+      if (!path || path.length <= 0) return;
+      const tableNode = path.filter(node => {
         return node.tagName && node.tagName.toUpperCase() === 'TABLE' && node.classList.contains('quill-better-table');
       })[0];
-      const rowNode = evt.path.filter(node => {
+      const rowNode = path.filter(node => {
         return node.tagName && node.tagName.toUpperCase() === 'TR' && node.getAttribute('data-row');
       })[0];
-      const cellNode = evt.path.filter(node => {
+      const cellNode = path.filter(node => {
         return node.tagName && node.tagName.toUpperCase() === 'TD' && node.getAttribute('data-row');
       })[0];
       let isTargetCellSelected = this.tableSelection.selectedTds.map(tableCell => tableCell.domNode).includes(cellNode);
