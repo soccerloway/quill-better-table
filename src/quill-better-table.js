@@ -11,6 +11,8 @@ import {
   matchHeader
 } from './utils/node-matchers'
 
+import { getEventComposedPath } from './utils/index'
+
 const Module = Quill.import('core/module')
 const Delta = Quill.import('delta')
 
@@ -49,9 +51,12 @@ class BetterTable extends Module {
 
     // handle click on quill-better-table
     this.quill.root.addEventListener('click', (evt) => {
-      if (!evt.path || evt.path.length <= 0) return
+      // bugfix: evt.path is undefined in Safari, FF, Micro Edge
+      const path = getEventComposedPath(evt)
 
-      const tableNode = evt.path.filter(node => {
+      if (!path || path.length <= 0) return
+
+      const tableNode = path.filter(node => {
         return node.tagName &&
           node.tagName.toUpperCase() === 'TABLE' &&
           node.classList.contains('quill-better-table')
@@ -73,21 +78,24 @@ class BetterTable extends Module {
     this.quill.root.addEventListener('contextmenu', (evt) => {
       if (!this.table) return true
       evt.preventDefault()
-      if (!evt.path || evt.path.length <= 0) return
 
-      const tableNode = evt.path.filter(node => {
+      // bugfix: evt.path is undefined in Safari, FF, Micro Edge
+      const path = getEventComposedPath(evt)
+      if (!path || path.length <= 0) return
+
+      const tableNode = path.filter(node => {
         return node.tagName &&
           node.tagName.toUpperCase() === 'TABLE' &&
           node.classList.contains('quill-better-table')
       })[0]
 
-      const rowNode = evt.path.filter(node => {
+      const rowNode = path.filter(node => {
         return node.tagName &&
           node.tagName.toUpperCase() === 'TR' &&
           node.getAttribute('data-row')
       })[0]
 
-      const cellNode = evt.path.filter(node => {
+      const cellNode = path.filter(node => {
         return node.tagName &&
           node.tagName.toUpperCase() === 'TD' &&
           node.getAttribute('data-row')
