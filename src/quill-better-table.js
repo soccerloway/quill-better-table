@@ -43,7 +43,7 @@ class BetterTable extends Module {
     Quill.register(TableViewWrapper, true);
     Quill.register(TableViewWrapper, true);
     // register customized Header，overwriting quill built-in Header
-    Quill.register('formats/header', Header, true);
+    // Quill.register('formats/header', Header, true);
   }
 
   constructor(quill, options) {
