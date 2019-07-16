@@ -7,10 +7,12 @@ A module for better table in Quill, more useful features are supported. There is
 # Planning to
 <ul>
   <li>
-    <p>Supporting headers in table cell. (Already done in v1.1.9)</p>
+    <p>Supporting headers in table cell.(cancelled)</p>
+    <p>(Already done in v1.1.9, but overwrited quill built-in header blot, maybe this is a bad idea, so I cancel this feature in v1.1.13. This feature may be an optional feature in another module.)</p>
   </li>
   <li>
-    <p>Supporting un/ordered list in table cell.</p>
+    <p>Supporting un/ordered list in table cell.(cancelled)</p>
+    <p>To implement this, it will do harm to quill built-in blot. This feature may be an optional feature in another module.</p>
   </li>
   <li>
     <p>UI optimization(icons, selected areas...).</p>

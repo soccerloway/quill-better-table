@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7eea064f0aba78ebf4ab";
+/******/ 	var hotCurrentHash = "16dafd8763b8395da6a4";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2648,8 +2648,7 @@ class quill_better_table_BetterTable extends Module {
     external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableContainer, true);
     external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true);
     external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true); // register customized Header，overwriting quill built-in Header
-
-    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register('formats/header', header, true);
+    // Quill.register('formats/header', Header, true);
   }
 
   constructor(quill, options) {
@@ -2736,8 +2735,8 @@ class quill_better_table_BetterTable extends Module {
 
     quill.clipboard.addMatcher('td', matchTableCell);
     quill.clipboard.addMatcher('th', matchTableHeader);
-    quill.clipboard.addMatcher('table', matchTable);
-    quill.clipboard.addMatcher('h1, h2, h3, h4, h5, h6', matchHeader); // remove matcher for tr tag
+    quill.clipboard.addMatcher('table', matchTable); // quill.clipboard.addMatcher('h1, h2, h3, h4, h5, h6', matchHeader)
+    // remove matcher for tr tag
 
     quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
       return matcher[0] !== 'tr';
