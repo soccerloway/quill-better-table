@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "16dafd8763b8395da6a4";
+/******/ 	var hotCurrentHash = "32939ced4a5595cb814b";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2456,7 +2456,7 @@ function matchTableCell(node, delta, scroll) {
       const tailStr = insertStr.substring(start);
       if (tailStr) lines.push(tailStr);
       lines.forEach(text => {
-        text === '\n' ? newDelta.insert('\n', op.attributes) : newDelta.insert(text, _omit(op.attributes, ['table', 'table-cell-line', 'header']));
+        text === '\n' ? newDelta.insert('\n', op.attributes) : newDelta.insert(text, _omit(op.attributes, ['table', 'table-cell-line']));
       });
     } else {
       newDelta.insert(op.insert, op.attributes);
@@ -2466,33 +2466,20 @@ function matchTableCell(node, delta, scroll) {
   }, new Delta());
   return delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string' && op.insert.startsWith('\n')) {
-      // distinguish between table-cell-line and header inside td
-      let childAttrs = {};
-
-      if (op.attributes['header']) {
-        childAttrs['header'] = {
-          row: rowId,
-          cell: cellId,
-          rowspan,
-          colspan
-        };
-      } else if (op.attributes['table-cell-line']) {
-        childAttrs['table-cell-line'] = {
-          row: rowId,
-          cell: cellId,
-          rowspan,
-          colspan
-        };
-      }
-
       newDelta.insert(op.insert, Object.assign({}, Object.assign({}, {
         row: rowId
-      }, op.attributes.table), childAttrs, _omit(op.attributes, ['table'])));
+      }, op.attributes.table), {
+        'table-cell-line': {
+          row: rowId,
+          cell: cellId,
+          rowspan,
+          colspan
+        }
+      }, _omit(op.attributes, ['table'])));
     } else {
       newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line'])));
     }
 
-    console.log(newDelta);
     return newDelta;
   }, new Delta());
 } // replace th tag with td tag
@@ -2619,10 +2606,6 @@ function matchTable(node, delta, scroll) {
       return finalDelta;
     }, new Delta());
   }
-} // match h tags, distinguish between headers in the table and headers outside the table
-
-function matchHeader(node, delta, scroll) {
-  return delta;
 }
 // CONCATENATED MODULE: ./src/quill-better-table.js
 
