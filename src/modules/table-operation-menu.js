@@ -1,6 +1,17 @@
 import Quill from 'quill'
 import { css, getRelativeRect } from '../utils'
 
+// svg icons
+import operationIcon1 from '../assets/icons/icon_operation_1.svg'
+import operationIcon2 from '../assets/icons/icon_operation_2.svg'
+import operationIcon3 from '../assets/icons/icon_operation_3.svg'
+import operationIcon4 from '../assets/icons/icon_operation_4.svg'
+import operationIcon5 from '../assets/icons/icon_operation_5.svg'
+import operationIcon6 from '../assets/icons/icon_operation_6.svg'
+import operationIcon7 from '../assets/icons/icon_operation_7.svg'
+import operationIcon8 from '../assets/icons/icon_operation_8.svg'
+import operationIcon9 from '../assets/icons/icon_operation_9.svg'
+
 const MENU_MIN_HEIHGT = 150
 const MENU_WIDTH = 200
 const ERROR_LIMIT = 5
@@ -8,6 +19,7 @@ const ERROR_LIMIT = 5
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
     text: 'Insert column right',
+    iconSrc: operationIcon1,
     handler () {
       const tableContainer = Quill.find(this.table)
       let colIndex = getColToolCellIndexByBoundary(
@@ -41,6 +53,7 @@ const MENU_ITEMS_DEFAULT = {
 
   insertColumnLeft: {
     text: 'Insert column left',
+    iconSrc: operationIcon2,
     handler () {
       const tableContainer = Quill.find(this.table)
       let colIndex = getColToolCellIndexByBoundary(
@@ -74,6 +87,7 @@ const MENU_ITEMS_DEFAULT = {
 
   insertRowUp: {
     text: 'Insert row up',
+    iconSrc: operationIcon3,
     handler () {
       const tableContainer = Quill.find(this.table)
       const affectedCells = tableContainer.insertRow(
@@ -96,6 +110,7 @@ const MENU_ITEMS_DEFAULT = {
 
   insertRowDown: {
     text: 'Insert row down',
+    iconSrc: operationIcon4,
     handler () {
       const tableContainer = Quill.find(this.table)
       const affectedCells = tableContainer.insertRow(
@@ -118,6 +133,7 @@ const MENU_ITEMS_DEFAULT = {
 
   mergeCells: {
     text: 'Merge selected cells',
+    iconSrc: operationIcon5,
     handler () {
       const tableContainer = Quill.find(this.table)
       // compute merged Cell rowspan, equal to length of selected rows
@@ -167,6 +183,7 @@ const MENU_ITEMS_DEFAULT = {
 
   unmergeCells: {
     text: 'Unmerge cells',
+    iconSrc: operationIcon6,
     handler () {
       const tableContainer = Quill.find(this.table)
       tableContainer.unmergeCells(
@@ -180,6 +197,7 @@ const MENU_ITEMS_DEFAULT = {
 
   deleteColumn: {
     text: 'Delete selected columns',
+    iconSrc: operationIcon7,
     handler () {
       const tableContainer = Quill.find(this.table)
       let colIndexes = getColToolCellIndexesByBoundary(
@@ -207,6 +225,7 @@ const MENU_ITEMS_DEFAULT = {
 
   deleteRow: {
     text: 'Delete selected rows',
+    iconSrc: operationIcon8,
     handler () {
       const tableContainer = Quill.find(this.table)
       tableContainer.deleteRow(
@@ -220,6 +239,7 @@ const MENU_ITEMS_DEFAULT = {
 
   deleteTable: {
     text: 'Delete table',
+    iconSrc: operationIcon9,
     handler () {
       const betterTableModule = this.quill.getModule('better-table')
       const tableContainer = Quill.find(this.table)
@@ -277,14 +297,33 @@ export default class TableOperationMenu {
             Object.assign({}, MENU_ITEMS_DEFAULT[name], this.menuItems[name])
           )
         )
+
+        if (['insertRowDown', 'unmergeCells'].indexOf(name) > -1) {
+          const dividing = document.createElement('div')
+          dividing.classList.add('qlbt-operation-menu-dividing')
+
+          this.domNode.appendChild(
+            dividing
+          )
+        }
       }
     }
   }
 
-  menuItemCreator ({ text, handler }) {
+  menuItemCreator ({ text, iconSrc, handler }) {
     const node = document.createElement('div')
     node.classList.add('qlbt-operation-menu-item')
-    node.innerText = text
+
+    const iconSpan = document.createElement('span')
+    iconSpan.classList.add('qlbt-operation-menu-icon')
+    iconSpan.innerHTML = iconSrc
+
+    const textSpan = document.createElement('span')
+    textSpan.classList.add('qlbt-operation-menu-text')
+    textSpan.innerText = text
+
+    node.appendChild(iconSpan)
+    node.appendChild(textSpan)
     node.addEventListener('click', handler.bind(this), false)
     return node
   }
