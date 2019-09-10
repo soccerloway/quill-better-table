@@ -1,4 +1,33 @@
-$primaryColor: #35A7ED;
+$primaryColor: #0589f3;
+
+
+.ql-container .qlbt-selection-line {
+  &.qlbt-selection-line-left {
+    &::before {
+      position: absolute;
+      left: -2px;
+      top: -2px;
+      content: '';
+      width: 5px;
+      height: 5px;
+      background-color: $primaryColor;
+      border-radius: 5px;
+    }
+  }
+
+  &.qlbt-selection-line-right {
+    &::before {
+      position: absolute;
+      right: -2px;
+      bottom: -3px;
+      content: '';
+      width: 5px;
+      height: 5px;
+      background-color: $primaryColor;
+      border-radius: 5px;
+    }
+  }
+}
 
 .quill-better-table-wrapper {
   overflow-x: auto;

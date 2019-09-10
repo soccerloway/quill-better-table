@@ -2,7 +2,7 @@ import Quill from 'quill'
 import { css, getRelativeRect } from '../utils'
 import { TableCell } from '../formats/table'
 
-const PRIMARY_COLOR = '#35A7ED'
+const PRIMARY_COLOR = '#0589f3'
 const LINE_POSITIONS = ['left', 'right', 'top', 'bottom']
 const ERROR_LIMIT = 2
 
@@ -31,6 +31,7 @@ export default class TableSelection {
     LINE_POSITIONS.forEach(direction => {
       this[direction] = document.createElement('div')
       this[direction].classList.add('qlbt-selection-line')
+      this[direction].classList.add('qlbt-selection-line-' + direction)
       css(this[direction], {
         position: 'absolute',
         display: 'none',
