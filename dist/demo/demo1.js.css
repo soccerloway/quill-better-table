@@ -1,3 +1,23 @@
+.ql-container .qlbt-selection-line.qlbt-selection-line-left::before {
+  position: absolute;
+  left: -2px;
+  top: -2px;
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: #0589f3;
+  border-radius: 5px; }
+
+.ql-container .qlbt-selection-line.qlbt-selection-line-right::before {
+  position: absolute;
+  right: -2px;
+  bottom: -3px;
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: #0589f3;
+  border-radius: 5px; }
+
 .quill-better-table-wrapper {
   overflow-x: auto; }
 
@@ -14,6 +34,9 @@ table {
   font-size: 14px;
   z-index: 100;
   overflow: hidden; }
+  .qlbt-operation-menu .qlbt-operation-menu-dividing {
+    height: 1px;
+    background-color: #efefef; }
   .qlbt-operation-menu .qlbt-operation-menu-item {
     display: flex;
     align-items: center;
@@ -25,6 +48,11 @@ table {
     text-overflow: ellipsis; }
     .qlbt-operation-menu .qlbt-operation-menu-item:hover {
       background-color: #efefef; }
+    .qlbt-operation-menu .qlbt-operation-menu-item .qlbt-operation-menu-icon {
+      margin-right: 8px;
+      height: 20px;
+      width: 20px;
+      font-size: 0; }
 
 .qlbt-col-tool {
   position: absolute;
@@ -51,7 +79,7 @@ table {
     background-color: transparent;
     cursor: ew-resize; }
     .qlbt-col-tool .qlbt-col-tool-cell-holder:hover {
-      background-color: #35A7ED; }
+      background-color: #0589f3; }
     .qlbt-col-tool .qlbt-col-tool-cell-holder::before {
       content: "";
       position: absolute;
