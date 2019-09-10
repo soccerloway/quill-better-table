@@ -16,6 +16,8 @@ A module for better table in Quill, more useful features are supported. There is
   </li>
   <li>
     <p>UI optimization(icons, selected areas...).</p>
+    <p>1. Add operation menus icons.</p>
+    <p>2. Add 2 dots to make selected areas easier to recognize.</p>
   </li>
 </ul>
 
