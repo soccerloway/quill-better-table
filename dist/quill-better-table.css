@@ -37,6 +37,24 @@ table {
   .qlbt-operation-menu .qlbt-operation-menu-dividing {
     height: 1px;
     background-color: #efefef; }
+  .qlbt-operation-menu .qlbt-operation-menu-subtitle {
+    color: #999;
+    font-size: 14px;
+    padding: 5px 16px; }
+  .qlbt-operation-menu .qlbt-operation-color-picker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 0 16px 10px;
+    background-color: #fff;
+    overflow: hidden; }
+    .qlbt-operation-menu .qlbt-operation-color-picker .qlbt-operation-color-picker-item {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #595959;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      cursor: pointer; }
   .qlbt-operation-menu .qlbt-operation-menu-item {
     display: flex;
     align-items: center;

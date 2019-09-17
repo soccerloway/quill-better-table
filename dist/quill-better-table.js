@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "4943d89bcf7c10cf888d";
+/******/ 	var hotCurrentHash = "36c5b584937f6e0dfc3f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1266,12 +1266,17 @@ class TableCellLine extends table_Block {
     CELL_ATTRIBUTES.forEach(attrName => {
       node.setAttribute("data-".concat(attrName), value[attrName] || CELL_DEFAULT[attrName]);
     });
+
+    if (value['cell-bg']) {
+      node.setAttribute('data-cell-bg', value['cell-bg']);
+    }
+
     return node;
   }
 
   static formats(domNode) {
     const formats = {};
-    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).reduce((formats, attribute) => {
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg']).reduce((formats, attribute) => {
       if (domNode.hasAttribute("data-".concat(attribute))) {
         formats[attribute] = domNode.getAttribute("data-".concat(attribute)) || undefined;
       }
@@ -1286,6 +1291,12 @@ class TableCellLine extends table_Block {
         this.domNode.setAttribute("data-".concat(name), value);
       } else {
         this.domNode.removeAttribute("data-".concat(name));
+      }
+    } else if (name === 'cell-bg') {
+      if (value) {
+        this.domNode.setAttribute('data-cell-bg', value);
+      } else {
+        this.domNode.removeAttribute('data-cell-bg');
       }
     } else if (name === 'header') {
       if (!value) return;
@@ -1313,12 +1324,14 @@ class TableCellLine extends table_Block {
     const rowId = this.domNode.getAttribute('data-row');
     const rowspan = this.domNode.getAttribute('data-rowspan');
     const colspan = this.domNode.getAttribute('data-colspan');
+    const cellBg = this.domNode.getAttribute('data-cell-bg');
 
     if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         colspan,
-        rowspan
+        rowspan,
+        'cell-bg': cellBg
       });
     }
 
@@ -1356,6 +1369,12 @@ class TableCell extends Container {
         node.setAttribute(attrName, value[attrName]);
       }
     });
+
+    if (value['cell-bg']) {
+      node.setAttribute('data-cell-bg', value['cell-bg']);
+      node.style.backgroundColor = value['cell-bg'];
+    }
+
     return node;
   }
 
@@ -1364,6 +1383,10 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-row")) {
       formats["row"] = domNode.getAttribute("data-row");
+    }
+
+    if (domNode.hasAttribute("data-cell-bg")) {
+      formats["cell-bg"] = domNode.getAttribute("data-cell-bg");
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -1388,6 +1411,10 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-row")) {
       formats["row"] = this.domNode.getAttribute("data-row");
+    }
+
+    if (this.domNode.hasAttribute("data-cell-bg")) {
+      formats["cell-bg"] = this.domNode.getAttribute("data-cell-bg");
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -1420,6 +1447,15 @@ class TableCell extends Container {
     } else if (['row'].indexOf(name) > -1) {
       this.toggleAttribute("data-".concat(name), value);
       this.formatChildren(name, value);
+    } else if (name === 'cell-bg') {
+      this.toggleAttribute('data-cell-bg', value);
+      this.formatChildren(name, value);
+
+      if (value) {
+        this.domNode.style.backgroundColor = value;
+      } else {
+        this.domNode.style.backgroundColor = 'initial';
+      }
     } else {
       super.format(name, value);
     }
@@ -2279,6 +2315,8 @@ var icon_operation_9_default = /*#__PURE__*/__webpack_require__.n(icon_operation
 const MENU_MIN_HEIHGT = 150;
 const MENU_WIDTH = 200;
 const table_operation_menu_ERROR_LIMIT = 5;
+const DEFAULT_CELL_COLORS = ['white', 'red', 'yellow', 'blue'];
+const DEFAULT_COLOR_SUBTITLE = 'Background Colors';
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
     text: 'Insert column right',
@@ -2442,6 +2480,8 @@ class table_operation_menu_TableOperationMenu {
     this.selectedTds = this.tableSelection.selectedTds;
     this.destroyHanlder = this.destroy.bind(this);
     this.columnToolCells = this.tableColumnTool.colToolCells();
+    this.colorSubTitle = options.color && options.color.text ? options.color.text : DEFAULT_COLOR_SUBTITLE;
+    this.cellColors = options.color && options.color.colors ? options.color.colors : DEFAULT_CELL_COLORS;
     this.menuInitial(params);
     this.mount();
     document.addEventListener("click", this.destroyHanlder, false);
@@ -2478,12 +2518,61 @@ class table_operation_menu_TableOperationMenu {
         this.domNode.appendChild(this.menuItemCreator(Object.assign({}, MENU_ITEMS_DEFAULT[name], this.menuItems[name])));
 
         if (['insertRowDown', 'unmergeCells'].indexOf(name) > -1) {
-          const dividing = document.createElement('div');
-          dividing.classList.add('qlbt-operation-menu-dividing');
-          this.domNode.appendChild(dividing);
+          this.domNode.appendChild(dividingCreator());
         }
       }
+    } // if colors option is false, disabled bg color
+
+
+    if (this.options.color && this.options.color !== false) {
+      this.domNode.appendChild(dividingCreator());
+      this.domNode.appendChild(subTitleCreator(this.colorSubTitle));
+      this.domNode.appendChild(this.colorsItemCreator(this.cellColors));
+    } // create dividing line
+
+
+    function dividingCreator() {
+      const dividing = document.createElement('div');
+      dividing.classList.add('qlbt-operation-menu-dividing');
+      return dividing;
+    } // create subtitle for menu
+
+
+    function subTitleCreator(title) {
+      const subTitle = document.createElement('div');
+      subTitle.classList.add('qlbt-operation-menu-subtitle');
+      subTitle.innerText = title;
+      return subTitle;
     }
+  }
+
+  colorsItemCreator(colors) {
+    const self = this;
+    const node = document.createElement('div');
+    node.classList.add('qlbt-operation-color-picker');
+    colors.forEach(color => {
+      let colorBox = colorBoxCreator(color);
+      node.appendChild(colorBox);
+    });
+
+    function colorBoxCreator(color) {
+      const box = document.createElement('div');
+      box.classList.add('qlbt-operation-color-picker-item');
+      box.setAttribute('data-color', color);
+      box.style.backgroundColor = color;
+      box.addEventListener('click', function () {
+        const selectedTds = self.tableSelection.selectedTds;
+
+        if (selectedTds && selectedTds.length > 0) {
+          selectedTds.forEach(tableCell => {
+            tableCell.format('cell-bg', color);
+          });
+        }
+      }, false);
+      return box;
+    }
+
+    return node;
   }
 
   menuItemCreator(_ref2) {
@@ -2544,7 +2633,8 @@ function matchTableCell(node, delta, scroll) {
   const rowId = rows.indexOf(row) + 1;
   const cellId = cells.indexOf(node) + 1;
   const colspan = node.getAttribute('colspan') || false;
-  const rowspan = node.getAttribute('rowspan') || false; // bugfix: empty table cells copied from other place will be removed unexpectedly
+  const rowspan = node.getAttribute('rowspan') || false;
+  const cellBg = node.getAttribute('data-cell-bg'); // bugfix: empty table cells copied from other place will be removed unexpectedly
 
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
@@ -2556,8 +2646,19 @@ function matchTableCell(node, delta, scroll) {
       }
     });
     return delta;
-  }
+  } // bugfix: remove background attr from the delta of table cell
+  //         to prevent unexcepted background attr append.
 
+
+  delta = delta.reduce((newDelta, op) => {
+    if (op.attributes.background === cellBg) {
+      newDelta.insert(op.insert, _omit(op.attributes, ['background']));
+    } else {
+      newDelta.insert(op.insert, op.attributes);
+    }
+
+    return newDelta;
+  }, new Delta());
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
       const lines = [];
@@ -2741,7 +2842,6 @@ function matchTable(node, delta, scroll) {
 
 const Module = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('core/module');
 const quill_better_table_Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta');
-
 
 
 class quill_better_table_BetterTable extends Module {
