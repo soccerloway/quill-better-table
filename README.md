@@ -4,20 +4,16 @@ A module for better table in Quill, more useful features are supported. There is
 # Online Demo
 [quill-better-table Codepen Demo](https://codepen.io/soccerloway/pen/WWJowj)
 
-# Planning to
+# Updated
 <ul>
   <li>
-    <p>Supporting headers in table cell.(cancelled)</p>
-    <p>(Already done in v1.1.9, but overwrited quill built-in header blot, maybe this is a bad idea, so I cancel this feature in v1.1.13. This feature may be an optional feature in another module.)</p>
+    <p>Add operation menus icons.</p>
   </li>
   <li>
-    <p>Supporting un/ordered list in table cell.(cancelled)</p>
-    <p>To implement this, it will do harm to quill built-in blot. This feature may be an optional feature in another module.</p>
+    <p>Add 2 dots to make selected areas easier to recognize.</p>
   </li>
   <li>
-    <p>UI optimization(icons, selected areas...).</p>
-    <p>1. Add operation menus icons.</p>
-    <p>2. Add 2 dots to make selected areas easier to recognize.</p>
+    <p>Add support for background color in table cells and relatived configures.(Mentioned in [issue 8](https://github.com/soccerloway/quill-better-table/issues/8))</p>
   </li>
 </ul>
 
@@ -151,7 +147,11 @@ const quill = new Quill('#editor', {
           unmergeCells: {
             text: 'Another unmerge cells name'
           }
-        }
+        },
+        color: {
+          colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors in operationMenu
+          text: 'Background Colors'  // subtitle
+        } 
       }
     },
     keyboard: {
@@ -188,6 +188,15 @@ operationMenu show all operations as default. `false` will remove the operation.
 </ul>
 
 You may need to modify the menu text, `operationKey.text` will do that.
+
+## operationMenu.color
+Background colors is optional, the default is hidden. If you need this feature, use this configure.
+```
+{
+  colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors you need in operationMenu, ['white', 'red', 'yellow', 'blue'] as default
+  text: 'Background Colors'  // subtitle, 'Background Colors' as default
+} 
+```
 
 # Community
 Send me an email(<a href="mailto: lw54760187@hotmail.com">lw54760187@hotmail.com</a>) or Contribute on [Issues](https://github.com/soccerloway/quill-better-table/issues), I glad to hear your suggestion.
