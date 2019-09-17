@@ -15,6 +15,7 @@ export function matchTableCell (node, delta, scroll) {
   const cellId = cells.indexOf(node) + 1;
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
+  const cellBg = node.getAttribute('data-cell-bg')
 
   // bugfix: empty table cells copied from other place will be removed unexpectedly
   if (delta.length() === 0) {
@@ -23,6 +24,18 @@ export function matchTableCell (node, delta, scroll) {
     })
     return delta
   }
+
+  // bugfix: remove background attr from the delta of table cell
+  //         to prevent unexcepted background attr append.
+  delta = delta.reduce((newDelta, op) => {
+    if (op.attributes.background === cellBg) {
+      newDelta.insert(op.insert, _omit(op.attributes, ['background']))  
+    } else {
+      newDelta.insert(op.insert, op.attributes)
+    }
+
+    return newDelta
+  }, new Delta())
 
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
@@ -55,7 +68,7 @@ export function matchTableCell (node, delta, scroll) {
 
     return newDelta
   }, new Delta())
-
+  
   return delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string' &&
       op.insert.startsWith('\n')) {

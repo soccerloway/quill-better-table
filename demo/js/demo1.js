@@ -17,6 +17,10 @@ window.onload = () => {
             unmergeCells: {
               text: 'Another unmerge cells name'
             }
+          },
+
+          color: {
+            colors: ['red', 'green', 'yellow', 'white', 'red', 'green', 'yellow', 'white']
           }
         }
       },

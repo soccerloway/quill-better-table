@@ -7,8 +7,7 @@ import TableOperationMenu from './modules/table-operation-menu'
 import {
   matchTableCell,
   matchTableHeader,
-  matchTable,
-  matchHeader
+  matchTable
 } from './utils/node-matchers'
 
 import { getEventComposedPath } from './utils/index'
@@ -28,8 +27,6 @@ import {
   rowId,
   cellId
 } from './formats/table';
-
-import Header from './formats/header'
 
 class BetterTable extends Module {
   static register() {

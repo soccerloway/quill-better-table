@@ -15,6 +15,8 @@ import operationIcon9 from '../assets/icons/icon_operation_9.svg'
 const MENU_MIN_HEIHGT = 150
 const MENU_WIDTH = 200
 const ERROR_LIMIT = 5
+const DEFAULT_CELL_COLORS = ['white', 'red', 'yellow', 'blue']
+const DEFAULT_COLOR_SUBTITLE = 'Background Colors'
 
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
@@ -263,6 +265,8 @@ export default class TableOperationMenu {
     this.selectedTds = this.tableSelection.selectedTds
     this.destroyHanlder = this.destroy.bind(this)
     this.columnToolCells = this.tableColumnTool.colToolCells()
+    this.colorSubTitle = options.color && options.color.text ? options.color.text : DEFAULT_COLOR_SUBTITLE
+    this.cellColors = options.color && options.color.colors ? options.color.colors : DEFAULT_CELL_COLORS
 
     this.menuInitial(params)
     this.mount()
@@ -299,15 +303,69 @@ export default class TableOperationMenu {
         )
 
         if (['insertRowDown', 'unmergeCells'].indexOf(name) > -1) {
-          const dividing = document.createElement('div')
-          dividing.classList.add('qlbt-operation-menu-dividing')
-
           this.domNode.appendChild(
-            dividing
+            dividingCreator()
           )
         }
       }
     }
+
+    // if colors option is false, disabled bg color
+    if (this.options.color && this.options.color !== false) {
+      this.domNode.appendChild(
+        dividingCreator()
+      )
+      this.domNode.appendChild(
+        subTitleCreator(this.colorSubTitle)
+      )
+      this.domNode.appendChild(this.colorsItemCreator(this.cellColors))
+    }
+
+    // create dividing line
+    function dividingCreator () {
+      const dividing = document.createElement('div')
+      dividing.classList.add('qlbt-operation-menu-dividing')
+      return dividing
+    }
+
+    // create subtitle for menu
+    function subTitleCreator (title) {
+      const subTitle = document.createElement('div')
+      subTitle.classList.add('qlbt-operation-menu-subtitle')
+      subTitle.innerText = title
+      return subTitle
+    }
+  }
+
+  colorsItemCreator (colors) {
+    const self = this
+    const node = document.createElement('div')
+    node.classList.add('qlbt-operation-color-picker')
+
+    colors.forEach(color => {
+      let colorBox = colorBoxCreator(color)
+      node.appendChild(colorBox)
+    })
+
+    function colorBoxCreator (color) {
+      const box = document.createElement('div')
+      box.classList.add('qlbt-operation-color-picker-item')
+      box.setAttribute('data-color', color)
+      box.style.backgroundColor = color
+
+      box.addEventListener('click', function () {
+        const selectedTds = self.tableSelection.selectedTds
+        if (selectedTds && selectedTds.length > 0) {
+          selectedTds.forEach(tableCell => {
+            tableCell.format('cell-bg', color)
+          })
+        }
+      }, false)
+
+      return box
+    }
+
+    return node
   }
 
   menuItemCreator ({ text, iconSrc, handler }) {
