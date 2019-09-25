@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "36c5b584937f6e0dfc3f";
+/******/ 	var hotCurrentHash = "97da4b01dfc4fa5473fa";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -942,6 +942,36 @@ function getEventComposedPath(evt) {
   }
 
   return path;
+}
+function convertToHex(rgb) {
+  var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/; // if rgb
+
+  if (/^(rgb|RGB)/.test(rgb)) {
+    var color = rgb.toString().match(/\d+/g);
+    var hex = "#";
+
+    for (var i = 0; i < 3; i++) {
+      hex += ("0" + Number(color[i]).toString(16)).slice(-2);
+    }
+
+    return hex;
+  } else if (reg.test(rgb)) {
+    var aNum = rgb.replace(/#/, "").split("");
+
+    if (aNum.length === 6) {
+      return rgb;
+    } else if (aNum.length === 3) {
+      var numHex = "#";
+
+      for (var i = 0; i < aNum.length; i += 1) {
+        numHex += aNum[i] + aNum[i];
+      }
+
+      return numHex;
+    }
+  }
+
+  return rgb;
 }
 // CONCATENATED MODULE: ./src/modules/table-column-tool.js
 
@@ -2634,7 +2664,8 @@ function matchTableCell(node, delta, scroll) {
   const cellId = cells.indexOf(node) + 1;
   const colspan = node.getAttribute('colspan') || false;
   const rowspan = node.getAttribute('rowspan') || false;
-  const cellBg = node.getAttribute('data-cell-bg'); // bugfix: empty table cells copied from other place will be removed unexpectedly
+  const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor; // The td from external table has no 'data-cell-bg' 
+  // bugfix: empty table cells copied from other place will be removed unexpectedly
 
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
@@ -2646,19 +2677,8 @@ function matchTableCell(node, delta, scroll) {
       }
     });
     return delta;
-  } // bugfix: remove background attr from the delta of table cell
-  //         to prevent unexcepted background attr append.
+  }
 
-
-  delta = delta.reduce((newDelta, op) => {
-    if (op.attributes.background === cellBg) {
-      newDelta.insert(op.insert, _omit(op.attributes, ['background']));
-    } else {
-      newDelta.insert(op.insert, op.attributes);
-    }
-
-    return newDelta;
-  }, new Delta());
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
       const lines = [];
@@ -2698,11 +2718,18 @@ function matchTableCell(node, delta, scroll) {
           row: rowId,
           cell: cellId,
           rowspan,
-          colspan
+          colspan,
+          'cell-bg': cellBg
         }
       }, _omit(op.attributes, ['table'])));
     } else {
-      newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line'])));
+      // bugfix: remove background attr from the delta of table cell
+      //         to prevent unexcepted background attr append.
+      if (op.attributes && op.attributes.background && op.attributes.background === convertToHex(cellBg)) {
+        newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line', 'background'])));
+      } else {
+        newDelta.insert(op.insert, Object.assign({}, _omit(op.attributes, ['table', 'table-cell-line'])));
+      }
     }
 
     return newDelta;
