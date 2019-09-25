@@ -69,7 +69,7 @@ export function matchTableCell (node, delta, scroll) {
     } else {
       // bugfix: remove background attr from the delta of table cell
       //         to prevent unexcepted background attr append.
-      if (op.attributes.background && op.attributes.background === convertToHex(cellBg)) {
+      if (op.attributes && op.attributes.background && op.attributes.background === convertToHex(cellBg)) {
         newDelta.insert(op.insert, Object.assign(
           {},
           _omit(op.attributes, ['table', 'table-cell-line', 'background'])
