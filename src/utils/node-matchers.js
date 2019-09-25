@@ -1,5 +1,5 @@
 import Quill from 'quill'
-import { _omit } from './index'
+import { _omit, convertToHex } from './index'
 
 const Delta = Quill.import('delta')
 
@@ -15,7 +15,7 @@ export function matchTableCell (node, delta, scroll) {
   const cellId = cells.indexOf(node) + 1;
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
-  const cellBg = node.getAttribute('data-cell-bg')
+  const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor // The td from external table has no 'data-cell-bg' 
 
   // bugfix: empty table cells copied from other place will be removed unexpectedly
   if (delta.length() === 0) {
@@ -24,18 +24,6 @@ export function matchTableCell (node, delta, scroll) {
     })
     return delta
   }
-
-  // bugfix: remove background attr from the delta of table cell
-  //         to prevent unexcepted background attr append.
-  delta = delta.reduce((newDelta, op) => {
-    if (op.attributes.background === cellBg) {
-      newDelta.insert(op.insert, _omit(op.attributes, ['background']))  
-    } else {
-      newDelta.insert(op.insert, op.attributes)
-    }
-
-    return newDelta
-  }, new Delta())
 
   delta = delta.reduce((newDelta, op) => {
     if (op.insert && typeof op.insert === 'string') {
@@ -75,14 +63,23 @@ export function matchTableCell (node, delta, scroll) {
       newDelta.insert(op.insert, Object.assign(
         {},
         Object.assign({}, { row: rowId }, op.attributes.table),
-        { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan } },
+        { 'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan, 'cell-bg': cellBg } },
         _omit(op.attributes, ['table'])
       ))
     } else {
-      newDelta.insert(op.insert, Object.assign(
-        {},
-        _omit(op.attributes, ['table', 'table-cell-line'])
-      ))
+      // bugfix: remove background attr from the delta of table cell
+      //         to prevent unexcepted background attr append.
+      if (op.attributes.background && op.attributes.background === convertToHex(cellBg)) {
+        newDelta.insert(op.insert, Object.assign(
+          {},
+          _omit(op.attributes, ['table', 'table-cell-line', 'background'])
+        ))
+      } else {
+        newDelta.insert(op.insert, Object.assign(
+          {},
+          _omit(op.attributes, ['table', 'table-cell-line'])
+        ))
+      }
     }
     
     return newDelta

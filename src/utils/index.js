@@ -67,3 +67,30 @@ export function getEventComposedPath (evt) {
 
   return path
 }
+
+export function convertToHex (rgb) {
+  var reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+  // if rgb
+  if (/^(rgb|RGB)/.test(rgb)) {
+    var color = rgb.toString().match(/\d+/g);
+    var hex = "#";
+
+    for (var i = 0; i < 3; i++) {
+        hex += ("0" + Number(color[i]).toString(16)).slice(-2);
+    }
+    return hex;
+  } else if (reg.test(rgb)) {
+    var aNum = rgb.replace(/#/,"").split("");
+    if (aNum.length === 6) {
+        return rgb;
+    } else if(aNum.length === 3) {
+        var numHex = "#";
+        for (var i=0; i<aNum.length; i+=1) {
+            numHex += (aNum[i] + aNum[i]);
+        }
+        return numHex;
+    }
+  }
+
+  return rgb;
+}
