@@ -81,10 +81,12 @@ class TableCellLine extends Block {
   optimize(context) {
     // cover shadowBlot's wrap call, pass params parentBlot initialize
     // needed
+    super.optimize(context)
     const rowId = this.domNode.getAttribute('data-row')
     const rowspan = this.domNode.getAttribute('data-rowspan')
     const colspan = this.domNode.getAttribute('data-colspan')
     const cellBg = this.domNode.getAttribute('data-cell-bg')
+    const formats = TableCellLine.formats(this.domNode)
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
@@ -93,8 +95,9 @@ class TableCellLine extends Block {
         rowspan,
         'cell-bg': cellBg
       })
+    } else if (formats.row !== this.parent.formats().row) {
+      this.parent.format('row', formats.row)
     }
-    super.optimize(context)
   }
 
   tableCell() {
@@ -121,7 +124,7 @@ class TableCell extends Container {
     return false
   }
 
-  static create(value) {
+  static create(value = { row: rowId() }) {
     const node = super.create(value)
     node.setAttribute("data-row", value.row)
 
@@ -206,7 +209,7 @@ class TableCell extends Container {
       this.formatChildren(name, value)
     } else if (['row'].indexOf(name) > -1) {
       this.toggleAttribute(`data-${name}`, value)
-      this.formatChildren(name, value)
+      // this.formatChildren(name, value)
     } else if (name === 'cell-bg') {
       this.toggleAttribute('data-cell-bg', value)
       this.formatChildren(name, value)
@@ -223,14 +226,33 @@ class TableCell extends Container {
 
   optimize(context) {
     const rowId = this.domNode.getAttribute("data-row")
-
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId
       })
+    } else if (rowId !== this.parent.formats().row) {
+      this.parent.format('row', rowId)
     }
+
+    this.children.forEach(child => {
+      if (child.next == null) return;
+      const childFormats = TableCellLine.formats(child.domNode);
+      const nextFormats = TableCellLine.formats(child.next.domNode);
+      if (childFormats.cell !== nextFormats.cell) {
+        const next = this.splitAfter(child);
+        if (next) {
+          next.optimize();
+        }
+        // We might be able to merge with prev now
+        if (this.prev) {
+          this.prev.optimize();
+        }
+      }
+    });
+
     super.optimize(context)
+
   }
 
   row() {
@@ -270,7 +292,9 @@ class TableRow extends Container {
 
   static create(value) {
     const node = super.create(value)
-    node.setAttribute("data-row", value.row)
+    if (value.row) {
+      node.setAttribute("data-row", value.row)
+    }
     return node
   }
 
@@ -283,6 +307,10 @@ class TableRow extends Container {
     }, {})
   }
 
+  format(key, value) {
+    this.domNode.setAttribute(`data-${key}`, value);
+  }
+
   optimize (context) {
     // optimize function of ShadowBlot
     if (
@@ -292,19 +320,25 @@ class TableRow extends Container {
       this.wrap(this.statics.requiredContainer.blotName)
     }
 
+    this.children.forEach(child => {
+      if (child.next == null) return
+      const childFormats = child.formats()
+      const nextFormats = child.next.formats()
+      if (childFormats.row !== nextFormats.row) {
+        const next = this.splitAfter(child)
+        if (next) {
+          next.optimize()
+        }
+        if (this.prev) {
+          this.prev.optimize()
+        }
+      }
+    })
+
     // optimize function of ParentBlot
     // note: modified this optimize function because
     // TableRow should not be removed when the length of its children was 0
-    this.enforceAllowedChildren()
-    if (this.uiNode != null && this.uiNode !== this.domNode.firstChild) {
-      this.domNode.insertBefore(this.uiNode, this.domNode.firstChild)
-    }
-
-    // optimize function of ContainerBlot
-    if (this.children.length > 0 && this.next != null && this.checkMerge()) {
-      this.next.moveChildren(this)
-      this.next.remove()
-    }
+    super.optimize(context)
   }
 
   rowOffset() {
@@ -914,4 +948,3 @@ export {
   CELL_IDENTITY_KEYS,
   CELL_ATTRIBUTES
 }
-
