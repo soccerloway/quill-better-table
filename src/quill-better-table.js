@@ -177,8 +177,12 @@ class BetterTable extends Module {
     const range = this.quill.getSelection(true)
     if (range == null) return
     let currentBlot = this.quill.getLeaf(range.index)[0]
-    let nextBlot = this.quill.getLeaf(range.index + 1)[0]
     let delta = new Delta().retain(range.index)
+
+    if (isInTableCell(currentBlot)) {
+      console.warn(`Can not insert table into a table cell.`)
+      return;
+    }
 
     delta.insert('\n')
     // insert table column
@@ -273,6 +277,18 @@ BetterTable.keyboardBindings = {
       });
     },
   }
+}
+
+function isTableCell (blot) {
+  return blot.statics.blotName === TableCell.blotName
+}
+
+function isInTableCell (current) {
+  return current && current.parent
+    ? isTableCell(current.parent)
+      ? true
+      : isInTableCell(current.parent)
+    : false
 }
 
 export default BetterTable;
