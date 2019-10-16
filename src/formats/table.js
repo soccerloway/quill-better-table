@@ -449,9 +449,22 @@ class TableContainer extends Container {
     if (body == null || body.children.head == null) return
 
     const tableCells = this.descendants(TableCell)
+    const tableRows = this.descendants(TableRow)
     const removedCells = []  // cells to be removed
     const modifiedCells = [] // cells to be modified
     const fallCells = []     // cells to fall into next row
+
+    // compute rows to remove
+    // bugfix: #21 There will be a empty tr left if delete the last row of a table
+    const removedRows = tableRows.filter(row => {
+      const rowRect = getRelativeRect(
+        row.domNode.getBoundingClientRect(),
+        editorWrapper
+      )
+      
+      return rowRect.y > compareRect.y - ERROR_LIMIT &&
+        rowRect.y1 < compareRect.y1 + ERROR_LIMIT
+    })
 
     tableCells.forEach(cell => {
       const cellRect = getRelativeRect(
@@ -529,6 +542,9 @@ class TableContainer extends Container {
       const cellRowspan = parseInt(cell.formats().rowspan, 10)
       cell.format("rowspan", cellRowspan - removedRowsLength)
     })
+
+    // remove selected rows
+    removedRows.forEach(row => row.remove())
   }
 
   tableDestroy() {
