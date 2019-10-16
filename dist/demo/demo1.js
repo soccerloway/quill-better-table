@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "97da4b01dfc4fa5473fa";
+/******/ 	var hotCurrentHash = "0ab79ca97240aece4188";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1711,12 +1711,19 @@ class table_TableContainer extends Container {
     const [body] = this.descendants(TableBody);
     if (body == null || body.children.head == null) return;
     const tableCells = this.descendants(TableCell);
+    const tableRows = this.descendants(TableRow);
     const removedCells = []; // cells to be removed
 
     const modifiedCells = []; // cells to be modified
 
     const fallCells = []; // cells to fall into next row
+    // compute rows to remove
+    // bugfix: #21 There will be a empty tr left if delete the last row of a table
 
+    const removedRows = tableRows.filter(row => {
+      const rowRect = getRelativeRect(row.domNode.getBoundingClientRect(), editorWrapper);
+      return rowRect.y > compareRect.y - ERROR_LIMIT && rowRect.y1 < compareRect.y1 + ERROR_LIMIT;
+    });
     tableCells.forEach(cell => {
       const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
 
@@ -1769,7 +1776,9 @@ class table_TableContainer extends Container {
     modifiedCells.forEach(cell => {
       const cellRowspan = parseInt(cell.formats().rowspan, 10);
       cell.format("rowspan", cellRowspan - removedRowsLength);
-    });
+    }); // remove selected rows
+
+    removedRows.forEach(row => row.remove());
   }
 
   tableDestroy() {
@@ -2996,8 +3005,13 @@ class quill_better_table_BetterTable extends Module {
     const range = this.quill.getSelection(true);
     if (range == null) return;
     let currentBlot = this.quill.getLeaf(range.index)[0];
-    let nextBlot = this.quill.getLeaf(range.index + 1)[0];
     let delta = new quill_better_table_Delta().retain(range.index);
+
+    if (isInTableCell(currentBlot)) {
+      console.warn("Can not insert table into a table cell.");
+      return;
+    }
+
     delta.insert('\n'); // insert table column
 
     delta = new Array(columns).fill('\n').reduce((memo, text) => {
@@ -3105,6 +3119,15 @@ quill_better_table_BetterTable.keyboardBindings = {
 
   }
 };
+
+function isTableCell(blot) {
+  return blot.statics.blotName === TableCell.blotName;
+}
+
+function isInTableCell(current) {
+  return current && current.parent ? isTableCell(current.parent) ? true : isInTableCell(current.parent) : false;
+}
+
 /* harmony default export */ var quill_better_table = __webpack_exports__["default"] = (quill_better_table_BetterTable);
 
 /***/ }),
