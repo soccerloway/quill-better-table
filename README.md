@@ -13,7 +13,7 @@ A module for better table in Quill, more useful features are supported. There is
     <p>Add 2 dots to make selected areas easier to recognize.</p>
   </li>
   <li>
-    <p>Add support for background color in table cells and relatived configures.(Mentioned in <a href="https://github.com/soccerloway/quill-better-table/issues/8">issue 8</a></p>
+    <p>Add support for background color in table cells and relatived configures.(Mentioned in <a href="https://github.com/soccerloway/quill-better-table/issues/8">issue 8)</a></p>
   </li>
 </ul>
 
