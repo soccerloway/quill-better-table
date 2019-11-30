@@ -21,10 +21,10 @@
 .quill-better-table-wrapper {
   overflow-x: auto; }
 
-table {
+table.quill-better-table {
   table-layout: fixed;
   border-collapse: collapse; }
-  table td {
+  table.quill-better-table td {
     border: 1px solid #000;
     padding: 2px 5px; }
 
