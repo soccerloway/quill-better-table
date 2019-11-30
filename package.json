@@ -1,6 +1,6 @@
 {
   "name": "quill-better-table",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Module for better table in Quill, more useful features are supported.",
   "main": "dist/quill-better-table.js",
   "scripts": {
