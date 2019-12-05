@@ -299,6 +299,27 @@ BetterTable.keyboardBindings = {
       }
       return true
     }
+  },
+  'up-to-table': {
+    key: 'ArrowUp',
+    collapsed: true,
+    handler(range, context) {
+      const target = context.line.prev
+      if (target && target.statics.blotName === 'table-view') {
+        const rows = target.table().rows()
+        const targetCell = rows[rows.length - 1].children.head
+        const targetLine = targetCell.children.head
+        
+        this.quill.setSelection(
+          targetLine.offset(this.quill.scroll),
+          0,
+          Quill.sources.USER
+        )
+
+        return false
+      }
+      return true
+    }
   }
 }
 
