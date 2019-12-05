@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "fc9381ece683addaf878";
+/******/ 	var hotCurrentHash = "b2ee69a9ed01aab8434c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -3133,6 +3133,25 @@ quill_better_table_BetterTable.keyboardBindings = {
 
       if (target && target.statics.blotName === 'table-view') {
         const targetCell = target.table().rows()[0].children.head;
+        const targetLine = targetCell.children.head;
+        this.quill.setSelection(targetLine.offset(this.quill.scroll), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
+        return false;
+      }
+
+      return true;
+    }
+
+  },
+  'up-to-table': {
+    key: 'ArrowUp',
+    collapsed: true,
+
+    handler(range, context) {
+      const target = context.line.prev;
+
+      if (target && target.statics.blotName === 'table-view') {
+        const rows = target.table().rows();
+        const targetCell = rows[rows.length - 1].children.head;
         const targetLine = targetCell.children.head;
         this.quill.setSelection(targetLine.offset(this.quill.scroll), 0, external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.sources.USER);
         return false;
