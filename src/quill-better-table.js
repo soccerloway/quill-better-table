@@ -276,7 +276,86 @@ BetterTable.keyboardBindings = {
         this.quill.format(name, context.format[name], Quill.sources.USER);
       });
     },
+  },
+
+  'table-cell-line up': makeTableArrowHandler(true),
+  'table-cell-line down': makeTableArrowHandler(false),
+  'down-to-table': {
+    key: 'ArrowDown',
+    collapsed: true,
+    handler(range, context) {
+      const target = context.line.next
+      if (target && target.statics.blotName === 'table-view') {
+        const targetCell = target.table().rows()[0].children.head
+        const targetLine = targetCell.children.head
+        
+        this.quill.setSelection(
+          targetLine.offset(this.quill.scroll),
+          0,
+          Quill.sources.USER
+        )
+
+        return false
+      }
+      return true
+    }
   }
+}
+
+function makeTableArrowHandler (up) {
+  return {
+    key: up ? 'ArrowUp' : 'ArrowDown',
+    collapsed: true,
+    format: ['table-cell-line'],
+    handler(range, context) {
+      // TODO move to table module
+      const key = up ? 'prev' : 'next'
+      const targetLine = context.line[key]
+      if (targetLine != null) return true
+
+      const cell = context.line.parent
+      const targetRow = cell.parent[key]
+
+      if (targetRow != null && targetRow.statics.blotName === 'table-row') {
+        let targetCell = targetRow.children.head
+        let totalColspanOfTargetCell = parseInt(targetCell.formats()['colspan'], 10)
+        let cur = cell
+        let totalColspanOfCur = parseInt(cur.formats()['colspan'], 10)
+
+        // get targetCell above current cell depends on colspan
+        while (cur.prev != null) {
+          cur = cur.prev
+          totalColspanOfCur += parseInt(cur.formats()['colspan'], 10)
+        }
+        
+        while (targetCell.next != null && totalColspanOfTargetCell < totalColspanOfCur) {
+          targetCell = targetCell.next
+          totalColspanOfTargetCell += parseInt(targetCell.formats()['colspan'], 10)
+        }
+
+        const index = targetCell.offset(this.quill.scroll)
+        this.quill.setSelection(index, 0, Quill.sources.USER)
+      } else {
+        const targetLine = cell.table().parent[key]
+        if (targetLine != null) {
+          if (up) {
+            this.quill.setSelection(
+              targetLine.offset(this.quill.scroll) + targetLine.length() - 1,
+              0,
+              Quill.sources.USER
+            )
+          } else {
+            this.quill.setSelection(
+              targetLine.offset(this.quill.scroll),
+              0,
+              Quill.sources.USER
+            )
+          }
+        }
+      }
+      return false;
+    },
+  };
 }
 
 function isTableCell (blot) {

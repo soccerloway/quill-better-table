@@ -871,6 +871,10 @@ class TableViewWrapper extends Container {
       }
     }, false)
   }
+
+  table () {
+    return this.children.head
+  }
 }
 TableViewWrapper.blotName = "table-view"
 TableViewWrapper.className = "quill-better-table-wrapper"
