@@ -274,7 +274,7 @@ export default class TableOperationMenu {
   }
 
   mount () {
-    document.body.appendChild(this.domNode)
+    this.quill.root.parentNode.appendChild(this.domNode)
   }
 
   destroy () {
@@ -284,12 +284,13 @@ export default class TableOperationMenu {
   }
 
   menuInitial ({ table, left, top }) {
+    const offset = this.quill.root.parentNode.getBoundingClientRect()
     this.domNode = document.createElement('div')
     this.domNode.classList.add('qlbt-operation-menu')
     css(this.domNode, {
       position: 'absolute',
-      left: `${left}px`,
-      top: `${top}px`,
+      left: `${left - offset.left}px`,
+      top: `${top - offset.top}px`,
       'min-height': `${MENU_MIN_HEIHGT}px`,
       width: `${MENU_WIDTH}px`
     })
