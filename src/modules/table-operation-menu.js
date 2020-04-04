@@ -263,14 +263,14 @@ export default class TableOperationMenu {
     this.tableColumnTool = betterTableModule.columnTool
     this.boundary = this.tableSelection.boundary
     this.selectedTds = this.tableSelection.selectedTds
-    this.destroyHanlder = this.destroy.bind(this)
+    this.destroyHandler = this.destroy.bind(this)
     this.columnToolCells = this.tableColumnTool.colToolCells()
     this.colorSubTitle = options.color && options.color.text ? options.color.text : DEFAULT_COLOR_SUBTITLE
     this.cellColors = options.color && options.color.colors ? options.color.colors : DEFAULT_CELL_COLORS
 
     this.menuInitial(params)
     this.mount()
-    document.addEventListener("click", this.destroyHanlder, false)
+    document.addEventListener("click", this.destroyHandler, false)
   }
 
   mount () {
@@ -279,7 +279,7 @@ export default class TableOperationMenu {
 
   destroy () {
     this.domNode.remove()
-    document.removeEventListener("click", this.destroyHanlder, false)
+    document.removeEventListener("click", this.destroyHandler, false)
     return null
   }
 
