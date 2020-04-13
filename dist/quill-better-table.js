@@ -2122,10 +2122,10 @@ class table_selection_TableSelection {
 
     this.dragging = false;
     this.selectingHandler = this.mouseDownHandler.bind(this);
-    this.clearSelectionHanler = this.clearSelection.bind(this);
+    this.clearSelectionHandler  = this.clearSelection.bind(this);
     this.helpLinesInitial();
     this.quill.root.addEventListener('mousedown', this.selectingHandler, false);
-    this.quill.on('text-change', this.clearSelectionHanler);
+    this.quill.on('text-change', this.clearSelectionHandler );
   }
 
   helpLinesInitial() {
@@ -2267,7 +2267,7 @@ class table_selection_TableSelection {
       this[direction] = null;
     });
     this.quill.root.removeEventListener('mousedown', this.selectingHandler, false);
-    this.quill.off('text-change', this.clearSelectionHanler);
+    this.quill.off('text-change', this.clearSelectionHandler );
     return null;
   }
 
