@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b2ee69a9ed01aab8434c";
+/******/ 	var hotCurrentHash = "7c1a0f2951cfd8773c10";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -271,7 +271,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			var chunkId = 2;
 /******/ 			// eslint-disable-next-line no-lone-blocks
 /******/ 			{
-/******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
 /******/ 			}
 /******/ 			if (
@@ -869,6 +868,7 @@ module.exports = "<?xml version=\"1.0\" standalone=\"no\"?><!doctype html><svg c
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: external {"commonjs":"quill","commonjs2":"quill","amd":"quill","root":"Quill"}
@@ -1669,9 +1669,7 @@ class table_TableContainer extends Container {
     return this.children.head;
   }
 
-  deleteColumns(compareRect) {
-    let delIndexes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    let editorWrapper = arguments.length > 2 ? arguments[2] : undefined;
+  deleteColumns(compareRect, delIndexes = [], editorWrapper) {
     const [body] = this.descendants(TableBody);
     if (body == null || body.children.head == null) return;
     const tableCells = this.descendants(TableCell);
@@ -1808,9 +1806,7 @@ class table_TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect, colIndex) {
-    let isRight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-    let editorWrapper = arguments.length > 3 ? arguments[3] : undefined;
+  insertColumn(compareRect, colIndex, isRight = true, editorWrapper) {
     const [body] = this.descendants(TableBody);
     const [tableColGroup] = this.descendants(TableColGroup);
     const tableCols = this.descendants(TableCol);
@@ -2122,10 +2118,10 @@ class table_selection_TableSelection {
 
     this.dragging = false;
     this.selectingHandler = this.mouseDownHandler.bind(this);
-    this.clearSelectionHandler  = this.clearSelection.bind(this);
+    this.clearSelectionHandler = this.clearSelection.bind(this);
     this.helpLinesInitial();
     this.quill.root.addEventListener('mousedown', this.selectingHandler, false);
-    this.quill.on('text-change', this.clearSelectionHandler );
+    this.quill.on('text-change', this.clearSelectionHandler);
   }
 
   helpLinesInitial() {
@@ -2267,7 +2263,7 @@ class table_selection_TableSelection {
       this[direction] = null;
     });
     this.quill.root.removeEventListener('mousedown', this.selectingHandler, false);
-    this.quill.off('text-change', this.clearSelectionHandler );
+    this.quill.off('text-change', this.clearSelectionHandler);
     return null;
   }
 
@@ -2540,12 +2536,11 @@ class table_operation_menu_TableOperationMenu {
     return null;
   }
 
-  menuInitial(_ref) {
-    let {
-      table,
-      left,
-      top
-    } = _ref;
+  menuInitial({
+    table,
+    left,
+    top
+  }) {
     this.domNode = document.createElement('div');
     this.domNode.classList.add('qlbt-operation-menu');
     css(this.domNode, {
@@ -2618,12 +2613,11 @@ class table_operation_menu_TableOperationMenu {
     return node;
   }
 
-  menuItemCreator(_ref2) {
-    let {
-      text,
-      iconSrc,
-      handler
-    } = _ref2;
+  menuItemCreator({
+    text,
+    iconSrc,
+    handler
+  }) {
     const node = document.createElement('div');
     node.classList.add('qlbt-operation-menu-item');
     const iconSpan = document.createElement('span');
@@ -2990,8 +2984,7 @@ class quill_better_table_BetterTable extends Module {
     });
   }
 
-  getTable() {
-    let range = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.quill.getSelection();
+  getTable(range = this.quill.getSelection()) {
     if (range == null) return [null, null, null, -1];
     const [cellLine, offset] = this.quill.getLine(range.index);
 
