@@ -7,7 +7,6 @@
   height: 5px;
   background-color: #0589f3;
   border-radius: 5px; }
-
 .ql-container .qlbt-selection-line.qlbt-selection-line-right::before {
   position: absolute;
   right: -2px;
@@ -115,3 +114,21 @@ table.quill-better-table {
       width: 8px;
       height: 100%; }
 
+.ql-snow .ql-table-picker {
+  width: 28px; }
+  .ql-snow .ql-table-picker .ql-picker-options {
+    padding: 3px 5px;
+    width: 212px; }
+  .ql-snow .ql-table-picker .ql-picker-item {
+    background-color: #cce4f8;
+    border: 1px solid transparent;
+    float: left;
+    height: 16px;
+    margin: 2px;
+    padding: 0;
+    width: 16px; }
+    .ql-snow .ql-table-picker .ql-picker-item.hover {
+      background-color: #186bad;
+      border-color: #000000; }
+
+/*# sourceMappingURL=quill-better-table.css.map */

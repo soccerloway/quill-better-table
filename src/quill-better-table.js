@@ -1,7 +1,10 @@
+import extend from 'extend';
 import Quill from 'quill'
 import TableColumnTool from './modules/table-column-tool'
 import TableSelection from './modules/table-selection'
 import TableOperationMenu from './modules/table-operation-menu'
+import BetterTableSnowTheme from "./themes/better-table-snow";
+import TablePicker from "./ui/table-picker";
 
 // import table node matchers
 import {
@@ -41,6 +44,9 @@ class BetterTable extends Module {
     Quill.register(TableViewWrapper, true);
     // register customized Header，overwriting quill built-in Header
     // Quill.register('formats/header', Header, true);
+
+    Quill.register('themes/better-table-snow', BetterTableSnowTheme, true);
+    Quill.register('ui/table-picker', TablePicker, true);
   }
 
   constructor(quill, options) {
@@ -159,6 +165,11 @@ class BetterTable extends Module {
     quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
       return matcher[0] !== 'tr'
     })
+
+    const toolbar = quill.getModule('toolbar');
+    if (toolbar) {
+      toolbar.addHandler('better-table', this.insertTable);
+    }
   }
 
   getTable(range = this.quill.getSelection()) {
@@ -174,6 +185,16 @@ class BetterTable extends Module {
   }
 
   insertTable(rows, columns) {
+    if (!columns) {
+      if (rows.match(/^\d+x\d+$/)) {
+        let tmp = rows.split('x');
+        columns = tmp[0];
+        rows = tmp[1];
+      } else {
+        return;
+      }
+    }
+
     const range = this.quill.getSelection(true)
     if (range == null) return
     let currentBlot = this.quill.getLeaf(range.index)[0]
