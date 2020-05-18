@@ -5,8 +5,9 @@
   "main": "dist/quill-better-table.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack.config.js --mode=development",
-    "build": "npm run build:webpack && npm run build:cleanup",
-    "build:webpack": "webpack --config webpack.config.js --mode=production --env.minimize; webpack --config webpack.config.js --mode=production",
+    "build": "npm run build:webpack && npm run build:webpack:minimize && npm run build:cleanup",
+    "build:webpack:minimize": "webpack --config webpack.config.js --mode=production --env.minimize",
+    "build:webpack": "webpack --config webpack.config.js --mode=production",
     "build:cleanup": "rm dist/quill-better-table",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

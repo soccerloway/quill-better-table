@@ -1,4 +1,6 @@
-import Picker from "quill/ui/picker";
+import Quill from 'quill';
+
+const Picker = Quill.import('ui/picker');
 
 class TablePicker extends Picker {
     constructor(select, label) {
@@ -38,13 +40,15 @@ class TablePicker extends Picker {
         super.selectItem(item, trigger);
 
         if (item == null) return
-
         item.classList.remove('ql-selected');
-
         if (item.label) {
             item.label.removeAttribute('data-value');
             item.label.removeAttribute('data-label');
         }
+
+        Array.from(this.container.querySelectorAll('.hover')).forEach(item => {
+            item.classList.remove('hover');
+        });
     }
 }
 
