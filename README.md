@@ -7,7 +7,7 @@ A module for better table in Quill, more useful features are supported. There is
 # Updated v1.2.10
 <ul>
   <li>
-    <p>Replace TableCellLine.tagName from `DIV` to `P`. Using `DIV` to implement TableCellLine led a copy/paste issue: [Pasting plain text also changes to table format](https://github.com/soccerloway/quill-better-table/issues/50). There are many more similar situations. When the user pastes the DIV tag into the editor, the DIV will be treated as a TableCellLine. Using `P` is more appropriate and fixes the mentioned issue. If this update caused any other new issues, tell me as soon as possible please, thanks！ Best wishes.</p>
+    <p>Replace TableCellLine.tagName from `DIV` to `P`. Using `DIV` to implement TableCellLine led a copy/paste issue: <a href="https://github.com/soccerloway/quill-better-table/issues/50">Pasting plain text also changes to table format</a>. There are many more similar situations. When the user pastes the DIV tag into the editor, the DIV will be treated as a TableCellLine. Using `P` is more appropriate and fixes the mentioned issue. If this update caused any other new issues, tell me as soon as possible please, thanks！ Best wishes.</p>
   </li>
 </ul>
 
