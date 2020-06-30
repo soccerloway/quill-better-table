@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "b2ee69a9ed01aab8434c";
+/******/ 	var hotCurrentHash = "ced44c7892a78034ffe4";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1375,8 +1375,8 @@ class TableCellLine extends table_Block {
 }
 
 TableCellLine.blotName = "table-cell-line";
-TableCellLine.ClassName = "qlbt-cell-line";
-TableCellLine.tagName = "DIV";
+TableCellLine.className = "qlbt-cell-line";
+TableCellLine.tagName = "P";
 
 class TableCell extends Container {
   checkMerge() {
@@ -2122,10 +2122,10 @@ class table_selection_TableSelection {
 
     this.dragging = false;
     this.selectingHandler = this.mouseDownHandler.bind(this);
-    this.clearSelectionHandler  = this.clearSelection.bind(this);
+    this.clearSelectionHandler = this.clearSelection.bind(this);
     this.helpLinesInitial();
     this.quill.root.addEventListener('mousedown', this.selectingHandler, false);
-    this.quill.on('text-change', this.clearSelectionHandler );
+    this.quill.on('text-change', this.clearSelectionHandler);
   }
 
   helpLinesInitial() {
@@ -2267,7 +2267,7 @@ class table_selection_TableSelection {
       this[direction] = null;
     });
     this.quill.root.removeEventListener('mousedown', this.selectingHandler, false);
-    this.quill.off('text-change', this.clearSelectionHandler );
+    this.quill.off('text-change', this.clearSelectionHandler);
     return null;
   }
 
