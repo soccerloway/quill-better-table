@@ -7,13 +7,7 @@ A module for better table in Quill, more useful features are supported. There is
 # Updated
 <ul>
   <li>
-    <p>Add operation menus icons.</p>
-  </li>
-  <li>
-    <p>Add 2 dots to make selected areas easier to recognize.</p>
-  </li>
-  <li>
-    <p>Add support for background color in table cells and relatived configures.(Mentioned in <a href="https://github.com/soccerloway/quill-better-table/issues/8">issue 8)</a></p>
+    <p>Replace TableCellLine.tagName from `DIV` to `P`. Using `DIV` to implement TableCellLine led a copy/paste issue: [#50](https://github.com/soccerloway/quill-better-table/issues/50). There are many more similar situations. When the user pastes the DIV tag into the editor, the DIV will be treated as a TableCellLine.</p>
   </li>
 </ul>
 
