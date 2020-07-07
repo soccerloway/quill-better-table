@@ -157,3 +157,44 @@ table.quill-better-table {
     }
   }
 }
+
+.ql-snow {
+  .ql-picker.ql-table-picker {
+    width: 28px;
+    
+    .ql-picker-label {
+      border: none;
+      padding: 0;
+
+      svg {
+        float: left;
+        height: 100%;
+        margin-top: auto;
+        position: static;
+        right: auto;
+        top: auto;
+        width: auto;
+      }
+    }
+
+    .ql-picker-options {
+      padding: 3px 5px;
+      width: 212px;
+    }
+
+    .ql-picker-item {
+      background-color: lighten(desaturate($primaryColor, 20%), 40%);
+      border: 1px solid transparent;
+      float: left;
+      height: 16px;
+      margin: 2px;
+      padding: 0;
+      width: 16px;
+
+      &.hover {
+        background-color: darken(desaturate($primaryColor, 20%), 10%);
+        border-color: #000000;
+      }
+    }
+  }
+}

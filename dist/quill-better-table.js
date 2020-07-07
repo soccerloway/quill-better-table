@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "ced44c7892a78034ffe4";
+/******/ 	var hotCurrentHash = "1b0e2a34d0e3d2fc104c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -166,6 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			_declinedDependencies: {},
 /******/ 			_selfAccepted: false,
 /******/ 			_selfDeclined: false,
+/******/ 			_selfInvalidated: false,
 /******/ 			_disposeHandlers: [],
 /******/ 			_main: hotCurrentChildModule !== moduleId,
 /******/
@@ -195,6 +196,29 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			removeDisposeHandler: function(callback) {
 /******/ 				var idx = hot._disposeHandlers.indexOf(callback);
 /******/ 				if (idx >= 0) hot._disposeHandlers.splice(idx, 1);
+/******/ 			},
+/******/ 			invalidate: function() {
+/******/ 				this._selfInvalidated = true;
+/******/ 				switch (hotStatus) {
+/******/ 					case "idle":
+/******/ 						hotUpdate = {};
+/******/ 						hotUpdate[moduleId] = modules[moduleId];
+/******/ 						hotSetStatus("ready");
+/******/ 						break;
+/******/ 					case "ready":
+/******/ 						hotApplyInvalidatedModule(moduleId);
+/******/ 						break;
+/******/ 					case "prepare":
+/******/ 					case "check":
+/******/ 					case "dispose":
+/******/ 					case "apply":
+/******/ 						(hotQueuedInvalidatedModules =
+/******/ 							hotQueuedInvalidatedModules || []).push(moduleId);
+/******/ 						break;
+/******/ 					default:
+/******/ 						// ignore requests in error states
+/******/ 						break;
+/******/ 				}
 /******/ 			},
 /******/
 /******/ 			// Management API
@@ -237,7 +261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	var hotDeferred;
 /******/
 /******/ 	// The update info
-/******/ 	var hotUpdate, hotUpdateNewHash;
+/******/ 	var hotUpdate, hotUpdateNewHash, hotQueuedInvalidatedModules;
 /******/
 /******/ 	function toModuleId(id) {
 /******/ 		var isNumber = +id + "" === id;
@@ -252,7 +276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		hotSetStatus("check");
 /******/ 		return hotDownloadManifest(hotRequestTimeout).then(function(update) {
 /******/ 			if (!update) {
-/******/ 				hotSetStatus("idle");
+/******/ 				hotSetStatus(hotApplyInvalidatedModules() ? "ready" : "idle");
 /******/ 				return null;
 /******/ 			}
 /******/ 			hotRequestedFilesMap = {};
@@ -271,7 +295,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			var chunkId = 2;
 /******/ 			// eslint-disable-next-line no-lone-blocks
 /******/ 			{
-/******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
 /******/ 			}
 /******/ 			if (
@@ -346,6 +369,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		if (hotStatus !== "ready")
 /******/ 			throw new Error("apply() is only allowed in ready status");
 /******/ 		options = options || {};
+/******/ 		return hotApplyInternal(options);
+/******/ 	}
+/******/
+/******/ 	function hotApplyInternal(options) {
+/******/ 		hotApplyInvalidatedModules();
 /******/
 /******/ 		var cb;
 /******/ 		var i;
@@ -368,7 +396,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				var moduleId = queueItem.id;
 /******/ 				var chain = queueItem.chain;
 /******/ 				module = installedModules[moduleId];
-/******/ 				if (!module || module.hot._selfAccepted) continue;
+/******/ 				if (
+/******/ 					!module ||
+/******/ 					(module.hot._selfAccepted && !module.hot._selfInvalidated)
+/******/ 				)
+/******/ 					continue;
 /******/ 				if (module.hot._selfDeclined) {
 /******/ 					return {
 /******/ 						type: "self-declined",
@@ -536,10 +568,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				installedModules[moduleId] &&
 /******/ 				installedModules[moduleId].hot._selfAccepted &&
 /******/ 				// removed self-accepted modules should not be required
-/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire
+/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire &&
+/******/ 				// when called invalidate self-accepting is not possible
+/******/ 				!installedModules[moduleId].hot._selfInvalidated
 /******/ 			) {
 /******/ 				outdatedSelfAcceptedModules.push({
 /******/ 					module: moduleId,
+/******/ 					parents: installedModules[moduleId].parents.slice(),
 /******/ 					errorHandler: installedModules[moduleId].hot._selfAccepted
 /******/ 				});
 /******/ 			}
@@ -612,7 +647,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		// Now in "apply" phase
 /******/ 		hotSetStatus("apply");
 /******/
-/******/ 		hotCurrentHash = hotUpdateNewHash;
+/******/ 		if (hotUpdateNewHash !== undefined) {
+/******/ 			hotCurrentHash = hotUpdateNewHash;
+/******/ 			hotUpdateNewHash = undefined;
+/******/ 		}
+/******/ 		hotUpdate = undefined;
 /******/
 /******/ 		// insert new code
 /******/ 		for (moduleId in appliedUpdate) {
@@ -665,7 +704,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		for (i = 0; i < outdatedSelfAcceptedModules.length; i++) {
 /******/ 			var item = outdatedSelfAcceptedModules[i];
 /******/ 			moduleId = item.module;
-/******/ 			hotCurrentParents = [moduleId];
+/******/ 			hotCurrentParents = item.parents;
+/******/ 			hotCurrentChildModule = moduleId;
 /******/ 			try {
 /******/ 				__webpack_require__(moduleId);
 /******/ 			} catch (err) {
@@ -707,10 +747,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			return Promise.reject(error);
 /******/ 		}
 /******/
+/******/ 		if (hotQueuedInvalidatedModules) {
+/******/ 			return hotApplyInternal(options).then(function(list) {
+/******/ 				outdatedModules.forEach(function(moduleId) {
+/******/ 					if (list.indexOf(moduleId) < 0) list.push(moduleId);
+/******/ 				});
+/******/ 				return list;
+/******/ 			});
+/******/ 		}
+/******/
 /******/ 		hotSetStatus("idle");
 /******/ 		return new Promise(function(resolve) {
 /******/ 			resolve(outdatedModules);
 /******/ 		});
+/******/ 	}
+/******/
+/******/ 	function hotApplyInvalidatedModules() {
+/******/ 		if (hotQueuedInvalidatedModules) {
+/******/ 			if (!hotUpdate) hotUpdate = {};
+/******/ 			hotQueuedInvalidatedModules.forEach(hotApplyInvalidatedModule);
+/******/ 			hotQueuedInvalidatedModules = undefined;
+/******/ 			return true;
+/******/ 		}
+/******/ 	}
+/******/
+/******/ 	function hotApplyInvalidatedModule(moduleId) {
+/******/ 		if (!Object.prototype.hasOwnProperty.call(hotUpdate, moduleId))
+/******/ 			hotUpdate[moduleId] = modules[moduleId];
 /******/ 	}
 /******/
 /******/ 	// The module cache
@@ -801,7 +864,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return hotCreateRequire(12)(__webpack_require__.s = 12);
+/******/ 	return hotCreateRequire(13)(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -866,9 +929,134 @@ module.exports = "<?xml version=\"1.0\" standalone=\"no\"?><!doctype html><svg c
 
 /***/ }),
 /* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var hasOwn = Object.prototype.hasOwnProperty;
+var toStr = Object.prototype.toString;
+var defineProperty = Object.defineProperty;
+var gOPD = Object.getOwnPropertyDescriptor;
+
+var isArray = function isArray(arr) {
+	if (typeof Array.isArray === 'function') {
+		return Array.isArray(arr);
+	}
+
+	return toStr.call(arr) === '[object Array]';
+};
+
+var isPlainObject = function isPlainObject(obj) {
+	if (!obj || toStr.call(obj) !== '[object Object]') {
+		return false;
+	}
+
+	var hasOwnConstructor = hasOwn.call(obj, 'constructor');
+	var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, 'isPrototypeOf');
+	// Not own constructor property must be Object
+	if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+		return false;
+	}
+
+	// Own properties are enumerated firstly, so to speed up,
+	// if last one is own, then all properties are own.
+	var key;
+	for (key in obj) { /**/ }
+
+	return typeof key === 'undefined' || hasOwn.call(obj, key);
+};
+
+// If name is '__proto__', and Object.defineProperty is available, define __proto__ as an own property on target
+var setProperty = function setProperty(target, options) {
+	if (defineProperty && options.name === '__proto__') {
+		defineProperty(target, options.name, {
+			enumerable: true,
+			configurable: true,
+			value: options.newValue,
+			writable: true
+		});
+	} else {
+		target[options.name] = options.newValue;
+	}
+};
+
+// Return undefined instead of __proto__ if '__proto__' is not an own property
+var getProperty = function getProperty(obj, name) {
+	if (name === '__proto__') {
+		if (!hasOwn.call(obj, name)) {
+			return void 0;
+		} else if (gOPD) {
+			// In early versions of node, obj['__proto__'] is buggy when obj has
+			// __proto__ as an own property. Object.getOwnPropertyDescriptor() works.
+			return gOPD(obj, name).value;
+		}
+	}
+
+	return obj[name];
+};
+
+module.exports = function extend() {
+	var options, name, src, copy, copyIsArray, clone;
+	var target = arguments[0];
+	var i = 1;
+	var length = arguments.length;
+	var deep = false;
+
+	// Handle a deep copy situation
+	if (typeof target === 'boolean') {
+		deep = target;
+		target = arguments[1] || {};
+		// skip the boolean and the target
+		i = 2;
+	}
+	if (target == null || (typeof target !== 'object' && typeof target !== 'function')) {
+		target = {};
+	}
+
+	for (; i < length; ++i) {
+		options = arguments[i];
+		// Only deal with non-null/undefined values
+		if (options != null) {
+			// Extend the base object
+			for (name in options) {
+				src = getProperty(target, name);
+				copy = getProperty(options, name);
+
+				// Prevent never-ending loop
+				if (target !== copy) {
+					// Recurse if we're merging plain objects or arrays
+					if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+						if (copyIsArray) {
+							copyIsArray = false;
+							clone = src && isArray(src) ? src : [];
+						} else {
+							clone = src && isPlainObject(src) ? src : {};
+						}
+
+						// Never move original objects, clone them
+						setProperty(target, { name: name, newValue: extend(deep, clone, copy) });
+
+					// Don't bring in undefined values
+					} else if (typeof copy !== 'undefined') {
+						setProperty(target, { name: name, newValue: copy });
+					}
+				}
+			}
+		}
+	}
+
+	// Return the modified object
+	return target;
+};
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: external {"commonjs":"quill","commonjs2":"quill","amd":"quill","root":"Quill"}
@@ -1669,9 +1857,7 @@ class table_TableContainer extends Container {
     return this.children.head;
   }
 
-  deleteColumns(compareRect) {
-    let delIndexes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    let editorWrapper = arguments.length > 2 ? arguments[2] : undefined;
+  deleteColumns(compareRect, delIndexes = [], editorWrapper) {
     const [body] = this.descendants(TableBody);
     if (body == null || body.children.head == null) return;
     const tableCells = this.descendants(TableCell);
@@ -1808,9 +1994,7 @@ class table_TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect, colIndex) {
-    let isRight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-    let editorWrapper = arguments.length > 3 ? arguments[3] : undefined;
+  insertColumn(compareRect, colIndex, isRight = true, editorWrapper) {
     const [body] = this.descendants(TableBody);
     const [tableColGroup] = this.descendants(TableColGroup);
     const tableCols = this.descendants(TableCol);
@@ -2540,12 +2724,11 @@ class table_operation_menu_TableOperationMenu {
     return null;
   }
 
-  menuInitial(_ref) {
-    let {
-      table,
-      left,
-      top
-    } = _ref;
+  menuInitial({
+    table,
+    left,
+    top
+  }) {
     this.domNode = document.createElement('div');
     this.domNode.classList.add('qlbt-operation-menu');
     css(this.domNode, {
@@ -2618,12 +2801,11 @@ class table_operation_menu_TableOperationMenu {
     return node;
   }
 
-  menuItemCreator(_ref2) {
-    let {
-      text,
-      iconSrc,
-      handler
-    } = _ref2;
+  menuItemCreator({
+    text,
+    iconSrc,
+    handler
+  }) {
     const node = document.createElement('div');
     node.classList.add('qlbt-operation-menu-item');
     const iconSpan = document.createElement('span');
@@ -2663,6 +2845,100 @@ function getColToolCellIndexesByBoundary(cells, boundary, conditionFn, container
     return findIndexes;
   }, []);
 }
+// CONCATENATED MODULE: ./src/ui/table-picker.js
+
+const Picker = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('ui/picker');
+
+class TablePicker extends Picker {
+  constructor(select, label) {
+    super(select);
+    this.label.innerHTML = label;
+    this.container.classList.add('ql-table-picker');
+  }
+
+  buildItem(option) {
+    const item = super.buildItem(option);
+    item.addEventListener('mouseover', () => {
+      let value = item.getAttribute('data-value').split('x');
+      let row = parseInt(value[1]);
+      let column = parseInt(value[0]);
+      let items = Array.from(this.container.querySelectorAll('.ql-picker-item'));
+      let lastItem = this.container.querySelector('.ql-picker-item:last-child');
+      value = lastItem.getAttribute('data-value').split('x'); // let rows = parseInt(value[1]);
+
+      let cols = parseInt(value[0]);
+      items.forEach(i => {
+        i.classList.remove('hover');
+      });
+
+      for (let r = 0; r < row; r++) {
+        items.slice(r * cols, r * cols + column).forEach(i => {
+          i.classList.add('hover');
+        });
+      }
+    });
+    return item;
+  }
+
+  selectItem(item, trigger = false) {
+    super.selectItem(item, trigger);
+    if (item == null) return;
+    item.classList.remove('ql-selected');
+
+    if (item.label) {
+      item.label.removeAttribute('data-value');
+      item.label.removeAttribute('data-label');
+    }
+
+    Array.from(this.container.querySelectorAll('.hover')).forEach(item => {
+      item.classList.remove('hover');
+    });
+  }
+
+}
+
+/* harmony default export */ var table_picker = (TablePicker);
+// EXTERNAL MODULE: ./node_modules/extend/index.js
+var extend = __webpack_require__(10);
+var extend_default = /*#__PURE__*/__webpack_require__.n(extend);
+
+// CONCATENATED MODULE: ./src/themes/better-table-snow.js
+
+
+
+const SnowTheme = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('themes/snow');
+
+class better_table_snow_BetterTableSnowTheme extends SnowTheme {
+  constructor(quill, options) {
+    super(quill, options);
+  }
+
+  buildPickers(selects, icons) {
+    selects = Array.from(selects);
+    let pickers = selects.map((select, index, selects) => {
+      if (select.classList.contains('ql-better-table')) {
+        selects.splice(index, 1);
+
+        if (select.querySelector('option') == null) {
+          for (let r = 1; r <= 8; r++) {
+            for (let c = 1; c <= 10; c++) {
+              const option = document.createElement('option');
+              option.setAttribute('value', c + 'x' + r);
+              select.appendChild(option);
+            }
+          }
+        }
+
+        return new table_picker(select, icons.table);
+      }
+    });
+    super.buildPickers(selects, icons);
+    this.pickers = extend_default()([], this.pickers, pickers);
+  }
+
+}
+
+/* harmony default export */ var better_table_snow = (better_table_snow_BetterTableSnowTheme);
 // CONCATENATED MODULE: ./src/utils/node-matchers.js
 
 
@@ -2876,6 +3152,8 @@ function matchTable(node, delta, scroll) {
 
 
 
+
+
  // import table node matchers
 
 
@@ -2896,6 +3174,9 @@ class quill_better_table_BetterTable extends Module {
     external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true);
     external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register(table_TableViewWrapper, true); // register customized Header，overwriting quill built-in Header
     // Quill.register('formats/header', Header, true);
+
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register('themes/better-table-snow', better_table_snow, true);
+    external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.register('ui/table-picker', table_picker, true);
   }
 
   constructor(quill, options) {
@@ -2951,12 +3232,12 @@ class quill_better_table_BetterTable extends Module {
           cell: cellNode,
           left: evt.pageX,
           top: evt.pageY
-        }, quill, options.operationMenu);
+        }, quill, options.operationMenu || {});
       }
     }, false); // add keyboard binding：Backspace
     // prevent user hits backspace to delete table cell
+    // const KeyBoard = quill.getModule('keyboard')
 
-    const KeyBoard = quill.getModule('keyboard');
     quill.keyboard.addBinding({
       key: 'Backspace'
     }, {}, function (range, context) {
@@ -2988,10 +3269,16 @@ class quill_better_table_BetterTable extends Module {
     quill.clipboard.matchers = quill.clipboard.matchers.filter(matcher => {
       return matcher[0] !== 'tr';
     });
+    const toolbar = quill.getModule('toolbar');
+    const input = toolbar.container.querySelector('select.ql-better-table');
+
+    if (toolbar && input) {
+      toolbar.addHandler('better-table', this.insertTable);
+      toolbar.attach(input);
+    }
   }
 
-  getTable() {
-    let range = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.quill.getSelection();
+  getTable(range = this.quill.getSelection()) {
     if (range == null) return [null, null, null, -1];
     const [cellLine, offset] = this.quill.getLine(range.index);
 
@@ -3006,6 +3293,16 @@ class quill_better_table_BetterTable extends Module {
   }
 
   insertTable(rows, columns) {
+    if (!columns) {
+      if (rows.match(/^\d+x\d+$/)) {
+        let tmp = rows.split('x');
+        columns = parseInt(tmp[0]);
+        rows = parseInt(tmp[1]);
+      } else {
+        return;
+      }
+    }
+
     const range = this.quill.getSelection(true);
     if (range == null) return;
     let currentBlot = this.quill.getLeaf(range.index)[0];
@@ -3068,12 +3365,7 @@ quill_better_table_BetterTable.keyboardBindings = {
 
     handler(range, context) {
       const [line, offset] = this.quill.getLine(range.index);
-
-      if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
-        return false;
-      }
-
-      return true;
+      return !(!line.prev || line.prev.statics.blotName !== 'table-cell-line');
     }
 
   },
@@ -3224,11 +3516,11 @@ function isInTableCell(current) {
 /* harmony default export */ var quill_better_table = __webpack_exports__["default"] = (quill_better_table_BetterTable);
 
 /***/ }),
-/* 11 */,
-/* 12 */
+/* 12 */,
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(10);
+module.exports = __webpack_require__(11);
 
 
 /***/ })
