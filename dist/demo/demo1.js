@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "588c3dfdf392f1061188";
+/******/ 	var hotCurrentHash = "1b0e2a34d0e3d2fc104c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1563,8 +1563,8 @@ class TableCellLine extends table_Block {
 }
 
 TableCellLine.blotName = "table-cell-line";
-TableCellLine.ClassName = "qlbt-cell-line";
-TableCellLine.tagName = "DIV";
+TableCellLine.className = "qlbt-cell-line";
+TableCellLine.tagName = "P";
 
 class TableCell extends Container {
   checkMerge() {
@@ -3236,8 +3236,8 @@ class quill_better_table_BetterTable extends Module {
       }
     }, false); // add keyboard binding：Backspace
     // prevent user hits backspace to delete table cell
+    // const KeyBoard = quill.getModule('keyboard')
 
-    const KeyBoard = quill.getModule('keyboard');
     quill.keyboard.addBinding({
       key: 'Backspace'
     }, {}, function (range, context) {
@@ -3365,12 +3365,7 @@ quill_better_table_BetterTable.keyboardBindings = {
 
     handler(range, context) {
       const [line, offset] = this.quill.getLine(range.index);
-
-      if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
-        return false;
-      }
-
-      return true;
+      return !(!line.prev || line.prev.statics.blotName !== 'table-cell-line');
     }
 
   },
