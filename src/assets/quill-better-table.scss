@@ -159,8 +159,23 @@ table.quill-better-table {
 }
 
 .ql-snow {
-  .ql-table-picker {
+  .ql-picker.ql-table-picker {
     width: 28px;
+    
+    .ql-picker-label {
+      border: none;
+      padding: 0;
+
+      svg {
+        float: left;
+        height: 100%;
+        margin-top: auto;
+        position: static;
+        right: auto;
+        top: auto;
+        width: auto;
+      }
+    }
 
     .ql-picker-options {
       padding: 3px 5px;

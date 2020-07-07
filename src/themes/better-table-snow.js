@@ -1,6 +1,8 @@
-import SnowTheme from "quill/themes/snow";
-import TablePicker from "../ui/table-picker";
-import extend from "extend";
+import Quill from 'quill';
+import TablePicker from '../ui/table-picker';
+import extend from 'extend';
+
+const SnowTheme = Quill.import('themes/snow');
 
 class BetterTableSnowTheme extends SnowTheme {
     constructor(quill, options) {

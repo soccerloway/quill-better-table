@@ -1,4 +1,3 @@
-import extend from 'extend';
 import Quill from 'quill'
 import TableColumnTool from './modules/table-column-tool'
 import TableSelection from './modules/table-selection'
@@ -126,13 +125,13 @@ class BetterTable extends Module {
           cell: cellNode,
           left: evt.pageX,
           top: evt.pageY
-        }, quill, options.operationMenu)
+        }, quill, options.operationMenu || {})
       }
     }, false)
 
     // add keyboard binding：Backspace
     // prevent user hits backspace to delete table cell
-    const KeyBoard = quill.getModule('keyboard')
+    // const KeyBoard = quill.getModule('keyboard')
     quill.keyboard.addBinding(
       { key: 'Backspace' },
       {},
@@ -167,8 +166,10 @@ class BetterTable extends Module {
     })
 
     const toolbar = quill.getModule('toolbar');
-    if (toolbar) {
+    const input = toolbar.container.querySelector('select.ql-better-table');
+    if (toolbar && input) {
       toolbar.addHandler('better-table', this.insertTable);
+      toolbar.attach(input);
     }
   }
 
@@ -188,8 +189,8 @@ class BetterTable extends Module {
     if (!columns) {
       if (rows.match(/^\d+x\d+$/)) {
         let tmp = rows.split('x');
-        columns = tmp[0];
-        rows = tmp[1];
+        columns = parseInt(tmp[0]);
+        rows = parseInt(tmp[1]);
       } else {
         return;
       }
@@ -249,10 +250,7 @@ BetterTable.keyboardBindings = {
     offset: 0,
     handler(range, context) {
       const [line, offset] = this.quill.getLine(range.index)
-      if (!line.prev || line.prev.statics.blotName !== 'table-cell-line') {
-        return false
-      }
-      return true
+      return !(!line.prev || line.prev.statics.blotName !== 'table-cell-line');
     },
   },
 
