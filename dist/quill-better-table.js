@@ -1694,7 +1694,7 @@ class table_TableContainer extends Container {
 
 
     delIndexes.forEach(delIndex => {
-      this.colGroup().children.at(delIndexes[0]).remove();
+      this.colGroup().children.at(delIndex).remove();
     });
     removedCells.forEach(cell => {
       cell.remove();
