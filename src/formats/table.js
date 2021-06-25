@@ -122,6 +122,7 @@ class TableCell extends Container {
   }
 
   static create(value) {
+    console.log('create tablecell with value', value);
     const node = super.create(value)
     node.setAttribute("data-row", value.row)
 
@@ -134,6 +135,10 @@ class TableCell extends Container {
     if (value['cell-bg']) {
       node.setAttribute('data-cell-bg', value['cell-bg'])
       node.style.backgroundColor = value['cell-bg']
+    }
+
+    if(value['cell-border']){
+      node.setAttribute('data-cell-border', value['cell-border'])
     }
 
     return node
