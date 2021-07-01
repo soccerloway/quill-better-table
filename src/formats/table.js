@@ -35,6 +35,10 @@ class TableCellLine extends Block {
     if (value['cell-bg']) {
       node.setAttribute('data-cell-bg', value['cell-bg'])
     }
+    
+    if (value['cell-border']) {
+      node.setAttribute('data-cell-border', value['cell-border'])
+    }
 
     return node
   }
@@ -42,7 +46,7 @@ class TableCellLine extends Block {
   static formats(domNode) {
     const formats = {}
 
-    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg']).reduce((formats, attribute) => {
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
         formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined
       }
@@ -62,6 +66,12 @@ class TableCellLine extends Block {
         this.domNode.setAttribute('data-cell-bg', value)
       } else {
         this.domNode.removeAttribute('data-cell-bg')
+      }
+    } else if (name === 'cell-border') {
+      if (value) {
+        this.domNode.setAttribute('data-cell-border', value)
+      } else {
+        this.domNode.removeAttribute('data-cell-border')
       }
     } else if (name === 'header') {
       if (!value) return;
@@ -85,13 +95,15 @@ class TableCellLine extends Block {
     const rowspan = this.domNode.getAttribute('data-rowspan')
     const colspan = this.domNode.getAttribute('data-colspan')
     const cellBg = this.domNode.getAttribute('data-cell-bg')
+    const cellBorder = this.domNode.getAttribute('data-cell-border')
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         colspan,
         rowspan,
-        'cell-bg': cellBg
+        'cell-bg': cellBg,
+        'cell-border': cellBorder
       })
     }
     super.optimize(context)
@@ -137,7 +149,7 @@ class TableCell extends Container {
       node.style.backgroundColor = value['cell-bg']
     }
 
-    if(value['cell-border']){
+    if (value['cell-border']) {
       node.setAttribute('data-cell-border', value['cell-border'])
     }
 
@@ -153,6 +165,10 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = domNode.getAttribute("data-cell-bg")
+    }
+
+    if (domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = domNode.getAttribute("data-cell-border")
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -180,6 +196,10 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = this.domNode.getAttribute("data-cell-bg")
+    }
+
+    if (this.domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = this.domNode.getAttribute("data-cell-border")
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -221,6 +241,9 @@ class TableCell extends Container {
       } else {
         this.domNode.style.backgroundColor = 'initial'
       }
+    } else if (name === 'cell-border'){
+      this.toggleAttribute('data-cell-border', value)
+      this.formatChildren(name, value)
     } else {
       super.format(name, value)
     }
