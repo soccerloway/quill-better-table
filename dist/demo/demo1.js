@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "ced44c7892a78034ffe4";
+/******/ 	var hotCurrentHash = "81ae6e0616c1987a997e";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -166,6 +166,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			_declinedDependencies: {},
 /******/ 			_selfAccepted: false,
 /******/ 			_selfDeclined: false,
+/******/ 			_selfInvalidated: false,
 /******/ 			_disposeHandlers: [],
 /******/ 			_main: hotCurrentChildModule !== moduleId,
 /******/
@@ -195,6 +196,29 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			removeDisposeHandler: function(callback) {
 /******/ 				var idx = hot._disposeHandlers.indexOf(callback);
 /******/ 				if (idx >= 0) hot._disposeHandlers.splice(idx, 1);
+/******/ 			},
+/******/ 			invalidate: function() {
+/******/ 				this._selfInvalidated = true;
+/******/ 				switch (hotStatus) {
+/******/ 					case "idle":
+/******/ 						hotUpdate = {};
+/******/ 						hotUpdate[moduleId] = modules[moduleId];
+/******/ 						hotSetStatus("ready");
+/******/ 						break;
+/******/ 					case "ready":
+/******/ 						hotApplyInvalidatedModule(moduleId);
+/******/ 						break;
+/******/ 					case "prepare":
+/******/ 					case "check":
+/******/ 					case "dispose":
+/******/ 					case "apply":
+/******/ 						(hotQueuedInvalidatedModules =
+/******/ 							hotQueuedInvalidatedModules || []).push(moduleId);
+/******/ 						break;
+/******/ 					default:
+/******/ 						// ignore requests in error states
+/******/ 						break;
+/******/ 				}
 /******/ 			},
 /******/
 /******/ 			// Management API
@@ -237,7 +261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	var hotDeferred;
 /******/
 /******/ 	// The update info
-/******/ 	var hotUpdate, hotUpdateNewHash;
+/******/ 	var hotUpdate, hotUpdateNewHash, hotQueuedInvalidatedModules;
 /******/
 /******/ 	function toModuleId(id) {
 /******/ 		var isNumber = +id + "" === id;
@@ -252,7 +276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		hotSetStatus("check");
 /******/ 		return hotDownloadManifest(hotRequestTimeout).then(function(update) {
 /******/ 			if (!update) {
-/******/ 				hotSetStatus("idle");
+/******/ 				hotSetStatus(hotApplyInvalidatedModules() ? "ready" : "idle");
 /******/ 				return null;
 /******/ 			}
 /******/ 			hotRequestedFilesMap = {};
@@ -271,7 +295,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			var chunkId = 0;
 /******/ 			// eslint-disable-next-line no-lone-blocks
 /******/ 			{
-/******/ 				/*globals chunkId */
 /******/ 				hotEnsureUpdateChunk(chunkId);
 /******/ 			}
 /******/ 			if (
@@ -346,6 +369,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		if (hotStatus !== "ready")
 /******/ 			throw new Error("apply() is only allowed in ready status");
 /******/ 		options = options || {};
+/******/ 		return hotApplyInternal(options);
+/******/ 	}
+/******/
+/******/ 	function hotApplyInternal(options) {
+/******/ 		hotApplyInvalidatedModules();
 /******/
 /******/ 		var cb;
 /******/ 		var i;
@@ -368,7 +396,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				var moduleId = queueItem.id;
 /******/ 				var chain = queueItem.chain;
 /******/ 				module = installedModules[moduleId];
-/******/ 				if (!module || module.hot._selfAccepted) continue;
+/******/ 				if (
+/******/ 					!module ||
+/******/ 					(module.hot._selfAccepted && !module.hot._selfInvalidated)
+/******/ 				)
+/******/ 					continue;
 /******/ 				if (module.hot._selfDeclined) {
 /******/ 					return {
 /******/ 						type: "self-declined",
@@ -536,10 +568,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 				installedModules[moduleId] &&
 /******/ 				installedModules[moduleId].hot._selfAccepted &&
 /******/ 				// removed self-accepted modules should not be required
-/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire
+/******/ 				appliedUpdate[moduleId] !== warnUnexpectedRequire &&
+/******/ 				// when called invalidate self-accepting is not possible
+/******/ 				!installedModules[moduleId].hot._selfInvalidated
 /******/ 			) {
 /******/ 				outdatedSelfAcceptedModules.push({
 /******/ 					module: moduleId,
+/******/ 					parents: installedModules[moduleId].parents.slice(),
 /******/ 					errorHandler: installedModules[moduleId].hot._selfAccepted
 /******/ 				});
 /******/ 			}
@@ -612,7 +647,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		// Now in "apply" phase
 /******/ 		hotSetStatus("apply");
 /******/
-/******/ 		hotCurrentHash = hotUpdateNewHash;
+/******/ 		if (hotUpdateNewHash !== undefined) {
+/******/ 			hotCurrentHash = hotUpdateNewHash;
+/******/ 			hotUpdateNewHash = undefined;
+/******/ 		}
+/******/ 		hotUpdate = undefined;
 /******/
 /******/ 		// insert new code
 /******/ 		for (moduleId in appliedUpdate) {
@@ -665,7 +704,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		for (i = 0; i < outdatedSelfAcceptedModules.length; i++) {
 /******/ 			var item = outdatedSelfAcceptedModules[i];
 /******/ 			moduleId = item.module;
-/******/ 			hotCurrentParents = [moduleId];
+/******/ 			hotCurrentParents = item.parents;
+/******/ 			hotCurrentChildModule = moduleId;
 /******/ 			try {
 /******/ 				__webpack_require__(moduleId);
 /******/ 			} catch (err) {
@@ -707,10 +747,33 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 			return Promise.reject(error);
 /******/ 		}
 /******/
+/******/ 		if (hotQueuedInvalidatedModules) {
+/******/ 			return hotApplyInternal(options).then(function(list) {
+/******/ 				outdatedModules.forEach(function(moduleId) {
+/******/ 					if (list.indexOf(moduleId) < 0) list.push(moduleId);
+/******/ 				});
+/******/ 				return list;
+/******/ 			});
+/******/ 		}
+/******/
 /******/ 		hotSetStatus("idle");
 /******/ 		return new Promise(function(resolve) {
 /******/ 			resolve(outdatedModules);
 /******/ 		});
+/******/ 	}
+/******/
+/******/ 	function hotApplyInvalidatedModules() {
+/******/ 		if (hotQueuedInvalidatedModules) {
+/******/ 			if (!hotUpdate) hotUpdate = {};
+/******/ 			hotQueuedInvalidatedModules.forEach(hotApplyInvalidatedModule);
+/******/ 			hotQueuedInvalidatedModules = undefined;
+/******/ 			return true;
+/******/ 		}
+/******/ 	}
+/******/
+/******/ 	function hotApplyInvalidatedModule(moduleId) {
+/******/ 		if (!Object.prototype.hasOwnProperty.call(hotUpdate, moduleId))
+/******/ 			hotUpdate[moduleId] = modules[moduleId];
 /******/ 	}
 /******/
 /******/ 	// The module cache
@@ -869,6 +932,7 @@ module.exports = "<?xml version=\"1.0\" standalone=\"no\"?><!doctype html><svg c
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXTERNAL MODULE: external {"commonjs":"quill","commonjs2":"quill","amd":"quill","root":"Quill"}
@@ -1001,10 +1065,10 @@ class table_column_tool_TableColumnTool {
     this.updateToolCells();
     parent.appendChild(this.domNode);
     css(this.domNode, {
-      width: "".concat(tableViewRect.width, "px"),
-      height: "".concat(COL_TOOL_HEIGHT, "px"),
-      left: "".concat(tableViewRect.left - containerRect.left + parent.scrollLeft, "px"),
-      top: "".concat(tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5, "px")
+      width: `${tableViewRect.width}px`,
+      height: `${COL_TOOL_HEIGHT}px`,
+      left: `${tableViewRect.left - containerRect.left + parent.scrollLeft}px`,
+      top: `${tableViewRect.top - containerRect.top + parent.scrollTop - COL_TOOL_HEIGHT - 5}px`
     });
   }
 
@@ -1014,7 +1078,7 @@ class table_column_tool_TableColumnTool {
     const resizeHolder = document.createElement('div');
     resizeHolder.classList.add('qlbt-col-tool-cell-holder');
     css(toolCell, {
-      'height': "".concat(COL_TOOL_CELL_HEIGHT, "px")
+      'height': `${COL_TOOL_CELL_HEIGHT}px`
     });
     toolCell.appendChild(resizeHolder);
     return toolCell;
@@ -1039,7 +1103,7 @@ class table_column_tool_TableColumnTool {
         this.addColCellHolderHandler(toolCell); // set tool cell min-width
 
         css(toolCell, {
-          'min-width': "".concat(colWidth, "px")
+          'min-width': `${colWidth}px`
         });
       } else if (existCells[index] && index >= cellsNumber) {
         existCells[index].remove();
@@ -1047,7 +1111,7 @@ class table_column_tool_TableColumnTool {
         toolCell = existCells[index]; // set tool cell min-width
 
         css(toolCell, {
-          'min-width': "".concat(colWidth, "px")
+          'min-width': `${colWidth}px`
         });
       }
     }
@@ -1084,7 +1148,7 @@ class table_column_tool_TableColumnTool {
         }
 
         css($helpLine, {
-          'left': "".concat(cellRect.left + cellRect.width - 1 + delta, "px")
+          'left': `${cellRect.left + cellRect.width - 1 + delta}px`
         });
       }
     };
@@ -1098,7 +1162,7 @@ class table_column_tool_TableColumnTool {
       if (dragging) {
         colBlot.format('width', width0 + delta);
         css(cell, {
-          'min-width': "".concat(width0 + delta, "px")
+          'min-width': `${width0 + delta}px`
         });
         x0 = 0;
         x = 0;
@@ -1127,10 +1191,10 @@ class table_column_tool_TableColumnTool {
       $helpLine = document.createElement('div');
       css($helpLine, {
         position: 'fixed',
-        top: "".concat(cellRect.top, "px"),
-        left: "".concat(cellRect.left + cellRect.width - 1, "px"),
+        top: `${cellRect.top}px`,
+        left: `${cellRect.left + cellRect.width - 1}px`,
         zIndex: '100',
-        height: "".concat(tableRect.height + COL_TOOL_HEIGHT + 4, "px"),
+        height: `${tableRect.height + COL_TOOL_HEIGHT + 4}px`,
         width: '1px',
         backgroundColor: PRIMARY_COLOR
       });
@@ -1172,10 +1236,10 @@ class header_Header extends Block {
 
     const node = super.create(value.value);
     CELL_IDENTITY_KEYS.forEach(key => {
-      if (value[key]) node.setAttribute("data-".concat(key), value[key]);
+      if (value[key]) node.setAttribute(`data-${key}`, value[key]);
     });
     CELL_ATTRIBUTES.forEach(key => {
-      if (value[key]) node.setAttribute("data-".concat(key), value[key]);
+      if (value[key]) node.setAttribute(`data-${key}`, value[key]);
     });
     return node;
   }
@@ -1184,8 +1248,8 @@ class header_Header extends Block {
     const formats = {};
     formats.value = this.tagName.indexOf(domNode.tagName) + 1;
     return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).reduce((formats, attribute) => {
-      if (domNode.hasAttribute("data-".concat(attribute))) {
-        formats[attribute] = domNode.getAttribute("data-".concat(attribute)) || undefined;
+      if (domNode.hasAttribute(`data-${attribute}`)) {
+        formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined;
       }
 
       return formats;
@@ -1291,14 +1355,18 @@ class TableCellLine extends table_Block {
     const node = super.create(value);
     CELL_IDENTITY_KEYS.forEach(key => {
       let identityMaker = key === 'row' ? table_rowId : table_cellId;
-      node.setAttribute("data-".concat(key), value[key] || identityMaker());
+      node.setAttribute(`data-${key}`, value[key] || identityMaker());
     });
     CELL_ATTRIBUTES.forEach(attrName => {
-      node.setAttribute("data-".concat(attrName), value[attrName] || CELL_DEFAULT[attrName]);
+      node.setAttribute(`data-${attrName}`, value[attrName] || CELL_DEFAULT[attrName]);
     });
 
     if (value['cell-bg']) {
       node.setAttribute('data-cell-bg', value['cell-bg']);
+    }
+
+    if (value['cell-border']) {
+      node.setAttribute('data-cell-border', value['cell-border']);
     }
 
     return node;
@@ -1306,9 +1374,9 @@ class TableCellLine extends table_Block {
 
   static formats(domNode) {
     const formats = {};
-    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg']).reduce((formats, attribute) => {
-      if (domNode.hasAttribute("data-".concat(attribute))) {
-        formats[attribute] = domNode.getAttribute("data-".concat(attribute)) || undefined;
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
+      if (domNode.hasAttribute(`data-${attribute}`)) {
+        formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined;
       }
 
       return formats;
@@ -1318,15 +1386,21 @@ class TableCellLine extends table_Block {
   format(name, value) {
     if (CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).indexOf(name) > -1) {
       if (value) {
-        this.domNode.setAttribute("data-".concat(name), value);
+        this.domNode.setAttribute(`data-${name}`, value);
       } else {
-        this.domNode.removeAttribute("data-".concat(name));
+        this.domNode.removeAttribute(`data-${name}`);
       }
     } else if (name === 'cell-bg') {
       if (value) {
         this.domNode.setAttribute('data-cell-bg', value);
       } else {
         this.domNode.removeAttribute('data-cell-bg');
+      }
+    } else if (name === 'cell-border') {
+      if (value) {
+        this.domNode.setAttribute('data-cell-border', value);
+      } else {
+        this.domNode.removeAttribute('data-cell-border');
       }
     } else if (name === 'header') {
       if (!value) return;
@@ -1355,13 +1429,15 @@ class TableCellLine extends table_Block {
     const rowspan = this.domNode.getAttribute('data-rowspan');
     const colspan = this.domNode.getAttribute('data-colspan');
     const cellBg = this.domNode.getAttribute('data-cell-bg');
+    const cellBorder = this.domNode.getAttribute('data-cell-border');
 
     if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         colspan,
         rowspan,
-        'cell-bg': cellBg
+        'cell-bg': cellBg,
+        'cell-border': cellBorder
       });
     }
 
@@ -1392,6 +1468,7 @@ class TableCell extends Container {
   }
 
   static create(value) {
+    console.log('create tablecell with value', value);
     const node = super.create(value);
     node.setAttribute("data-row", value.row);
     CELL_ATTRIBUTES.forEach(attrName => {
@@ -1403,6 +1480,10 @@ class TableCell extends Container {
     if (value['cell-bg']) {
       node.setAttribute('data-cell-bg', value['cell-bg']);
       node.style.backgroundColor = value['cell-bg'];
+    }
+
+    if (value['cell-border']) {
+      node.setAttribute('data-cell-border', value['cell-border']);
     }
 
     return node;
@@ -1417,6 +1498,10 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = domNode.getAttribute("data-cell-bg");
+    }
+
+    if (domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = domNode.getAttribute("data-cell-border");
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -1447,6 +1532,10 @@ class TableCell extends Container {
       formats["cell-bg"] = this.domNode.getAttribute("data-cell-bg");
     }
 
+    if (this.domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = this.domNode.getAttribute("data-cell-border");
+    }
+
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
       if (this.domNode.hasAttribute(attribute)) {
         formats[attribute] = this.domNode.getAttribute(attribute);
@@ -1475,7 +1564,7 @@ class TableCell extends Container {
       this.toggleAttribute(name, value);
       this.formatChildren(name, value);
     } else if (['row'].indexOf(name) > -1) {
-      this.toggleAttribute("data-".concat(name), value);
+      this.toggleAttribute(`data-${name}`, value);
       this.formatChildren(name, value);
     } else if (name === 'cell-bg') {
       this.toggleAttribute('data-cell-bg', value);
@@ -1486,6 +1575,9 @@ class TableCell extends Container {
       } else {
         this.domNode.style.backgroundColor = 'initial';
       }
+    } else if (name === 'cell-border') {
+      this.toggleAttribute('data-cell-border', value);
+      this.formatChildren(name, value);
     } else {
       super.format(name, value);
     }
@@ -1545,8 +1637,8 @@ class TableRow extends Container {
 
   formats() {
     return ["row"].reduce((formats, attrName) => {
-      if (this.domNode.hasAttribute("data-".concat(attrName))) {
-        formats[attrName] = this.domNode.getAttribute("data-".concat(attrName));
+      if (this.domNode.hasAttribute(`data-${attrName}`)) {
+        formats[attrName] = this.domNode.getAttribute(`data-${attrName}`);
       }
 
       return formats;
@@ -1601,15 +1693,15 @@ class TableCol extends table_Block {
   static create(value) {
     let node = super.create(value);
     COL_ATTRIBUTES.forEach(attrName => {
-      node.setAttribute("".concat(attrName), value[attrName] || COL_DEFAULT[attrName]);
+      node.setAttribute(`${attrName}`, value[attrName] || COL_DEFAULT[attrName]);
     });
     return node;
   }
 
   static formats(domNode) {
     return COL_ATTRIBUTES.reduce((formats, attribute) => {
-      if (domNode.hasAttribute("".concat(attribute))) {
-        formats[attribute] = domNode.getAttribute("".concat(attribute)) || undefined;
+      if (domNode.hasAttribute(`${attribute}`)) {
+        formats[attribute] = domNode.getAttribute(`${attribute}`) || undefined;
       }
 
       return formats;
@@ -1618,7 +1710,7 @@ class TableCol extends table_Block {
 
   format(name, value) {
     if (COL_ATTRIBUTES.indexOf(name) > -1) {
-      this.domNode.setAttribute("".concat(name), value || COL_DEFAULT[name]);
+      this.domNode.setAttribute(`${name}`, value || COL_DEFAULT[name]);
     } else {
       super.format(name, value);
     }
@@ -1657,7 +1749,7 @@ class table_TableContainer extends Container {
         sumWidth = sumWidth + parseInt(col.formats()[TableCol.blotName].width, 10);
         return sumWidth;
       }, 0);
-      this.domNode.style.width = "".concat(tableWidth, "px");
+      this.domNode.style.width = `${tableWidth}px`;
     }, 0);
   }
 
@@ -1669,9 +1761,7 @@ class table_TableContainer extends Container {
     return this.children.head;
   }
 
-  deleteColumns(compareRect) {
-    let delIndexes = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    let editorWrapper = arguments.length > 2 ? arguments[2] : undefined;
+  deleteColumns(compareRect, delIndexes = [], editorWrapper) {
     const [body] = this.descendants(TableBody);
     if (body == null || body.children.head == null) return;
     const tableCells = this.descendants(TableCell);
@@ -1808,9 +1898,7 @@ class table_TableContainer extends Container {
     }
   }
 
-  insertColumn(compareRect, colIndex) {
-    let isRight = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-    let editorWrapper = arguments.length > 3 ? arguments[3] : undefined;
+  insertColumn(compareRect, colIndex, isRight = true, editorWrapper) {
     const [body] = this.descendants(TableBody);
     const [tableColGroup] = this.descendants(TableColGroup);
     const tableCols = this.descendants(TableCol);
@@ -2094,12 +2182,12 @@ TableCol.requiredContainer = TableColGroup;
 
 function table_rowId() {
   const id = Math.random().toString(36).slice(2, 6);
-  return "row-".concat(id);
+  return `row-${id}`;
 }
 
 function table_cellId() {
   const id = Math.random().toString(36).slice(2, 6);
-  return "cell-".concat(id);
+  return `cell-${id}`;
 }
 
 
@@ -2224,30 +2312,30 @@ class table_selection_TableSelection {
     const tableViewScrollLeft = this.table.parentNode.scrollLeft;
     css(this.left, {
       display: 'block',
-      left: "".concat(this.boundary.x - tableViewScrollLeft - 1, "px"),
-      top: "".concat(this.boundary.y, "px"),
-      height: "".concat(this.boundary.height + 1, "px"),
+      left: `${this.boundary.x - tableViewScrollLeft - 1}px`,
+      top: `${this.boundary.y}px`,
+      height: `${this.boundary.height + 1}px`,
       width: '1px'
     });
     css(this.right, {
       display: 'block',
-      left: "".concat(this.boundary.x1 - tableViewScrollLeft, "px"),
-      top: "".concat(this.boundary.y, "px"),
-      height: "".concat(this.boundary.height + 1, "px"),
+      left: `${this.boundary.x1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y}px`,
+      height: `${this.boundary.height + 1}px`,
       width: '1px'
     });
     css(this.top, {
       display: 'block',
-      left: "".concat(this.boundary.x - 1 - tableViewScrollLeft, "px"),
-      top: "".concat(this.boundary.y, "px"),
-      width: "".concat(this.boundary.width + 1, "px"),
+      left: `${this.boundary.x - 1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y}px`,
+      width: `${this.boundary.width + 1}px`,
       height: '1px'
     });
     css(this.bottom, {
       display: 'block',
-      left: "".concat(this.boundary.x - 1 - tableViewScrollLeft, "px"),
-      top: "".concat(this.boundary.y1 + 1, "px"),
-      width: "".concat(this.boundary.width + 1, "px"),
+      left: `${this.boundary.x - 1 - tableViewScrollLeft}px`,
+      top: `${this.boundary.y1 + 1}px`,
+      width: `${this.boundary.width + 1}px`,
       height: '1px'
     });
   } // based on selectedTds compute positions of help lines
@@ -2540,20 +2628,19 @@ class table_operation_menu_TableOperationMenu {
     return null;
   }
 
-  menuInitial(_ref) {
-    let {
-      table,
-      left,
-      top
-    } = _ref;
+  menuInitial({
+    table,
+    left,
+    top
+  }) {
     this.domNode = document.createElement('div');
     this.domNode.classList.add('qlbt-operation-menu');
     css(this.domNode, {
       position: 'absolute',
-      left: "".concat(left, "px"),
-      top: "".concat(top, "px"),
-      'min-height': "".concat(MENU_MIN_HEIHGT, "px"),
-      width: "".concat(MENU_WIDTH, "px")
+      left: `${left}px`,
+      top: `${top}px`,
+      'min-height': `${MENU_MIN_HEIHGT}px`,
+      width: `${MENU_WIDTH}px`
     });
 
     for (let name in this.menuItems) {
@@ -2618,12 +2705,11 @@ class table_operation_menu_TableOperationMenu {
     return node;
   }
 
-  menuItemCreator(_ref2) {
-    let {
-      text,
-      iconSrc,
-      handler
-    } = _ref2;
+  menuItemCreator({
+    text,
+    iconSrc,
+    handler
+  }) {
     const node = document.createElement('div');
     node.classList.add('qlbt-operation-menu-item');
     const iconSpan = document.createElement('span');
@@ -2990,8 +3076,7 @@ class quill_better_table_BetterTable extends Module {
     });
   }
 
-  getTable() {
-    let range = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.quill.getSelection();
+  getTable(range = this.quill.getSelection()) {
     if (range == null) return [null, null, null, -1];
     const [cellLine, offset] = this.quill.getLine(range.index);
 
@@ -3012,7 +3097,7 @@ class quill_better_table_BetterTable extends Module {
     let delta = new quill_better_table_Delta().retain(range.index);
 
     if (isInTableCell(currentBlot)) {
-      console.warn("Can not insert table into a table cell.");
+      console.warn(`Can not insert table into a table cell.`);
       return;
     }
 
