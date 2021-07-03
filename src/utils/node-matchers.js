@@ -18,12 +18,13 @@ export function matchTableCell (node, delta, scroll) {
   const rowspan = node.getAttribute('rowspan') || false
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor // The td from external table has no 'data-cell-bg' 
   const cellBorder = node.getAttribute('data-cell-border') || 
-    (node.style && node.style.border && node.style.border.indexOf('fefefe') >= 0 ? 'none': undefined);
+    (node.style && node.style.borderColor && convertToHex(node.style.borderColor) ==='#FEFEFE' ? 'none': undefined);
 
+  console.log('calculated cellBorder', cellBorder);
   // bugfix: empty table cells copied from other place will be removed unexpectedly
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
-      'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan }
+      'table-cell-line': { row: rowId, cell: cellId, rowspan, colspan, 'cell-border':cellBorder }
     })
     return delta
   }
