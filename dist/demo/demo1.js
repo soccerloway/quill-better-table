@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "ea2e88dbe064133451e8";
+/******/ 	var hotCurrentHash = "7078847d86847c28bc06";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2791,7 +2791,8 @@ function matchTableCell(node, delta, scroll) {
   const colspan = node.getAttribute('colspan') || false;
   const rowspan = node.getAttribute('rowspan') || false;
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor; // The td from external table has no 'data-cell-bg' 
-  // bugfix: empty table cells copied from other place will be removed unexpectedly
+
+  const cellBorder = node.getAttribute('data-cell-border') || (node.style && node.style.border && node.style.border.indexOf('fefefe') >= 0 ? 'none' : undefined); // bugfix: empty table cells copied from other place will be removed unexpectedly
 
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
@@ -2845,7 +2846,8 @@ function matchTableCell(node, delta, scroll) {
           cell: cellId,
           rowspan,
           colspan,
-          'cell-bg': cellBg
+          'cell-bg': cellBg,
+          'cell-border': cellBorder
         }
       }, _omit(op.attributes, ['table'])));
     } else {
