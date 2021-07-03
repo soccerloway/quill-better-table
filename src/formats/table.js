@@ -156,6 +156,15 @@ class TableCell extends Container {
     return node
   }
 
+  static value(domNode) {
+    console.log('make value from ', domNode);
+    const value = {...domNode.dataset};
+    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
+      value["cell-border"] = 'none'; //this is customized for review and comment page
+    }
+    return value;
+  }
+  
   constructor(scroll, domNode, value){
     super(scroll, domNode);
     console.log('table cell constructor ', domNode, value);

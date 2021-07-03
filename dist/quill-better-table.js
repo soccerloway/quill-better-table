@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "e817703ea7dd92e498fe";
+/******/ 	var hotCurrentHash = "cd73ef7e34c0761945a3";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1487,6 +1487,18 @@ class TableCell extends Container {
     }
 
     return node;
+  }
+
+  static value(domNode) {
+    console.log('make value from ', domNode);
+    const value = { ...domNode.dataset
+    };
+
+    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
+      value["cell-border"] = 'none'; //this is customized for review and comment page
+    }
+
+    return value;
   }
 
   constructor(scroll, domNode, value) {
