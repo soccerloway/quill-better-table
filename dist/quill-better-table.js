@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7078847d86847c28bc06";
+/******/ 	var hotCurrentHash = "a9de8eb281d1acd67a59";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1373,34 +1373,15 @@ class TableCellLine extends table_Block {
     return node;
   }
 
-  static value(domNode) {
-    console.log('make value from ', domNode);
-    const value = { ...domNode.dataset
-    };
-
-    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
-      value["cell-border"] = 'none'; //this is customized for review and comment page
-    }
-
-    return value;
-  }
-
   static formats(domNode) {
-    console.log('static formats', domNode);
     const formats = {};
-    formats = CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
         formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined;
       }
 
       return formats;
     }, formats);
-
-    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
-      formats["cell-border"] = 'none'; //this is customized for review and comment page
-    }
-
-    return formats;
   }
 
   format(name, value) {
