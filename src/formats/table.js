@@ -20,6 +20,8 @@ const ERROR_LIMIT = 5
 
 class TableCellLine extends Block {
   static create(value) {
+    console.log('create tablecellline with value', value);
+
     const node = super.create(value)
 
     CELL_IDENTITY_KEYS.forEach(key => {
@@ -43,15 +45,33 @@ class TableCellLine extends Block {
     return node
   }
 
+
+  static value(domNode) {
+    console.log('make value from ', domNode);
+    const value = {...domNode.dataset};
+    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
+      value["cell-border"] = 'none'; //this is customized for review and comment page
+    }
+    return value;
+  }
+
   static formats(domNode) {
+    console.log('static formats', domNode);
+
     const formats = {}
 
-    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
+    formats = CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'cell-border']).reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
         formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined
       }
       return formats
-    }, formats)
+    }, formats);
+
+    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
+      formats["cell-border"] = 'none'; //this is customized for review and comment page
+    }
+
+    return formats;
   }
 
   format(name, value) {
@@ -134,7 +154,6 @@ class TableCell extends Container {
   }
 
   static create(value) {
-    console.log('create tablecell with value', value);
     const node = super.create(value)
     node.setAttribute("data-row", value.row)
 
@@ -154,20 +173,6 @@ class TableCell extends Container {
     }
 
     return node
-  }
-
-  static value(domNode) {
-    console.log('make value from ', domNode);
-    const value = {...domNode.dataset};
-    if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
-      value["cell-border"] = 'none'; //this is customized for review and comment page
-    }
-    return value;
-  }
-  
-  constructor(scroll, domNode, value){
-    super(scroll, domNode);
-    console.log('table cell constructor ', domNode, value);
   }
 
   static formats(domNode) {
