@@ -173,7 +173,7 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = domNode.getAttribute("data-cell-border")
-    }else if (domNode.style && domNode.style.indexOf('fefefe') >= 0) {
+    }else if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
       formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
@@ -206,7 +206,7 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = this.domNode.getAttribute("data-cell-border")
-    }else if (this.domNode.style && this.domNode.style.indexOf('fefefe') >= 0) {
+    }else if (this.domNode.style && this.domNode.style.border && this.domNode.style.border.indexOf('fefefe') >= 0) {
       formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
