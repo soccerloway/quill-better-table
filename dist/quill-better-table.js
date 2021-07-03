@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "d2691e653a3428f55941";
+/******/ 	var hotCurrentHash = "e817703ea7dd92e498fe";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1487,6 +1487,11 @@ class TableCell extends Container {
     }
 
     return node;
+  }
+
+  constructor(scroll, domNode, value) {
+    super(scroll, domNode);
+    console.log('table cell constructor ', domNode, value);
   }
 
   static formats(domNode) {

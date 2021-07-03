@@ -156,6 +156,11 @@ class TableCell extends Container {
     return node
   }
 
+  constructor(scroll, domNode, value){
+    super(scroll, domNode);
+    console.log('table cell constructor ', domNode, value);
+  }
+
   static formats(domNode) {
     const formats = {}
 
