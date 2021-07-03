@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "7b174f08c21f884d4c9d";
+/******/ 	var hotCurrentHash = "36b0f0cac5deaaf3ad7c";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2774,13 +2774,7 @@ function matchTableCell(node, delta, scroll) {
   const rowspan = node.getAttribute('rowspan') || false;
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor; // The td from external table has no 'data-cell-bg' 
 
-  const cellBorder = node.getAttribute('data-cell-border') || (node.style && node.style.borderColor && convertToHex(node.style.borderColor) === '#FEFEFE' ? 'none' : undefined) || 'none';
-
-  if (node.style && node.style.borderColor) {
-    console.log('borderColor', node.style.borderColor);
-    console.log('converted', convertToHex(node.style.borderColor));
-  } // bugfix: empty table cells copied from other place will be removed unexpectedly
-
+  const cellBorder = node.getAttribute('data-cell-border') || (node.style && node.style.borderColor && convertToHex(node.style.borderColor) === '#fefefe' ? 'none' : undefined); // bugfix: empty table cells copied from other place will be removed unexpectedly
 
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
