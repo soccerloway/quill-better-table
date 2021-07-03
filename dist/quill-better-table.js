@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "81ae6e0616c1987a997e";
+/******/ 	var hotCurrentHash = "2048db6adee61e3e681f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1504,6 +1504,12 @@ class TableCell extends Container {
       formats["cell-border"] = domNode.getAttribute("data-cell-border");
     }
 
+    if (domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = domNode.getAttribute("data-cell-border");
+    } else if (domNode.style && domNode.style.indexOf('fefefe') >= 0) {
+      formats["cell-border"] = 'none'; //this is customized for review and comment page
+    }
+
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
       if (domNode.hasAttribute(attribute)) {
         formats[attribute] = domNode.getAttribute(attribute);
@@ -1534,6 +1540,8 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = this.domNode.getAttribute("data-cell-border");
+    } else if (this.domNode.style && this.domNode.style.indexOf('fefefe') >= 0) {
+      formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
