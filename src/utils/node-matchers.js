@@ -5,6 +5,7 @@ const Delta = Quill.import('delta')
 
 // rebuild delta
 export function matchTableCell (node, delta, scroll) {
+  console.log('matching node ', node);
   const row = node.parentNode;
   const table = row.parentNode.tagName === 'TABLE'
     ? row.parentNode

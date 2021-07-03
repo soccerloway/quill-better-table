@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "a9de8eb281d1acd67a59";
+/******/ 	var hotCurrentHash = "76db839a5b3abaf48c4a";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2763,6 +2763,7 @@ function getColToolCellIndexesByBoundary(cells, boundary, conditionFn, container
 const Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta'); // rebuild delta
 
 function matchTableCell(node, delta, scroll) {
+  console.log('matching node ', node);
   const row = node.parentNode;
   const table = row.parentNode.tagName === 'TABLE' ? row.parentNode : row.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));
