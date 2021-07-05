@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "36b0f0cac5deaaf3ad7c";
+/******/ 	var hotCurrentHash = "be97bea329b1f39220c0";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -1352,7 +1352,6 @@ const ERROR_LIMIT = 5;
 
 class TableCellLine extends table_Block {
   static create(value) {
-    console.log('create tablecellline with value', value);
     const node = super.create(value);
     CELL_IDENTITY_KEYS.forEach(key => {
       let identityMaker = key === 'row' ? table_rowId : table_cellId;
@@ -1506,8 +1505,6 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = domNode.getAttribute("data-cell-border");
-    } else if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
-      formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -1540,8 +1537,6 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = this.domNode.getAttribute("data-cell-border");
-    } else if (this.domNode.style && this.domNode.style.border && this.domNode.style.border.indexOf('fefefe') >= 0) {
-      formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -2763,7 +2758,6 @@ function getColToolCellIndexesByBoundary(cells, boundary, conditionFn, container
 const Delta = external_commonjs_quill_commonjs2_quill_amd_quill_root_Quill_default.a.import('delta'); // rebuild delta
 
 function matchTableCell(node, delta, scroll) {
-  console.log('matching node ', node);
   const row = node.parentNode;
   const table = row.parentNode.tagName === 'TABLE' ? row.parentNode : row.parentNode.parentNode;
   const rows = Array.from(table.querySelectorAll('tr'));

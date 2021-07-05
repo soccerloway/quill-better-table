@@ -20,8 +20,6 @@ const ERROR_LIMIT = 5
 
 class TableCellLine extends Block {
   static create(value) {
-    console.log('create tablecellline with value', value);
-
     const node = super.create(value)
 
     CELL_IDENTITY_KEYS.forEach(key => {
@@ -174,8 +172,6 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = domNode.getAttribute("data-cell-border")
-    }else if (domNode.style && domNode.style.border && domNode.style.border.indexOf('fefefe') >= 0) {
-      formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -207,10 +203,8 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-border")) {
       formats["cell-border"] = this.domNode.getAttribute("data-cell-border")
-    }else if (this.domNode.style && this.domNode.style.border && this.domNode.style.border.indexOf('fefefe') >= 0) {
-      formats["cell-border"] = 'none'; //this is customized for review and comment page
     }
-
+    
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
       if (this.domNode.hasAttribute(attribute)) {
         formats[attribute] = this.domNode.getAttribute(attribute)
