@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "be97bea329b1f39220c0";
+/******/ 	var hotCurrentHash = "e1712f28e02eec8e7da4";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -2768,7 +2768,7 @@ function matchTableCell(node, delta, scroll) {
   const rowspan = node.getAttribute('rowspan') || false;
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor; // The td from external table has no 'data-cell-bg' 
 
-  const cellBorder = node.getAttribute('data-cell-border') || (node.style && node.style.borderColor && convertToHex(node.style.borderColor) === '#fefefe' ? 'none' : undefined); // bugfix: empty table cells copied from other place will be removed unexpectedly
+  const cellBorder = node.getAttribute('data-cell-border') || (node.style && node.style.borderColor && convertToHex(node.style.borderColor) === '#fefefe' ? 'none' : undefined) || (node.style && node.style.borderTopColor && convertToHex(node.style.borderTopColor) === '#fefefe' ? 'none' : undefined) || (node.style && node.style.borderRightColor && convertToHex(node.style.borderRightColor) === '#fefefe' ? 'none' : undefined) || (node.style && node.style.borderBottomColor && convertToHex(node.style.borderBottomColor) === '#fefefe' ? 'none' : undefined) || (node.style && node.style.borderLeftColor && convertToHex(node.style.borderLeftColor) === '#fefefe' ? 'none' : undefined); // bugfix: empty table cells copied from other place will be removed unexpectedly
 
   if (delta.length() === 0) {
     delta = new Delta().insert('\n', {
