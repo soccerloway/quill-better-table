@@ -16,12 +16,9 @@ export function matchTableCell (node, delta, scroll) {
   const colspan = node.getAttribute('colspan') || false
   const rowspan = node.getAttribute('rowspan') || false
   const cellBg = node.getAttribute('data-cell-bg') || node.style.backgroundColor // The td from external table has no 'data-cell-bg' 
+  const borderColor = node.style && (node.style.borderColor || node.style.borderTopColor || node.style.borderRightColor || node.style.borderBottomColor || node.style.borderLeftColor);
   const cellBorder = node.getAttribute('data-cell-border') || 
-    (node.style && node.style.borderColor && convertToHex(node.style.borderColor) === '#fefefe' ? 'none': undefined) || 
-    (node.style && node.style.borderTopColor && convertToHex(node.style.borderTopColor) === '#fefefe' ? 'none': undefined) || 
-    (node.style && node.style.borderRightColor && convertToHex(node.style.borderRightColor) === '#fefefe' ? 'none': undefined) || 
-    (node.style && node.style.borderBottomColor && convertToHex(node.style.borderBottomColor) === '#fefefe' ? 'none': undefined) || 
-    (node.style && node.style.borderLeftColor && convertToHex(node.style.borderLeftColor) === '#fefefe' ? 'none': undefined);
+    (borderColor &&  convertToHex(borderColor) === '#fefefe' ? 'none': undefined);
   
   // bugfix: empty table cells copied from other place will be removed unexpectedly
   if (delta.length() === 0) {
