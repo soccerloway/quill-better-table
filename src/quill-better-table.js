@@ -131,6 +131,11 @@ class BetterTable extends Module {
       { key: 'Backspace' },
       {},
       function (range, context) {
+        // 匹配极端情况下 ol 元素在第一个 导致无法删除的情况 这种情况下手动删除
+        if (range.index === 0 && range.length === 0 && this.quill.getLength() === 1 && context?.format?.list) {
+          this.quill.deleteText(0, 1);
+        }
+
         if (range.index === 0 || this.quill.getLength() <= 1) return true;
         const [line] = this.quill.getLine(range.index);
         if (context.offset === 0) {
