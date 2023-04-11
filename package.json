@@ -1,5 +1,5 @@
 {
-  "name": "quill-better-table",
+  "name": "@mild-blue/quill-better-table",
   "version": "1.2.10",
   "description": "Module for better table in Quill, more useful features are supported.",
   "main": "dist/quill-better-table.js",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/soccerloway/quill-better-table.git"
+    "url": "git+https://github.com/mild-blue/quill-better-table.git"
   },
   "keywords": [
     "quill",
@@ -19,12 +19,12 @@
     "multiline",
     "quilltable"
   ],
-  "author": "soccerloway",
+  "author": "mild-blue",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/soccerloway/quill-better-table/issues"
+    "url": "https://github.com/mild-blue/quill-better-table/issues"
   },
-  "homepage": "https://github.com/soccerloway/quill-better-table#readme",
+  "homepage": "https://github.com/mild-blue/quill-better-table/#readme",
   "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.4.3",
