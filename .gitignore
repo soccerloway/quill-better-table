@@ -3,3 +3,4 @@ node_modules
 *-lock.json
 .DS_Store
 *.log
+.idea
