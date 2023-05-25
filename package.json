@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "webpack-dev-server --config webpack.config.js --mode=development",
     "build": "webpack --config webpack.config.js --mode=production --env.minimize; webpack --config webpack.config.js --mode=production; rm dist/quill-better-table;",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prettier-format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}'",
+    "prettier-check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.13.2"
+    "webpack-dev-server": "^4.13.2",
+    "prettier": "^2.8.3"
   }
 }

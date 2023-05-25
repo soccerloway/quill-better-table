@@ -1,10 +1,13 @@
 # quill-better-table
+
 A module for better table in Quill, more useful features are supported. There is a list of features below. Thanks [quilljs](https://quilljs.com/) for its awesome extensibility. Hope that quill-better-table could help you.
 
 # Online Demo
+
 [quill-better-table Codepen Demo](https://codepen.io/soccerloway/pen/WWJowj)
 
 # Updated v1.2.10
+
 <ul>
   <li>
     <p>Replace TableCellLine.tagName from `DIV` to `P`. Using `DIV` to implement TableCellLine led a copy/paste issue: <a href="https://github.com/soccerloway/quill-better-table/issues/50">Pasting plain text also changes to table format</a>. There are many more similar situations. When the user pastes the DIV tag into the editor, the DIV will be treated as a TableCellLine. Using `P` is more appropriate and fixes the mentioned issue. If this update caused any other new issues, tell me as soon as possible please, thanks！ Best wishes.</p>
@@ -12,6 +15,7 @@ A module for better table in Quill, more useful features are supported. There is
 </ul>
 
 # Features
+
 Clicking on tables in quill editor will initialize the tools for table, all features are based on it.
 
 <ul>
@@ -54,26 +58,32 @@ Clicking on tables in quill editor will initialize the tools for table, all feat
 </ul>
 
 # Requirements
+
 [quilljs](https://github.com/quilljs/quill) v2.0.0-dev.3
 
 Since I use webpack externals to bundle, you must expose `Quill` to window object, like load quill.js by script tag globally. Or you may need to fork this repo and build what you need.
 
 # Installation
+
 ```
 npm install quill-better-table
 ```
 
 # Usage
+
 Load quill and style dependencies
+
 ```
 <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.min.js" type="text/javascript"></script>
 ```
+
 ```
 <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.snow.min.css" rel="stylesheet">
 <link href="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.css" rel="stylesheet">
 ```
 
 ES6
+
 ```
 import QuillBetterTable from 'quill-better-table'
 
@@ -110,12 +120,17 @@ window.onload = () => {
 ```
 
 # Module methods
+
 first, you can get quill-better-table module by `quill.getModule`
+
 ```
 let module = quill.getModule('better-table')
 ```
+
 ## module.getTable(range = quill.getSelection())
+
 get an array with TableContainer, TableRow, TableCell, offset through the given range.
+
 ```
 module.getTable()  // current selection
 module.getTable(range)
@@ -123,13 +138,17 @@ module.getTable(range)
 ```
 
 ## module.insertTable(rows: Number, columns: Number)
+
 insert table at current position
+
 ```
 module.insertTable(3, 3)
 ```
 
 # Module Options
+
 quill-better-table only provide operation options now.
+
 ```
 const quill = new Quill('#editor', {
   theme: 'snow',
@@ -145,7 +164,7 @@ const quill = new Quill('#editor', {
         color: {
           colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors in operationMenu
           text: 'Background Colors'  // subtitle
-        } 
+        }
       }
     },
     keyboard: {
@@ -154,11 +173,15 @@ const quill = new Quill('#editor', {
   }
 })
 ```
+
 ## operationMenu
+
 OperationMenu configures the operation list in right-click menu.
 
 ## operationMenu.items
+
 operationMenu show all operations as default. `false` will remove the operation.
+
 ```
 {
   operationKey: {
@@ -168,7 +191,9 @@ operationMenu show all operations as default. `false` will remove the operation.
   operationKey: false
 }
 ```
+
 `operationKey` is the name of operation, there is a list below:
+
 <ul>
   <li>insertColumnRight</li>
   <li>insertColumnLeft</li>
@@ -184,16 +209,20 @@ operationMenu show all operations as default. `false` will remove the operation.
 You may need to modify the menu text, `operationKey.text` will do that.
 
 ## operationMenu.color
+
 Background colors is optional, the default is hidden. If you need this feature, use this configure.
+
 ```
 {
   colors: ['#fff', 'red', 'rgb(0, 0, 0)'],  // colors you need in operationMenu, ['white', 'red', 'yellow', 'blue'] as default
   text: 'Background Colors'  // subtitle, 'Background Colors' as default
-} 
+}
 ```
 
 # Community
+
 Send me an email(<a href="mailto: lw54760187@hotmail.com">lw54760187@hotmail.com</a>) or Contribute on [Issues](https://github.com/soccerloway/quill-better-table/issues), I glad to hear your suggestion.
 
 # License
+
 [MIT License](https://rmm5t.mit-license.org/)
