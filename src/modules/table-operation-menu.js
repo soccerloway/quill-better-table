@@ -17,6 +17,8 @@ const MENU_WIDTH = 200;
 const ERROR_LIMIT = 5;
 const DEFAULT_CELL_COLORS = ["white", "red", "yellow", "blue"];
 const DEFAULT_COLOR_SUBTITLE = "Background Colors";
+const DEFAULT_BORDER_WIDTH = ["0px", "1px", "2px"];
+const DEFAULT_BORDER_WIDTH_SUBTITLE = "Table border width";
 
 const MENU_ITEMS_DEFAULT = {
   insertColumnRight: {
@@ -218,6 +220,9 @@ export default class TableOperationMenu {
     this.columnToolCells = this.tableColumnTool.colToolCells();
     this.colorSubTitle = options.color && options.color.text ? options.color.text : DEFAULT_COLOR_SUBTITLE;
     this.cellColors = options.color && options.color.colors ? options.color.colors : DEFAULT_CELL_COLORS;
+    this.cellBorderWidth = options.border && options.border.widths ? options.border.widths : DEFAULT_BORDER_WIDTH;
+    this.cellBorderWidthSubTitle =
+      options.border && options.border.text ? options.border.text : DEFAULT_BORDER_WIDTH_SUBTITLE;
 
     this.menuInitial(params);
     this.mount();
@@ -264,6 +269,13 @@ export default class TableOperationMenu {
       this.domNode.appendChild(this.colorsItemCreator(this.cellColors));
     }
 
+    // if border option is false, disabled border
+    if (this.options.border && this.options.border !== false) {
+      this.domNode.appendChild(dividingCreator());
+      this.domNode.appendChild(subTitleCreator(this.cellBorderWidthSubTitle));
+      this.domNode.appendChild(this.setBorderWidth(this.cellBorderWidth));
+    }
+
     // create dividing line
     function dividingCreator() {
       const dividing = document.createElement("div");
@@ -303,6 +315,41 @@ export default class TableOperationMenu {
           if (selectedTds && selectedTds.length > 0) {
             selectedTds.forEach((tableCell) => {
               tableCell.format("cell-bg", color);
+            });
+          }
+        },
+        false
+      );
+
+      return box;
+    }
+
+    return node;
+  }
+
+  setBorderWidth(borderWidths) {
+    const self = this;
+    const node = document.createElement("div");
+    node.classList.add("qlbt-operation-border-width-picker");
+
+    borderWidths.forEach((width) => {
+      let widthOption = widthOptionCreator(width);
+      node.appendChild(widthOption);
+    });
+
+    function widthOptionCreator(width) {
+      const box = document.createElement("div");
+      box.classList.add("qlbt-operation-border-width-picker-item");
+      box.innerText = width;
+      box.setAttribute("data-border-width", width);
+
+      box.addEventListener(
+        "click",
+        function () {
+          const allTds = self.tableSelection.allTds;
+          if (allTds && allTds.length > 0) {
+            allTds.forEach((tableCell) => {
+              tableCell.format("cell-border", width);
             });
           }
         },

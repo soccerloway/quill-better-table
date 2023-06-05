@@ -79,6 +79,28 @@ table.quill-better-table {
     }
   }
 
+  .qlbt-operation-border-width-picker {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    padding: 0 16px 10px;
+    background-color: #fff;
+    overflow: hidden;
+
+    &-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 40px;
+      height: 20px;
+      border: 1px solid #595959;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  }
+
   .qlbt-operation-menu-item {
     display: flex;
     align-items: center;

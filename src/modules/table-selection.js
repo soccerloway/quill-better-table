@@ -13,6 +13,7 @@ export default class TableSelection {
     this.quill = quill;
     this.options = options;
     this.boundary = {}; // params for selected square
+    this.allTds = []; // all table-cells
     this.selectedTds = []; // array for selected table-cells
     this.dragging = false;
     this.selectingHandler = this.mouseDownHandler.bind(this);
@@ -22,6 +23,12 @@ export default class TableSelection {
     this.quill.root.addEventListener("mousedown", this.selectingHandler, false);
 
     this.quill.on("text-change", this.clearSelectionHandler);
+    this.setAllTds();
+  }
+
+  setAllTds() {
+    const tableContainer = Quill.find(this.table);
+    this.allTds = tableContainer.descendants(TableCell);
   }
 
   helpLinesInitial() {
