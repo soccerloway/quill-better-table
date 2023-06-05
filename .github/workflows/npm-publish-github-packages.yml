@@ -29,6 +29,11 @@ jobs:
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
+
+      - name: Bump version in package.json
+        run: npm version "$(git tag --sort=committerdate | tail -1)" --no-git-tag-version
+        working-directory: app
+
       - run: npm ci
       - run: npm publish
         env:
