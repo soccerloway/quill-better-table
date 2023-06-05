@@ -213,6 +213,13 @@ class TableCell extends Container {
       } else {
         this.domNode.style.backgroundColor = "initial";
       }
+    } else if (name === "cell-border") {
+      this.toggleAttribute("data-cell-border", value);
+      this.formatChildren(name, value);
+
+      if (value && name === "cell-border") {
+        this.domNode.style.borderWidth = value;
+      }
     } else {
       super.format(name, value);
     }
@@ -477,7 +484,7 @@ class TableContainer extends Container {
       return sum;
     }, 0);
 
-    // it must excute before the table layout changed with other operation
+    // it must execute before the table layout changed with other operation
     fallCells.forEach((cell) => {
       const cellRect = getRelativeRect(cell.domNode.getBoundingClientRect(), editorWrapper);
       const nextRow = cell.parent.next;
