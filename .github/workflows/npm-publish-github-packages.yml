@@ -22,6 +22,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
           # Defaults to the user or organization that owns the workflow file
           scope: '@mild-blue'
+          always-auth: false
 
       - name: Bump version in package.json
         run: npm version "$(git tag --sort=committerdate | tail -1)" --no-git-tag-version
