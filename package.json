@@ -14,6 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/mild-blue/quill-better-table.git"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "keywords": [
     "quill",
     "quilljs",
