@@ -14,6 +14,7 @@ export function matchTableCell(node, delta, scroll) {
   const colspan = node.getAttribute("colspan") || false;
   const rowspan = node.getAttribute("rowspan") || false;
   const cellBg = node.getAttribute("data-cell-bg") || node.style.backgroundColor; // The td from external table has no 'data-cell-bg'
+  const cellBorder = node.getAttribute("data-cell-border") || node.style.border; // The td from external table has no 'data-cell-border'
 
   // bugfix: empty table cells copied from other place will be removed unexpectedly
   if (delta.length() === 0) {
@@ -62,7 +63,16 @@ export function matchTableCell(node, delta, scroll) {
         Object.assign(
           {},
           Object.assign({}, { row: rowId }, op.attributes.table),
-          { "table-cell-line": { row: rowId, cell: cellId, rowspan, colspan, "cell-bg": cellBg } },
+          {
+            "table-cell-line": {
+              row: rowId,
+              cell: cellId,
+              rowspan,
+              colspan,
+              "cell-bg": cellBg,
+              "cell-border": cellBorder,
+            },
+          },
           _omit(op.attributes, ["table"])
         )
       );

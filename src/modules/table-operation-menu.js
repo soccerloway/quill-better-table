@@ -341,12 +341,12 @@ export default class TableOperationMenu {
       const box = document.createElement("div");
       box.classList.add("qlbt-operation-border-width-picker-item");
       box.innerText = width;
-      box.setAttribute("data-border-width", width);
+      box.style.borderWidth = width;
 
       box.addEventListener(
         "click",
         function () {
-          const allTds = self.tableSelection.allTds;
+          const allTds = self.tableSelection.getAllTds();
           if (allTds && allTds.length > 0) {
             allTds.forEach((tableCell) => {
               tableCell.format("cell-border", width);
