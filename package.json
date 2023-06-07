@@ -8,7 +8,8 @@
     "build": "webpack --config webpack.config.js --mode=production --env.minimize; webpack --config webpack.config.js --mode=production; rm dist/quill-better-table;",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prettier-format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}'",
-    "prettier-check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'"
+    "prettier-check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
