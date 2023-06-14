@@ -21,6 +21,7 @@ const ERROR_LIMIT = 5;
 class TableCellLine extends Block {
   static create(value) {
     const node = super.create(value);
+    node.setAttribute("contenteditable", true);
 
     CELL_IDENTITY_KEYS.forEach((key) => {
       let identityMaker = key === "row" ? rowId : cellId;
@@ -121,6 +122,7 @@ class TableCell extends Container {
   static create(value) {
     const node = super.create(value);
     node.setAttribute("data-row", value.row);
+    node.setAttribute("contenteditable", false);
 
     CELL_ATTRIBUTES.forEach((attrName) => {
       if (value[attrName]) {
