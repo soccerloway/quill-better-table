@@ -35,6 +35,10 @@ class TableCellLine extends Block {
       node.setAttribute("data-cell-bg", value["cell-bg"]);
     }
 
+    if (value["cell-border"]) {
+      node.setAttribute("data-cell-border", value["cell-border"]);
+    }
+
     return node;
   }
 
@@ -43,6 +47,7 @@ class TableCellLine extends Block {
 
     return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS)
       .concat(["cell-bg"])
+      .concat(["cell-border"])
       .reduce((formats, attribute) => {
         if (domNode.hasAttribute(`data-${attribute}`)) {
           formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined;
@@ -63,6 +68,12 @@ class TableCellLine extends Block {
         this.domNode.setAttribute("data-cell-bg", value);
       } else {
         this.domNode.removeAttribute("data-cell-bg");
+      }
+    } else if (name === "cell-border") {
+      if (value) {
+        this.domNode.setAttribute("data-cell-border", value);
+      } else {
+        this.domNode.removeAttribute("data-cell-border");
       }
     } else if (name === "header") {
       if (!value) return;
@@ -86,12 +97,14 @@ class TableCellLine extends Block {
     const rowspan = this.domNode.getAttribute("data-rowspan");
     const colspan = this.domNode.getAttribute("data-colspan");
     const cellBg = this.domNode.getAttribute("data-cell-bg");
+    const cellBorder = this.domNode.getAttribute("data-cell-border");
     if (this.statics.requiredContainer && !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         colspan,
         rowspan,
         "cell-bg": cellBg,
+        "cell-border": cellBorder,
       });
     }
     super.optimize(context);
@@ -133,6 +146,11 @@ class TableCell extends Container {
       node.style.backgroundColor = value["cell-bg"];
     }
 
+    if (value["cell-border"]) {
+      node.setAttribute("data-cell-border", value["cell-border"]);
+      node.style.borderWidth = value["cell-border"];
+    }
+
     return node;
   }
 
@@ -145,6 +163,10 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = domNode.getAttribute("data-cell-bg");
+    }
+
+    if (domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = domNode.getAttribute("data-cell-border");
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -172,6 +194,10 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = this.domNode.getAttribute("data-cell-bg");
+    }
+
+    if (this.domNode.hasAttribute("data-cell-border")) {
+      formats["cell-border"] = this.domNode.getAttribute("data-cell-border");
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -592,12 +618,14 @@ class TableContainer extends Container {
         Object.assign({}, CELL_DEFAULT, {
           row: rId,
           rowspan: cellFormats.rowspan,
+          "cell-border": cellFormats["cell-border"],
         })
       );
       const cellLine = this.scroll.create(TableCellLine.blotName, {
         row: rId,
         cell: id,
         rowspan: cellFormats.rowspan,
+        "cell-border": cellFormats["cell-border"],
       });
       tableCell.appendChild(cellLine);
 
@@ -680,12 +708,17 @@ class TableContainer extends Container {
 
       const tableCell = this.scroll.create(
         TableCell.blotName,
-        Object.assign({}, CELL_DEFAULT, { row: rId, colspan: cellFormats.colspan })
+        Object.assign({}, CELL_DEFAULT, {
+          row: rId,
+          colspan: cellFormats.colspan,
+          "cell-border": cellFormats["cell-border"],
+        })
       );
       const cellLine = this.scroll.create(TableCellLine.blotName, {
         row: rId,
         cell: cId,
         colspan: cellFormats.colspan,
+        "cell-border": cellFormats["cell-border"],
       });
       const empty = this.scroll.create(Break.blotName);
       cellLine.appendChild(empty);
