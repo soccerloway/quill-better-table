@@ -205,9 +205,9 @@ export function matchTable(node, delta, scroll) {
   }
 }
 
-export function matchElement(node, delta) {
-  const range = this.quill.getSelection();
-  const [line] = this.quill.getLine(range?.index);
+export function matchElement(quill, node, delta) {
+  const range = quill.getSelection();
+  const [line] = quill.getLine(range?.index);
 
   // Remove new lines when pasting into a table cell
   if (line instanceof TableCellLine) {
