@@ -145,9 +145,29 @@ class BetterTable extends Module {
 
     // add Matchers to match and render quill-better-table for initialization
     // or pasting
-    quill.clipboard.addMatcher("td", matchTableCell);
-    quill.clipboard.addMatcher("th", matchTableHeader);
-    quill.clipboard.addMatcher("table", matchTable);
+    quill.clipboard.addMatcher("td", () => {
+      console.log("matchTableCell");
+      matchTableCell();
+    });
+    quill.clipboard.addMatcher("th", () => {
+      console.log("matchTableHeader");
+      matchTableHeader();
+    });
+    quill.clipboard.addMatcher("table", () => {
+      console.log("matchTable");
+      matchTable();
+    });
+    quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+      const range = this.quill.getSelection();
+      const [line] = this.quill.getLine(range?.index);
+      console.log(line instanceof TableCellLine, node, delta.ops);
+      if (line instanceof TableCellLine) {
+        const ops = delta.ops.map((op) => ({ insert: op.insert.replaceAll("\n", " ") }));
+        return new Delta(ops);
+      }
+
+      return delta;
+    });
     // quill.clipboard.addMatcher('h1, h2, h3, h4, h5, h6', matchHeader)
 
     // remove matcher for tr tag
