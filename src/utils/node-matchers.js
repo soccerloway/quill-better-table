@@ -1,5 +1,6 @@
 import Quill from "quill";
 import { _omit, convertToHex } from "./index";
+import { TableCellLine } from "src/formats/table";
 
 const Delta = Quill.import("delta");
 
@@ -202,4 +203,17 @@ export function matchTable(node, delta, scroll) {
       return finalDelta;
     }, new Delta());
   }
+}
+
+export function matchElement(node, delta) {
+  const range = this.quill.getSelection();
+  const [line] = this.quill.getLine(range?.index);
+
+  // Remove new lines when pasting into a table cell
+  if (line instanceof TableCellLine) {
+    const ops = delta.ops.map((op) => ({ insert: op.insert.replaceAll("\n", " ") }));
+    return new Delta(ops);
+  }
+
+  return delta;
 }
