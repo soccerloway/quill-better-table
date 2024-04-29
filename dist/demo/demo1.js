@@ -2465,10 +2465,25 @@ module.exports = function (urlString) {
 // extracted by mini-css-extract-plugin
 
     if(true) {
-      // 1712697725953
-      var cssReload = __webpack_require__(140)(module.id, {"locals":false});
-      module.hot.dispose(cssReload);
-      module.hot.accept(undefined, cssReload);
+      (function() {
+        var localsJsonString = undefined;
+        // 1714348584382
+        var cssReload = __webpack_require__(140)(module.id, {});
+        // only invalidate when locals change
+        if (
+          module.hot.data &&
+          module.hot.data.value &&
+          module.hot.data.value !== localsJsonString
+        ) {
+          module.hot.invalidate();
+        } else {
+          module.hot.accept();
+        }
+        module.hot.dispose(function(data) {
+          data.value = localsJsonString;
+          cssReload();
+        });
+      })();
     }
   
 
@@ -2575,7 +2590,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__912__;
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("9905ae40c8bacb5a4926")
+/******/ 		__webpack_require__.h = () => ("9f9cfb4bf918febee5af")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
@@ -3151,6 +3166,10 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__912__;
 /******/ 				}));
 /******/ 			});
 /******/ 		}
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
