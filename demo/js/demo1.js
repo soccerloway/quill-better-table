@@ -21,7 +21,8 @@ window.onload = () => {
 
           color: {
             colors: ['red', 'green', 'yellow', 'white', 'red', 'green', 'yellow', 'white']
-          }
+          },
+          borderColor: {}
         }
       },
       keyboard: {

@@ -36,13 +36,17 @@ class TableCellLine extends Block {
       node.setAttribute('data-cell-bg', value['cell-bg'])
     }
 
+    if (value['border-color']) {
+      node.setAttribute('data-border-color', value['border-color']);
+    }
+
     return node
   }
 
   static formats(domNode) {
     const formats = {}
 
-    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg']).reduce((formats, attribute) => {
+    return CELL_ATTRIBUTES.concat(CELL_IDENTITY_KEYS).concat(['cell-bg', 'border-color']).reduce((formats, attribute) => {
       if (domNode.hasAttribute(`data-${attribute}`)) {
         formats[attribute] = domNode.getAttribute(`data-${attribute}`) || undefined
       }
@@ -62,6 +66,12 @@ class TableCellLine extends Block {
         this.domNode.setAttribute('data-cell-bg', value)
       } else {
         this.domNode.removeAttribute('data-cell-bg')
+      }
+    } else if (name === 'border-color') {
+      if (value) {
+        this.domNode.setAttribute('data-border-color', value);
+      } else {
+        this.domNode.removeAttribute('data-border-color');
       }
     } else if (name === 'header') {
       if (!value) return;
@@ -85,13 +95,15 @@ class TableCellLine extends Block {
     const rowspan = this.domNode.getAttribute('data-rowspan')
     const colspan = this.domNode.getAttribute('data-colspan')
     const cellBg = this.domNode.getAttribute('data-cell-bg')
+    const borderColor = this.domNode.getAttribute('data-border-color');
     if (this.statics.requiredContainer &&
       !(this.parent instanceof this.statics.requiredContainer)) {
       this.wrap(this.statics.requiredContainer.blotName, {
         row: rowId,
         colspan,
         rowspan,
-        'cell-bg': cellBg
+        'cell-bg': cellBg,
+        'border-color': borderColor,
       })
     }
     super.optimize(context)
@@ -136,6 +148,11 @@ class TableCell extends Container {
       node.style.backgroundColor = value['cell-bg']
     }
 
+    if (value['border-color']) {
+      node.setAttribute('data-border-color', value['border-color']);
+      node.style.borderColor = value['border-color'];
+    }
+
     return node
   }
 
@@ -148,6 +165,10 @@ class TableCell extends Container {
 
     if (domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = domNode.getAttribute("data-cell-bg")
+    }
+
+    if (domNode.hasAttribute('data-border-color')) {
+      formats['border-color'] = domNode.getAttribute('data-border-color');
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -175,6 +196,10 @@ class TableCell extends Container {
 
     if (this.domNode.hasAttribute("data-cell-bg")) {
       formats["cell-bg"] = this.domNode.getAttribute("data-cell-bg")
+    }
+
+    if (this.domNode.hasAttribute('data-border-color')) {
+      formats['border-color'] = this.domNode.getAttribute('data-border-color');
     }
 
     return CELL_ATTRIBUTES.reduce((formats, attribute) => {
@@ -215,6 +240,14 @@ class TableCell extends Container {
         this.domNode.style.backgroundColor = value
       } else {
         this.domNode.style.backgroundColor = 'initial'
+      }
+    } else if (name === 'border-color') {
+      this.toggleAttribute('data-border-color', value);
+      this.formatChildren(name, value);
+      if (value) {
+        this.domNode.style.borderColor = value;
+      } else {
+        this.domNode.style.borderColor = '#000';
       }
     } else {
       super.format(name, value)

@@ -267,6 +267,15 @@ export default class TableOperationMenu {
     this.columnToolCells = this.tableColumnTool.colToolCells()
     this.colorSubTitle = options.color && options.color.text ? options.color.text : DEFAULT_COLOR_SUBTITLE
     this.cellColors = options.color && options.color.colors ? options.color.colors : DEFAULT_CELL_COLORS
+    // 添加边框颜色配置
+    this.borderColorSubTitle =
+      options.borderColor && options.borderColor.text
+        ? options.borderColor.text
+        : 'Border Colors';
+    this.borderColors =
+      options.borderColor && options.borderColor.colors
+        ? options.borderColor.colors
+        : DEFAULT_CELL_COLORS;
 
     this.menuInitial(params)
     this.mount()
@@ -321,6 +330,12 @@ export default class TableOperationMenu {
       this.domNode.appendChild(this.colorsItemCreator(this.cellColors))
     }
 
+    // 添加边框颜色选择器
+    if (this.options.borderColor && this.options.borderColor !== false) {
+      this.domNode.appendChild(dividingCreator());
+      this.domNode.appendChild(subTitleCreator(this.borderColorSubTitle));
+      this.domNode.appendChild(this.borderColorsItemCreator(this.borderColors));
+    }
     // create dividing line
     function dividingCreator () {
       const dividing = document.createElement('div')
@@ -337,35 +352,138 @@ export default class TableOperationMenu {
     }
   }
 
-  colorsItemCreator (colors) {
-    const self = this
-    const node = document.createElement('div')
-    node.classList.add('qlbt-operation-color-picker')
+  colorsItemCreator(colors) {
+    const self = this;
+    const node = document.createElement('div');
+    node.classList.add('qlbt-operation-color-picker');
 
     colors.forEach(color => {
-      let colorBox = colorBoxCreator(color)
-      node.appendChild(colorBox)
-    })
+      let colorBox = colorBoxCreator(color);
+      node.appendChild(colorBox);
+    });
 
-    function colorBoxCreator (color) {
-      const box = document.createElement('div')
-      box.classList.add('qlbt-operation-color-picker-item')
-      box.setAttribute('data-color', color)
-      box.style.backgroundColor = color
+    // 添加"更多"选项
+    const moreColorBox = document.createElement('div');
+    moreColorBox.classList.add('qlbt-operation-color-picker-item');
+    moreColorBox.style.background =
+      'linear-gradient(to right, #ff0000, #00ff00, #0000ff)';
 
-      box.addEventListener('click', function () {
-        const selectedTds = self.tableSelection.selectedTds
-        if (selectedTds && selectedTds.length > 0) {
-          selectedTds.forEach(tableCell => {
-            tableCell.format('cell-bg', color)
-          })
-        }
-      }, false)
+    moreColorBox.addEventListener(
+      'click',
+      function () {
+        const colorPicker = document.createElement('input');
+        colorPicker.type = 'color';
+        colorPicker.style.display = 'none';
+        document.body.appendChild(colorPicker);
 
-      return box
+        colorPicker.addEventListener('change', e => {
+          const color = e.target.value;
+          // 按照Delta的方式修改表格边框颜色
+          const selectedTds = self.tableSelection.selectedTds;
+          if (selectedTds && selectedTds.length > 0) {
+            selectedTds.forEach(tableCell => {
+              tableCell.format('cell-bg', color);
+            });
+          }
+          colorPicker.remove();
+        });
+
+        colorPicker.click();
+      },
+      false,
+    );
+
+    node.appendChild(moreColorBox);
+    function colorBoxCreator(color) {
+      const box = document.createElement('div');
+      box.classList.add('qlbt-operation-color-picker-item');
+      box.setAttribute('data-color', color);
+      box.style.backgroundColor = color;
+
+      box.addEventListener(
+        'click',
+        function () {
+          const selectedTds = self.tableSelection.selectedTds;
+          if (selectedTds && selectedTds.length > 0) {
+            selectedTds.forEach(tableCell => {
+              tableCell.format('cell-bg', color);
+            });
+          }
+        },
+        false,
+      );
+
+      return box;
     }
 
-    return node
+    return node;
+  }
+
+  borderColorsItemCreator(colors) {
+    const self = this;
+    const node = document.createElement('div');
+    node.classList.add('qlbt-operation-color-picker');
+
+    colors.forEach(color => {
+      let colorBox = borderColorBoxCreator(color);
+      node.appendChild(colorBox);
+    });
+
+    // 添加"更多"选项
+    const moreColorBox = document.createElement('div');
+    moreColorBox.classList.add('qlbt-operation-color-picker-item');
+    moreColorBox.style.background =
+      'linear-gradient(to right, #ff0000, #00ff00, #0000ff)';
+
+    moreColorBox.addEventListener(
+      'click',
+      function () {
+        const colorPicker = document.createElement('input');
+        colorPicker.type = 'color';
+        colorPicker.style.display = 'none';
+        document.body.appendChild(colorPicker);
+
+        colorPicker.addEventListener('change', e => {
+          const color = e.target.value;
+          const selectedTds = self.tableSelection.selectedTds;
+          if (selectedTds && selectedTds.length > 0) {
+            selectedTds.forEach(tableCell => {
+              tableCell.format('border-color', color);
+            });
+          }
+          colorPicker.remove();
+        });
+
+        colorPicker.click();
+      },
+      false,
+    );
+
+    node.appendChild(moreColorBox);
+
+    function borderColorBoxCreator(color) {
+      const box = document.createElement('div');
+      box.classList.add('qlbt-operation-color-picker-item');
+      box.setAttribute('data-color', color);
+      box.style.backgroundColor = color;
+
+      box.addEventListener(
+        'click',
+        function () {
+          const selectedTds = self.tableSelection.selectedTds;
+          if (selectedTds && selectedTds.length > 0) {
+            selectedTds.forEach(tableCell => {
+              tableCell.format('border-color', color);
+            });
+          }
+        },
+        false,
+      );
+
+      return box;
+    }
+
+    return node;
   }
 
   menuItemCreator ({ text, iconSrc, handler }) {
